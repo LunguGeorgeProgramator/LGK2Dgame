@@ -20,6 +20,7 @@ public abstract class Individual
     public String movementDirection;
     public int frameCounter;
     public int assetNumber;
+    public boolean stopMoving = false;
 
     public Individual(int positionX, int positionY, int speed)
     {
@@ -37,13 +38,20 @@ public abstract class Individual
     // Override in child classes if logic needs changing
     protected void changeAssetNumberByFrameCounter()
     {
-        final int numberOfFramesLimit = 25;
-        this.frameCounter++;
-//        this.frameCounter = this.frameCounter + 1;
-
-        if (this.frameCounter > numberOfFramesLimit)
+        if (!this.stopMoving)
         {
-            this.assetNumber = this.assetNumber == 1 ? 2 : 1;
+            final int numberOfFramesLimit = 25;
+            this.frameCounter++;
+    //        this.frameCounter = this.frameCounter + 1;
+
+            if (this.frameCounter > numberOfFramesLimit)
+            {
+                this.assetNumber = this.assetNumber == 1 ? 2 : 1;
+                this.frameCounter = 0;
+            }
+        }
+        else
+        {
             this.frameCounter = 0;
         }
     }

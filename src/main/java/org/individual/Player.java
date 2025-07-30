@@ -49,25 +49,30 @@ public class Player extends Individual
         {
             this.positionY = this.positionY - this.speed;
             this.movementDirection = "up";
+            this.stopMoving = false;
         }
         else if (keyBoardHandler.downPressed)
         {
             this.positionY = this.positionY + this.speed;
             this.movementDirection = "down";
+            this.stopMoving = false;
         }
         else if (keyBoardHandler.leftPressed)
         {
             this.positionX = this.positionX - this.speed;
             this.movementDirection = "left";
+            this.stopMoving = false;
         }
         else if (keyBoardHandler.rightPressed)
         {
             this.positionX = this.positionX + this.speed;
             this.movementDirection = "right";
+            this.stopMoving = false;
         }
         else
         {
-            this.movementDirection = "standstill";
+            this.stopMoving = true;
+//            this.movementDirection = "standstill";
         }
 
         this.changeAssetNumberByFrameCounter();
