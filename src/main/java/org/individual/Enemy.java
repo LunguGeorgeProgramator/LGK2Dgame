@@ -14,6 +14,12 @@ public class Enemy extends Individual
     {
         super(200, 200, 4);
         this.gamePanel = gamePanel;
+        getAssetImages();
+    }
+
+    @Override
+    public void getAssetImages() {
+
     }
 
     @Override
