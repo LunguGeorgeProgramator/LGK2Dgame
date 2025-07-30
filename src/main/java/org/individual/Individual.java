@@ -56,7 +56,7 @@ public abstract class Individual
         }
     }
 
-    protected BufferedImage setPlayerAssetImage(BufferedImage startImage, BufferedImage endImage)
+    protected BufferedImage buildMovingAnimationFromAssetImages(BufferedImage startImage, BufferedImage endImage)
     {
         return this.assetNumber == 1 ? startImage : endImage;
     }

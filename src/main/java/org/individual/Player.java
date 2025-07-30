@@ -86,16 +86,16 @@ public class Player extends Individual
         switch (this.movementDirection)
         {
             case "up":
-                playerAsset = this.setPlayerAssetImage(this.movingUp, this.movingUp2);
+                playerAsset = this.buildMovingAnimationFromAssetImages(this.movingUp, this.movingUp2);
                 break;
             case "down":
-                playerAsset = this.setPlayerAssetImage(this.movingDown, this.movingDown2);
+                playerAsset = this.buildMovingAnimationFromAssetImages(this.movingDown, this.movingDown2);
                 break;
             case "left":
-                playerAsset = this.setPlayerAssetImage(this.movingLeft, this.movingLeft2);
+                playerAsset = this.buildMovingAnimationFromAssetImages(this.movingLeft, this.movingLeft2);
                 break;
             case "right":
-                playerAsset = this.setPlayerAssetImage(this.movingRight, this.movingRight2);
+                playerAsset = this.buildMovingAnimationFromAssetImages(this.movingRight, this.movingRight2);
                 break;
             case null, default:
                 playerAsset = this.standStill;
