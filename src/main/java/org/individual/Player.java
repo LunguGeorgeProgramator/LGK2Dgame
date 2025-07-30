@@ -28,9 +28,13 @@ public class Player extends Individual
         {
             this.standStill = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-stand.png")));
             this.movingUp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-up.png")));
+            this.movingUp2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-up-2.png")));
             this.movingDown = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-down.png")));
+            this.movingDown2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-down-2.png")));
             this.movingLeft = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-left.png")));
+            this.movingLeft2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-left-2.png")));
             this.movingRight = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-right.png")));
+            this.movingRight2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-right-2.png")));
         }
         catch (IOException ex)
         {
@@ -65,29 +69,28 @@ public class Player extends Individual
         {
             this.movementDirection = "standstill";
         }
+
+        this.changeAssetNumberByFrameCounter();
     }
 
     @Override
     public void draw(Graphics2D g2D)
     {
-//        g2D.setColor(Color.WHITE);
-//        g2D.fillRect(this.positionX, this.positionY, gamePanel.titleSize, gamePanel.titleSize);
-
         BufferedImage playerAsset;
 
         switch (this.movementDirection)
         {
             case "up":
-                playerAsset = this.movingUp;
+                playerAsset = this.setPlayerAssetImage(this.movingUp, this.movingUp2);
                 break;
             case "down":
-                playerAsset = this.movingDown;
+                playerAsset = this.setPlayerAssetImage(this.movingDown, this.movingDown2);
                 break;
             case "left":
-                playerAsset = this.movingLeft;
+                playerAsset = this.setPlayerAssetImage(this.movingLeft, this.movingLeft2);
                 break;
             case "right":
-                playerAsset = this.movingRight;
+                playerAsset = this.setPlayerAssetImage(this.movingRight, this.movingRight2);
                 break;
             case null, default:
                 playerAsset = this.standStill;
