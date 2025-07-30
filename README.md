@@ -15,3 +15,6 @@ Run command
 ````
 
 When the game window opens use keyboard w, s, d and a keys to move the white rectangle.
+
+<img width="1366" height="768" alt="player_moving" src="https://github.com/user-attachments/assets/dc80707b-891d-48c8-8ca7-3779573ef53c" />
+
