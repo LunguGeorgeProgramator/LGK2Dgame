@@ -16,5 +16,5 @@ Run command
 
 When the game window opens use keyboard w, s, d and a keys to move the white rectangle.
 
-<img width="1366" height="768" alt="player_moving" src="https://github.com/user-attachments/assets/dc80707b-891d-48c8-8ca7-3779573ef53c" />
+<img width="1366" height="768" alt="player_new_style_moving" src="https://github.com/user-attachments/assets/63e56798-9658-492d-a8d7-2c8791be338a" />
 
