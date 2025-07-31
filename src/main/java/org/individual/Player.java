@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 public class Player extends Individual
@@ -24,21 +25,44 @@ public class Player extends Individual
     @Override
     public void getAssetImages()
     {
+        this.upMovementImagesAssetsMap = Map.of(
+            1, this.getImageFromAssets("/player/player-up.png"),
+            2, this.getImageFromAssets("/player/player-up-2.png")
+        );
+
+        this.downMovementImagesAssetsMap = Map.of(
+            1, this.getImageFromAssets("/player/player-down.png"),
+            2, this.getImageFromAssets("/player/player-down-2.png")
+        );
+
+        this.leftMovementImagesAssetsMap = Map.of(
+            1, this.getImageFromAssets("/player/player-left.png"),
+            2, this.getImageFromAssets("/player/player-left-2.png")
+        );
+
+        this.rightMovementImagesAssetsMap = Map.of(
+            1, this.getImageFromAssets("/player/player-right.png"),
+            2, this.getImageFromAssets("/player/player-right-2.png")
+        );
+
+        this.standStillImagesAssetsMap = Map.of(
+            "up", this.getImageFromAssets("/player/player-up-stand-still.png"),
+            "down", this.getImageFromAssets("/player/player-stand.png"),
+            "left", this.getImageFromAssets("/player/player-left-stand-still.png"),
+            "right", this.getImageFromAssets("/player/player-right-stand-still.png")
+        );
+    }
+
+    private BufferedImage getPlayerStandAsset(String assetName)
+    {
         try
         {
-            this.standStill = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-stand.png")));
-            this.movingUp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-up.png")));
-            this.movingUp2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-up-2.png")));
-            this.movingDown = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-down.png")));
-            this.movingDown2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-down-2.png")));
-            this.movingLeft = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-left.png")));
-            this.movingLeft2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-left-2.png")));
-            this.movingRight = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-right.png")));
-            this.movingRight2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/player-right-2.png")));
+            return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/" + assetName)));
         }
         catch (IOException ex)
         {
             ex.printStackTrace();
+            return null;
         }
     }
 
@@ -49,30 +73,29 @@ public class Player extends Individual
         {
             this.positionY = this.positionY - this.speed;
             this.movementDirection = "up";
-            this.stopMoving = false;
+            this.stoppedDirection = "up";
         }
         else if (keyBoardHandler.downPressed)
         {
             this.positionY = this.positionY + this.speed;
             this.movementDirection = "down";
-            this.stopMoving = false;
+            this.stoppedDirection = "down";
         }
         else if (keyBoardHandler.leftPressed)
         {
             this.positionX = this.positionX - this.speed;
             this.movementDirection = "left";
-            this.stopMoving = false;
+            this.stoppedDirection = "left";
         }
         else if (keyBoardHandler.rightPressed)
         {
             this.positionX = this.positionX + this.speed;
             this.movementDirection = "right";
-            this.stopMoving = false;
+            this.stoppedDirection = "right";
         }
         else
         {
-            this.stopMoving = true;
-//            this.movementDirection = "standstill";
+            this.movementDirection = null;
         }
 
         this.changeAssetNumberByFrameCounter();
@@ -86,19 +109,20 @@ public class Player extends Individual
         switch (this.movementDirection)
         {
             case "up":
-                playerAsset = this.buildMovingAnimationFromAssetImages(this.movingUp, this.movingUp2);
+                playerAsset = this.upMovementImagesAssetsMap.get(this.assetNumber);
                 break;
             case "down":
-                playerAsset = this.buildMovingAnimationFromAssetImages(this.movingDown, this.movingDown2);
+                playerAsset = this.downMovementImagesAssetsMap.get(this.assetNumber);
                 break;
             case "left":
-                playerAsset = this.buildMovingAnimationFromAssetImages(this.movingLeft, this.movingLeft2);
+                playerAsset = this.leftMovementImagesAssetsMap.get(this.assetNumber);
                 break;
             case "right":
-                playerAsset = this.buildMovingAnimationFromAssetImages(this.movingRight, this.movingRight2);
+                playerAsset = this.rightMovementImagesAssetsMap.get(this.assetNumber);
                 break;
             case null, default:
-                playerAsset = this.standStill;
+                String playerStoppedDirection = this.stoppedDirection != null ? this.stoppedDirection : this.defaultStoppedDirection;
+                playerAsset = this.standStillImagesAssetsMap.get(playerStoppedDirection);
                 break;
         }
 

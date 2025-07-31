@@ -1,26 +1,27 @@
 package org.individual;
 
+import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
 
 public abstract class Individual
 {
     public int positionX;
     public int positionY;
-    public int speed;
-    public BufferedImage standStill;
-    public BufferedImage movingUp;
-    public BufferedImage movingUp2;
-    public BufferedImage movingDown;
-    public BufferedImage movingDown2;
-    public BufferedImage movingLeft;
-    public BufferedImage movingLeft2;
-    public BufferedImage movingRight;
-    public BufferedImage movingRight2;
-    public String movementDirection;
-    public int frameCounter;
-    public int assetNumber;
-    public boolean stopMoving = false;
+    protected int speed;
+    protected String movementDirection;
+    protected int frameCounter;
+    protected int assetNumber;
+    protected String stoppedDirection;
+    protected String defaultStoppedDirection = "down";
+    protected Map<String, BufferedImage> standStillImagesAssetsMap;
+    protected Map<Integer, BufferedImage> upMovementImagesAssetsMap;
+    protected Map<Integer, BufferedImage> downMovementImagesAssetsMap;
+    protected Map<Integer, BufferedImage> leftMovementImagesAssetsMap;
+    protected Map<Integer, BufferedImage> rightMovementImagesAssetsMap;
 
     public Individual(int positionX, int positionY, int speed)
     {
@@ -38,26 +39,27 @@ public abstract class Individual
     // Override in child classes if logic needs changing
     protected void changeAssetNumberByFrameCounter()
     {
-        if (!this.stopMoving)
+        final int numberOfFramesLimit = 25;
+        this.frameCounter++;
+//        this.frameCounter = this.frameCounter + 1;
+        if (this.frameCounter > numberOfFramesLimit)
         {
-            final int numberOfFramesLimit = 25;
-            this.frameCounter++;
-    //        this.frameCounter = this.frameCounter + 1;
-
-            if (this.frameCounter > numberOfFramesLimit)
-            {
-                this.assetNumber = this.assetNumber == 1 ? 2 : 1;
-                this.frameCounter = 0;
-            }
-        }
-        else
-        {
+            this.assetNumber = this.assetNumber == 1 ? 2 : 1;
             this.frameCounter = 0;
         }
     }
 
-    protected BufferedImage buildMovingAnimationFromAssetImages(BufferedImage startImage, BufferedImage endImage)
+    protected BufferedImage getImageFromAssets(String imagePath)
     {
-        return this.assetNumber == 1 ? startImage : endImage;
+        try
+        {
+            return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+        }
+        catch (IOException ex)
+        {
+            // TODO: build login logic and use it for stack traces
+            ex.printStackTrace();
+            return null;
+        }
     }
 }
