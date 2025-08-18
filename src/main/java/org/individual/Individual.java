@@ -1,11 +1,8 @@
 package org.individual;
 
-import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
 public abstract class Individual
 {
@@ -46,20 +43,6 @@ public abstract class Individual
         {
             this.assetNumber = this.assetNumber == 1 ? 2 : 1;
             this.frameCounter = 0;
-        }
-    }
-
-    protected BufferedImage getImageFromAssets(String imagePath)
-    {
-        try
-        {
-            return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-        }
-        catch (IOException ex)
-        {
-            // TODO: build login logic and use it for stack traces
-            ex.printStackTrace();
-            return null;
         }
     }
 }

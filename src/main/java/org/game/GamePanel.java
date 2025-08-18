@@ -6,9 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Color;
 
-import org.game.KeyBoardHandler;
 import org.individual.Enemy;
 import org.individual.Player;
+import org.world.GameWorld;
 
 public class GamePanel extends JPanel implements Runnable
 {
@@ -16,8 +16,8 @@ public class GamePanel extends JPanel implements Runnable
     final int scale = 3;
 
     public final int titleSize = originalTileSize * scale; // 48 x 48 pixel
-    final int maxScreenColumns = 16;
-    final int maxScreenRows = 12;
+    public final int maxScreenColumns = 16;
+    public final int maxScreenRows = 12;
     final int screenWith = titleSize * maxScreenColumns; // 768 pixels
     final int screeHeight = titleSize * maxScreenRows; // 576 pixels
 
@@ -25,6 +25,7 @@ public class GamePanel extends JPanel implements Runnable
     final KeyBoardHandler keyBoardHandler;
     final Player player;
     final Enemy enemy;
+    final GameWorld gameWorld;
     Thread gameThread;
 
     public GamePanel()
@@ -37,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable
         this.setFocusable(true);
         this.player = new Player(this, this.keyBoardHandler);
         this.enemy = new Enemy(this);
+        this.gameWorld = new GameWorld(this);
     }
 
     public void startGameThread()
@@ -79,6 +81,9 @@ public class GamePanel extends JPanel implements Runnable
     {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
+
+        this.gameWorld.draw(g2D);
+
         int pX = this.player.positionX;
         int pY = this.player.positionY;
         int eX = this.enemy.positionX;

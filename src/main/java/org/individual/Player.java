@@ -2,12 +2,12 @@ package org.individual;
 import org.game.GamePanel;
 import org.game.KeyBoardHandler;
 
-import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
+
+import static org.helpers.ToolsHelper.getImageFromAssets;
 
 public class Player extends Individual
 {
@@ -26,44 +26,36 @@ public class Player extends Individual
     public void getAssetImages()
     {
         this.upMovementImagesAssetsMap = Map.of(
-            1, this.getImageFromAssets("/player/player-up.png"),
-            2, this.getImageFromAssets("/player/player-up-2.png")
+            1, getAssetImage("/player/player-up.png"),
+            2, getAssetImage("/player/player-up-2.png")
         );
 
         this.downMovementImagesAssetsMap = Map.of(
-            1, this.getImageFromAssets("/player/player-down.png"),
-            2, this.getImageFromAssets("/player/player-down-2.png")
+            1, getAssetImage("/player/player-down.png"),
+            2, getAssetImage("/player/player-down-2.png")
         );
 
         this.leftMovementImagesAssetsMap = Map.of(
-            1, this.getImageFromAssets("/player/player-left.png"),
-            2, this.getImageFromAssets("/player/player-left-2.png")
+            1, getAssetImage("/player/player-left.png"),
+            2, getAssetImage("/player/player-left-2.png")
         );
 
         this.rightMovementImagesAssetsMap = Map.of(
-            1, this.getImageFromAssets("/player/player-right.png"),
-            2, this.getImageFromAssets("/player/player-right-2.png")
+            1, getAssetImage("/player/player-right.png"),
+            2, getAssetImage("/player/player-right-2.png")
         );
 
         this.standStillImagesAssetsMap = Map.of(
-            "up", this.getImageFromAssets("/player/player-up-stand-still.png"),
-            "down", this.getImageFromAssets("/player/player-stand.png"),
-            "left", this.getImageFromAssets("/player/player-left-stand-still.png"),
-            "right", this.getImageFromAssets("/player/player-right-stand-still.png")
+            "up", getAssetImage("/player/player-up-stand-still.png"),
+            "down", getAssetImage("/player/player-stand.png"),
+            "left", getAssetImage("/player/player-left-stand-still.png"),
+            "right", getAssetImage("/player/player-right-stand-still.png")
         );
     }
 
-    private BufferedImage getPlayerStandAsset(String assetName)
+    private BufferedImage getAssetImage(String assetPath)
     {
-        try
-        {
-            return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/" + assetName)));
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-            return null;
-        }
+        return Objects.requireNonNull(getImageFromAssets(assetPath));
     }
 
     @Override
