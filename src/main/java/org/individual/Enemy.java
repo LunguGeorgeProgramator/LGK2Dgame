@@ -13,9 +13,10 @@ public class Enemy extends Individual
 {
 
     GamePanel gamePanel;
-    int maxDistanceAllowedDown;
-    int maxDistanceAllowedUp;
-    String direction;
+    private final int maxDistanceAllowedDown;
+    private final int maxDistanceAllowedUp;
+    private String direction;
+    private BufferedImage enemyAsset;
 
     public Enemy(
         GamePanel gamePanel,
@@ -24,20 +25,21 @@ public class Enemy extends Individual
         int maxDistanceAllowedDown,
         int maxDistanceAllowedUp,
         String direction,
-        int speed
+        int speed,
+        String assetPath
     )
     {
-        super(defaultPositionX, defaultPositionY, speed);
+        super(defaultPositionX, defaultPositionY, speed, assetPath);
         this.gamePanel = gamePanel;
         this.maxDistanceAllowedDown = maxDistanceAllowedDown;
         this.maxDistanceAllowedUp = maxDistanceAllowedUp;
         this.direction = direction;
-        getAssetImages();
     }
 
     @Override
-    public void getAssetImages() {
-
+    public void getAssetImages(String assetPath)
+    {
+        this.enemyAsset = Objects.requireNonNull(getImageFromAssets(assetPath));
     }
 
     @Override
@@ -65,7 +67,6 @@ public class Enemy extends Individual
     @Override
     public void draw(Graphics2D g2D)
     {
-        BufferedImage enemyAsset = Objects.requireNonNull(getImageFromAssets("/enemy/color-monster.png"));
-        g2D.drawImage(enemyAsset, this.positionX, this.positionY, gamePanel.titleSize, gamePanel.titleSize, null);
+        g2D.drawImage(this.enemyAsset, this.positionX, this.positionY, gamePanel.titleSize, gamePanel.titleSize, null);
     }
 }

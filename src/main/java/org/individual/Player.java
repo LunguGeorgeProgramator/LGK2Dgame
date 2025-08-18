@@ -16,14 +16,13 @@ public class Player extends Individual
 
     public Player(GamePanel gamePanel, KeyBoardHandler keyBoardHandler)
     {
-        super(100, 100, 4); // set player position x, y and speed
+        super(100, 100, 4, null); // set player position x, y and speed
         this.gamePanel = gamePanel;
         this.keyBoardHandler = keyBoardHandler;
-        getAssetImages();
     }
 
     @Override
-    public void getAssetImages()
+    public void getAssetImages(String assetPath)
     {
         this.upMovementImagesAssetsMap = Map.of(
             1, getAssetImage("/player/player-up.png"),

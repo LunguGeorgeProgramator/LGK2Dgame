@@ -38,8 +38,26 @@ public class GamePanel extends JPanel implements Runnable
         this.addKeyListener(this.keyBoardHandler);
         this.setFocusable(true);
         this.player = new Player(this, this.keyBoardHandler);
-        this.firtEnemy = new Enemy(this, 200, 200, 300, 200, "down", 1);
-        this.secondEnemy = new Enemy(this, 400, 200, 400, 100, "up", 4);
+        this.firtEnemy = new Enemy(
+            this,
+            200,
+            200,
+            300,
+            200,
+            "down",
+            1,
+            "/enemy/color-monster.png"
+        );
+        this.secondEnemy = new Enemy(
+            this,
+            400,
+            200,
+            400,
+            100,
+            "up",
+            4,
+            "/enemy/color-monster.png" // TODO: add new monster images
+        );
         this.gameWorld = new GameWorld(this);
     }
 

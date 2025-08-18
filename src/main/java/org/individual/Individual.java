@@ -20,16 +20,16 @@ public abstract class Individual
     protected Map<Integer, BufferedImage> leftMovementImagesAssetsMap;
     protected Map<Integer, BufferedImage> rightMovementImagesAssetsMap;
 
-    public Individual(int positionX, int positionY, int speed)
+    public Individual(int positionX, int positionY, int speed, String assetPath)
     {
         this.positionX = positionX;
         this.positionY = positionY;
         this.speed = speed;
-        getAssetImages();
+        getAssetImages(assetPath);
     }
 
     // force all children classes to have this methods
-    public abstract void getAssetImages();
+    public abstract void getAssetImages(String assetPath);
     public abstract void update();
     public abstract void draw(Graphics2D g2D);
 
