@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.Objects;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -21,10 +20,7 @@ public class ToolsHelper
         try
         {
             URL resource = ToolsHelper.class.getResource(txtFilePath);
-            if (resource == null)
-            {
-                throw new IllegalArgumentException(String.format("File not found %s !", txtFilePath));
-            }
+            fileNullChecker(resource, txtFilePath);
             return Files.readAllLines(Paths.get(resource.toURI()));
         }
         catch (IOException | URISyntaxException | IllegalArgumentException e)
@@ -41,10 +37,7 @@ public class ToolsHelper
         try
         {
             InputStream imageResource = ToolsHelper.class.getResourceAsStream(imagePath);
-            if (imageResource == null)
-            {
-                throw new IllegalArgumentException(String.format("File not found %s !", imagePath));
-            }
+            fileNullChecker(imageResource, imagePath);
             return ImageIO.read(imageResource);
         }
         catch (IOException | IllegalArgumentException ex)
@@ -52,5 +45,13 @@ public class ToolsHelper
             ex.printStackTrace();
         }
         return null;
+    }
+
+    private static void fileNullChecker(Object file, String filePath) throws IllegalArgumentException
+    {
+        if (file == null)
+        {
+            throw new IllegalArgumentException(String.format("File not found %s !", filePath));
+        }
     }
 }
