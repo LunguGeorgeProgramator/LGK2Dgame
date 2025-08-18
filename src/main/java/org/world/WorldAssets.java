@@ -29,7 +29,12 @@ public enum WorldAssets
         {
             throw new RuntimeException("Index not found in world assets!");
         }
-        return worldAssets.worldAssetImage;
+        return worldAssets.getWorldAssetImage();
+    }
+
+    private BufferedImage getWorldAssetImage()
+    {
+        return this.worldAssetImage;
     }
 
     private int getIndex()
