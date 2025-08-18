@@ -24,7 +24,8 @@ public class GamePanel extends JPanel implements Runnable
     final int framePerSecond = 60;
     final KeyBoardHandler keyBoardHandler;
     final Player player;
-    final Enemy enemy;
+    final Enemy firtEnemy;
+    final Enemy secondEnemy;
     final GameWorld gameWorld;
     Thread gameThread;
 
@@ -37,7 +38,8 @@ public class GamePanel extends JPanel implements Runnable
         this.addKeyListener(this.keyBoardHandler);
         this.setFocusable(true);
         this.player = new Player(this, this.keyBoardHandler);
-        this.enemy = new Enemy(this);
+        this.firtEnemy = new Enemy(this, 200, 200, 300, 200, "down", 1);
+        this.secondEnemy = new Enemy(this, 400, 200, 400, 100, "up", 4);
         this.gameWorld = new GameWorld(this);
     }
 
@@ -74,7 +76,10 @@ public class GamePanel extends JPanel implements Runnable
 
     public void update()
     {
+
         this.player.update();
+        this.firtEnemy.update();
+        this.secondEnemy.update();
     }
 
     public void paintComponent(Graphics g)
@@ -84,18 +89,20 @@ public class GamePanel extends JPanel implements Runnable
 
         this.gameWorld.draw(g2D);
 
+        this.secondEnemy.draw(g2D);
+
         int pX = this.player.positionX;
         int pY = this.player.positionY;
-        int eX = this.enemy.positionX;
-        int eY = this.enemy.positionY;
+        int eX = this.firtEnemy.positionX;
+        int eY = this.firtEnemy.positionY;
         if (pY< eY)
         {
             this.player.draw(g2D);
-            this.enemy.draw(g2D);
+            this.firtEnemy.draw(g2D);
         }
         else
         {
-            this.enemy.draw(g2D);
+            this.firtEnemy.draw(g2D);
             this.player.draw(g2D);
         }
 
