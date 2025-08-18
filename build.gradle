@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'edu.sc.seis.launch4j' version '2.5.0'
 }
 
 group = 'org.LGK2DGame'
@@ -21,4 +22,14 @@ test {
 tasks.register('run', JavaExec) {
     main = 'org.game.Main'
     classpath = sourceSets.main.runtimeClasspath
+}
+
+// Launch4j - Windows .exe configuration
+launch4j {
+    mainClassName = 'org.game.Main'
+    outputDir = "$buildDir/exe"
+    outfile = 'LGK2DGame.exe'
+    jar = "$buildDir/libs/${project.name}-${version}.jar"
+    bundledJrePath = ''
+    jreMinVersion = '1.8.0'
 }
