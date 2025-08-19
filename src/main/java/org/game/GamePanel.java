@@ -15,15 +15,15 @@ public class GamePanel extends JPanel implements Runnable
     final int originalTileSize = 16; // 16 x 16 pixel
     final int scale = 3;
 
-    public final int titleSize = originalTileSize * scale; // 48 x 48 pixel
+    public final int tileSize = originalTileSize * scale; // 48 x 48 pixel
     public final int maxScreenColumns = 16;
     public final int maxScreenRows = 12;
-    final int screenWith = titleSize * maxScreenColumns; // 768 pixels
-    final int screeHeight = titleSize * maxScreenRows; // 576 pixels
+    public final int screenWith = tileSize * maxScreenColumns; // 768 pixels
+    public final int screeHeight = tileSize * maxScreenRows; // 576 pixels
 
     final int framePerSecond = 60;
     final KeyBoardHandler keyBoardHandler;
-    final Player player;
+    public final Player player;
     final Enemy firtEnemy;
     final Enemy secondEnemy;
     final GameWorld gameWorld;
@@ -58,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable
             4,
             "/enemy/color-monster.png" // TODO: add new monster images
         );
-        this.gameWorld = new GameWorld(this);
+        this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
     }
 
     public void startGameThread()
@@ -107,23 +107,23 @@ public class GamePanel extends JPanel implements Runnable
 
         this.gameWorld.draw(g2D);
 
-        this.secondEnemy.draw(g2D);
+//        this.secondEnemy.draw(g2D);
 
-        int pX = this.player.positionX;
-        int pY = this.player.positionY;
-        int eX = this.firtEnemy.positionX;
-        int eY = this.firtEnemy.positionY;
-        if (pY< eY)
-        {
-            this.player.draw(g2D);
-            this.firtEnemy.draw(g2D);
-        }
-        else
-        {
-            this.firtEnemy.draw(g2D);
-            this.player.draw(g2D);
-        }
-
+//        int pX = this.player.positionX;
+//        int pY = this.player.positionY;
+//        int eX = this.firtEnemy.positionX;
+//        int eY = this.firtEnemy.positionY;
+//        if (pY< eY)
+//        {
+//            this.player.draw(g2D);
+//            this.firtEnemy.draw(g2D);
+//        }
+//        else
+//        {
+//            this.firtEnemy.draw(g2D);
+//            this.player.draw(g2D);
+//        }
+        this.player.draw(g2D);
         g2D.dispose(); // free up memory, destroy after draw
     }
 }

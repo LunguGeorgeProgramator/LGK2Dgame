@@ -67,6 +67,6 @@ public class Enemy extends Individual
     @Override
     public void draw(Graphics2D g2D)
     {
-        g2D.drawImage(this.enemyAsset, this.positionX, this.positionY, gamePanel.titleSize, gamePanel.titleSize, null);
+        g2D.drawImage(this.enemyAsset, this.positionX, this.positionY, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 }

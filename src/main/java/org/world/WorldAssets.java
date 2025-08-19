@@ -9,7 +9,9 @@ public enum WorldAssets
     GRASS(0, getImageFromAssets("/tiles/grass.png")),
     WATER(1, getImageFromAssets("/tiles/water.png")),
     WALL(2, getImageFromAssets("/tiles/wall.png")),
-    SIDE_WALL(3, getImageFromAssets("/tiles/sideWall.png"));
+    SIDE_WALL(3, getImageFromAssets("/tiles/sideWall.png")),
+    TREE(4, getImageFromAssets("/tiles/tree.png")),
+    ROAD(5, getImageFromAssets("/tiles/road.png"));
 
     private final int index;
     private final BufferedImage worldAssetImage;

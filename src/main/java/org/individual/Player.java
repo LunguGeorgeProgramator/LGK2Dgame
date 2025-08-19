@@ -13,12 +13,16 @@ public class Player extends Individual
 {
     GamePanel gamePanel;
     KeyBoardHandler keyBoardHandler;
+    public final int playerScreenX;
+    public final int playerScreenY;
 
     public Player(GamePanel gamePanel, KeyBoardHandler keyBoardHandler)
     {
         super(100, 100, 4, null); // set player position x, y and speed
         this.gamePanel = gamePanel;
         this.keyBoardHandler = keyBoardHandler;
+        this.playerScreenX = (this.gamePanel.screenWith/2) - (this.gamePanel.tileSize/2);
+        this.playerScreenY = (this.gamePanel.screeHeight/2) - (this.gamePanel.tileSize/2);
     }
 
     @Override
@@ -117,6 +121,6 @@ public class Player extends Individual
                 break;
         }
 
-        g2D.drawImage(playerAsset, this.positionX, this.positionY, gamePanel.titleSize, gamePanel.titleSize, null);
+        g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 }

@@ -4,6 +4,7 @@ import org.game.GamePanel;
 
 import java.awt.Graphics2D;
 import java.util.List;
+import java.util.Optional;
 
 import static org.helpers.ToolsHelper.getTxtFileFromResources;
 
@@ -12,18 +13,34 @@ public class GameWorld
 
     GamePanel gamePanel;
     int[][] worldMap;
+    int worldMapCol;
+    int worldMapRow;
 
 
-    public GameWorld(GamePanel gamePanel)
+    public GameWorld(GamePanel gamePanel, String worldMapPath)
     {
         this.gamePanel = gamePanel;
-        this.worldMap = new int[this.gamePanel.maxScreenColumns][this.gamePanel.maxScreenRows];
-        loadMapIntoMatrix();
+        List<String> txtMapLines = getTxtFileFromResources(worldMapPath);
+        setWorldMapRange(txtMapLines);
+        loadMapIntoMatrix(txtMapLines);
     }
 
-    private void loadMapIntoMatrix()
+    private void setWorldMapRange(List<String> txtMapLines)
     {
-        List<String> txtMapLines = getTxtFileFromResources("/worldMaps/CastleRuinMap.txt");
+        int txtMapRows = txtMapLines.size();
+        int txtMapCols = 0;
+        Optional<String> cols = txtMapLines.stream().findFirst();
+        if (cols.isPresent())
+        {
+            txtMapCols = cols.get().split(",").length;
+        }
+        this.worldMap = new int[txtMapCols][txtMapRows];
+        this.worldMapCol = txtMapCols;
+        this.worldMapRow = txtMapRows;
+    }
+
+    private void loadMapIntoMatrix(List<String> txtMapLines)
+    {
         int i = 0;
         for(String line : txtMapLines)
         {
@@ -42,10 +59,13 @@ public class GameWorld
         {
             for (int j = 0; j < this.worldMap[i].length; j++)
             {
-                int worldAssetPositionX = this.gamePanel.titleSize * i;
-                int worldAssetPositionY = this.gamePanel.titleSize * j;
+                int worldPositionX = this.gamePanel.tileSize * i;
+                int worldPositionY = this.gamePanel.tileSize * j;
+                int worldAssetPositionX = worldPositionX - this.gamePanel.player.positionX + this.gamePanel.player.playerScreenX;
+                int worldAssetPositionY = worldPositionY - this.gamePanel.player.positionY + this.gamePanel.player.playerScreenY;
                 int worldAssetIndex = this.worldMap[i][j];
-                g2D.drawImage(WorldAssets.getWorldAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, gamePanel.titleSize, gamePanel.titleSize, null);
+
+                g2D.drawImage(WorldAssets.getWorldAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, gamePanel.tileSize, gamePanel.tileSize, null);
             }
         }
     }
