@@ -32,40 +32,40 @@ public class CollisionChecker
         {
             case "up":
                 individualTopRow = (individualTopY - individual.speed) / gamePanel.tileSize;
-                worldAssetOne = gamePanel.gameWorld.worldMap[individualLeftCol][individualTopRow];
-                worldAssetTwo = gamePanel.gameWorld.worldMap[individualRightCol][individualTopRow];
+                worldAssetOne = getWorldAssetIndex(individualLeftCol, individualTopRow);
+                worldAssetTwo = getWorldAssetIndex(individualRightCol, individualTopRow);
 
-                if (WorldAssets.getWorldAssetByIndex(worldAssetOne).getCollision() || WorldAssets.getWorldAssetByIndex(worldAssetTwo).getCollision())
+                if (checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo))
                 {
                     individual.activateCollision = true;
                 }
                 break;
             case "down":
                 individualBottomRow = (individualBottomY + individual.speed) / gamePanel.tileSize;
-                worldAssetOne = gamePanel.gameWorld.worldMap[individualLeftCol][individualBottomRow];
-                worldAssetTwo = gamePanel.gameWorld.worldMap[individualRightCol][individualBottomRow];
+                worldAssetOne = getWorldAssetIndex(individualLeftCol, individualBottomRow);
+                worldAssetTwo = getWorldAssetIndex(individualRightCol, individualBottomRow);
 
-                if (WorldAssets.getWorldAssetByIndex(worldAssetOne).getCollision() || WorldAssets.getWorldAssetByIndex(worldAssetTwo).getCollision())
+                if (checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo))
                 {
                     individual.activateCollision = true;
                 }
                 break;
             case "left":
                 individualLeftCol = (individualLeftX - individual.speed) / gamePanel.tileSize;
-                worldAssetOne = gamePanel.gameWorld.worldMap[individualLeftCol][individualTopRow];
-                worldAssetTwo = gamePanel.gameWorld.worldMap[individualLeftCol][individualBottomRow];
+                worldAssetOne = getWorldAssetIndex(individualLeftCol, individualTopRow);
+                worldAssetTwo = getWorldAssetIndex(individualLeftCol, individualBottomRow);
 
-                if (WorldAssets.getWorldAssetByIndex(worldAssetOne).getCollision() || WorldAssets.getWorldAssetByIndex(worldAssetTwo).getCollision())
+                if (checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo))
                 {
                     individual.activateCollision = true;
                 }
                 break;
             case "right":
                 individualRightCol = (individualRightX + individual.speed) / gamePanel.tileSize;
-                worldAssetOne = gamePanel.gameWorld.worldMap[individualRightCol][individualTopRow];
-                worldAssetTwo = gamePanel.gameWorld.worldMap[individualRightCol][individualBottomRow];
+                worldAssetOne = getWorldAssetIndex(individualRightCol, individualTopRow);
+                worldAssetTwo = getWorldAssetIndex(individualRightCol, individualBottomRow);
 
-                if (WorldAssets.getWorldAssetByIndex(worldAssetOne).getCollision() || WorldAssets.getWorldAssetByIndex(worldAssetTwo).getCollision())
+                if (checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo))
                 {
                     individual.activateCollision = true;
                 }
@@ -73,5 +73,15 @@ public class CollisionChecker
             case null, default:
                 break;
         }
+     }
+
+     private boolean checkIfWorldAssetsHaveCollisionOn(int worldAssetOne, int worldAssetTwo)
+     {
+         return WorldAssets.getWorldAssetByIndex(worldAssetOne).getCollision() || WorldAssets.getWorldAssetByIndex(worldAssetTwo).getCollision();
+     }
+
+     private int getWorldAssetIndex(int assetCol, int assetRow)
+     {
+         return gamePanel.gameWorld.worldMap[assetCol][assetRow];
      }
 }
