@@ -1,6 +1,7 @@
 package org.world;
 
 import org.game.GamePanel;
+import org.individual.Player;
 
 import java.awt.Graphics2D;
 import java.util.List;
@@ -55,18 +56,32 @@ public class GameWorld
 
     public void draw(Graphics2D g2D)
     {
+        Player player = this.gamePanel.player;
         for (int i = 0; i < this.worldMap.length; i++)
         {
             for (int j = 0; j < this.worldMap[i].length; j++)
             {
                 int worldPositionX = this.gamePanel.tileSize * i;
                 int worldPositionY = this.gamePanel.tileSize * j;
-                int worldAssetPositionX = worldPositionX - this.gamePanel.player.positionX + this.gamePanel.player.playerScreenX;
-                int worldAssetPositionY = worldPositionY - this.gamePanel.player.positionY + this.gamePanel.player.playerScreenY;
+                int worldAssetPositionX = worldPositionX - player.positionX + player.playerScreenX;
+                int worldAssetPositionY = worldPositionY - player.positionY + player.playerScreenY;
                 int worldAssetIndex = this.worldMap[i][j];
 
-                g2D.drawImage(WorldAssets.getWorldAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, gamePanel.tileSize, gamePanel.tileSize, null);
+                if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, player, this.gamePanel.tileSize))
+                {
+                    // Draw assets only if they are inside the screen (with x height) plus one tile size to remove popup effect on rendering world assets.
+                    g2D.drawImage(WorldAssets.getWorldAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, gamePanel.tileSize, gamePanel.tileSize, null);
+                }
             }
         }
+    }
+
+    private boolean checkIfAssetIsInsideTheBoundary(int worldAssetPositionX, int worldAssetPositionY, Player player, int worldTileSize)
+    {
+        boolean isAssetBoundaryUpLimitDraw = worldAssetPositionX + worldTileSize > player.positionX - player.playerScreenX;
+        boolean isAssetBoundaryDownLimitDraw = worldAssetPositionX - worldTileSize < player.positionX + player.playerScreenX;
+        boolean isAssetBoundaryLeftLimitDraw = worldAssetPositionY + worldTileSize > player.positionY - player.playerScreenY;
+        boolean isAssetBoundaryRightLimitDraw = worldAssetPositionY - worldTileSize < player.positionY + player.playerScreenY;
+        return isAssetBoundaryUpLimitDraw && isAssetBoundaryDownLimitDraw && isAssetBoundaryLeftLimitDraw && isAssetBoundaryRightLimitDraw;
     }
 }
