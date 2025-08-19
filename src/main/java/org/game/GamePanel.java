@@ -27,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable
     final Enemy firtEnemy;
     final Enemy secondEnemy;
     final GameWorld gameWorld;
+    public final CollisionChecker collisionChecker;
     Thread gameThread;
 
     public GamePanel()
@@ -59,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable
             "/enemy/color-monster.png" // TODO: add new monster images
         );
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
+        this.collisionChecker = new CollisionChecker(this);
     }
 
     public void startGameThread()

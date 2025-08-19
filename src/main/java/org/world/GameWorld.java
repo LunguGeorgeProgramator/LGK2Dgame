@@ -13,7 +13,7 @@ public class GameWorld
 {
 
     GamePanel gamePanel;
-    int[][] worldMap;
+    public int[][] worldMap;
     int worldMapCol;
     int worldMapRow;
 
@@ -70,7 +70,7 @@ public class GameWorld
                 if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, player, this.gamePanel.tileSize))
                 {
                     // Draw assets only if they are inside the screen (with x height) plus one tile size to remove popup effect on rendering world assets.
-                    g2D.drawImage(WorldAssets.getWorldAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, gamePanel.tileSize, gamePanel.tileSize, null);
+                    g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, gamePanel.tileSize, gamePanel.tileSize, null);
                 }
             }
         }

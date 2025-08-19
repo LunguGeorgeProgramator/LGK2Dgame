@@ -1,6 +1,6 @@
 package org.individual;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
@@ -8,8 +8,8 @@ public abstract class Individual
 {
     public int positionX;
     public int positionY;
-    protected int speed;
-    protected String movementDirection;
+    public int speed;
+    public String movementDirection;
     protected int frameCounter;
     protected int assetNumber;
     protected String stoppedDirection;
@@ -19,6 +19,8 @@ public abstract class Individual
     protected Map<Integer, BufferedImage> downMovementImagesAssetsMap;
     protected Map<Integer, BufferedImage> leftMovementImagesAssetsMap;
     protected Map<Integer, BufferedImage> rightMovementImagesAssetsMap;
+    public Rectangle collisionArea;
+    public boolean activateCollision = false;
 
     public Individual(int positionX, int positionY, int speed, String assetPath)
     {

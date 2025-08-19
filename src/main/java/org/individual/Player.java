@@ -2,7 +2,7 @@ package org.individual;
 import org.game.GamePanel;
 import org.game.KeyBoardHandler;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +23,16 @@ public class Player extends Individual
         this.keyBoardHandler = keyBoardHandler;
         this.playerScreenX = (this.gamePanel.screenWith/2) - (this.gamePanel.tileSize/2);
         this.playerScreenY = (this.gamePanel.screeHeight/2) - (this.gamePanel.tileSize/2);
+        buildPlayerCollisionArea();
+    }
+
+    private void buildPlayerCollisionArea()
+    { // make the collision area small that the player rectangle so upper corners will not hit solid world assets
+        this.collisionArea = new Rectangle();
+        this.collisionArea.x = 8;
+        this.collisionArea.y = 16;
+        this.collisionArea.height = this.gamePanel.tileSize - 16;
+        this.collisionArea.width = this.gamePanel.tileSize - 16;
     }
 
     @Override
@@ -66,31 +76,51 @@ public class Player extends Individual
     {
         if (keyBoardHandler.upPressed)
         {
-            this.positionY = this.positionY - this.speed;
             this.movementDirection = "up";
             this.stoppedDirection = "up";
         }
         else if (keyBoardHandler.downPressed)
         {
-            this.positionY = this.positionY + this.speed;
             this.movementDirection = "down";
             this.stoppedDirection = "down";
         }
         else if (keyBoardHandler.leftPressed)
         {
-            this.positionX = this.positionX - this.speed;
             this.movementDirection = "left";
             this.stoppedDirection = "left";
         }
         else if (keyBoardHandler.rightPressed)
         {
-            this.positionX = this.positionX + this.speed;
             this.movementDirection = "right";
             this.stoppedDirection = "right";
         }
         else
         {
             this.movementDirection = null;
+        }
+
+        this.activateCollision = false;
+        this.gamePanel.collisionChecker.checkTile(this);
+
+        if (!this.activateCollision)
+        {
+            switch (this.movementDirection)
+            {
+                case "up":
+                    this.positionY = this.positionY - this.speed;
+                    break;
+                case "down":
+                    this.positionY = this.positionY + this.speed;
+                    break;
+                case "left":
+                    this.positionX = this.positionX - this.speed;
+                    break;
+                case "right":
+                    this.positionX = this.positionX + this.speed;
+                    break;
+                case null , default:
+                    break;
+            }
         }
 
         this.changeAssetNumberByFrameCounter();
