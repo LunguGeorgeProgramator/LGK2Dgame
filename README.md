@@ -16,7 +16,8 @@ Run command
 
 When the game window opens use keyboard w, s, d and a keys to move the white rectangle.
 
-<img width="784" height="610" alt="game_with_enemy" src="https://github.com/user-attachments/assets/7e03da6f-7f08-4d88-bc54-4c66536c9acc" />
+<img width="775" height="608" alt="Screenshot_20250819_222506" src="https://github.com/user-attachments/assets/45ae1cea-3cae-4db9-91be-6cc9f4538a67" />
+
 
 # How to build a windows exe ?
 
