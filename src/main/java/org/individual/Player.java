@@ -39,30 +39,30 @@ public class Player extends Individual
     public void getAssetImages(String assetPath)
     {
         this.upMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-up.png"),
-            2, getAssetImage("/player/player-up-2.png")
+            1, getAssetImage("/player/player-walk-up.png"),
+            2, getAssetImage("/player/player-walk-up-two.png")
         );
 
         this.downMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-down.png"),
-            2, getAssetImage("/player/player-down-2.png")
+            1, getAssetImage("/player/player-walk-down.png"),
+            2, getAssetImage("/player/player-walk-down-two.png")
         );
 
         this.leftMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-left.png"),
-            2, getAssetImage("/player/player-left-2.png")
+            1, getAssetImage("/player/player-walk-left.png"),
+            2, getAssetImage("/player/player-walk-left-two.png")
         );
 
         this.rightMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-right.png"),
-            2, getAssetImage("/player/player-right-2.png")
+            1, getAssetImage("/player/player-walk-right.png"),
+            2, getAssetImage("/player/player-walk-right-two.png")
         );
 
         this.standStillImagesAssetsMap = Map.of(
-            "up", getAssetImage("/player/player-up-stand-still.png"),
-            "down", getAssetImage("/player/player-stand.png"),
-            "left", getAssetImage("/player/player-left-stand-still.png"),
-            "right", getAssetImage("/player/player-right-stand-still.png")
+            "up", getAssetImage("/player/player-stand-still-up.png"),
+            "down", getAssetImage("/player/player-stand-still-down.png"),
+            "left", getAssetImage("/player/player-stand-still-left.png"),
+            "right", getAssetImage("/player/player-stand-still-right.png")
         );
     }
 
