@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.helpers.ToolsHelper.getTxtFileFromResources;
+import static org.game.GamePanel.tileSize;
 
 public class GameWorld
 {
@@ -16,6 +17,7 @@ public class GameWorld
     public int[][] worldMap;
     int worldMapCol;
     int worldMapRow;
+    static int noneMapAssetsRangeOfViewTileMultiplier = 15;
 
 
     public GameWorld(GamePanel gamePanel, String worldMapPath)
@@ -61,27 +63,27 @@ public class GameWorld
         {
             for (int j = 0; j < this.worldMap[i].length; j++)
             {
-                int worldPositionX = this.gamePanel.tileSize * i;
-                int worldPositionY = this.gamePanel.tileSize * j;
+                int worldPositionX = tileSize * i;
+                int worldPositionY = tileSize * j;
                 int worldAssetPositionX = worldPositionX - player.positionX + player.playerScreenX;
                 int worldAssetPositionY = worldPositionY - player.positionY + player.playerScreenY;
                 int worldAssetIndex = this.worldMap[i][j];
 
-                if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, player, this.gamePanel.tileSize))
+                if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, player, tileSize, true))
                 {
                     // Draw assets only if they are inside the screen (with x height) plus one tile size to remove popup effect on rendering world assets.
-                    g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, gamePanel.tileSize, gamePanel.tileSize, null);
+                    g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, tileSize, tileSize, null);
                 }
             }
         }
     }
 
-    private boolean checkIfAssetIsInsideTheBoundary(int worldAssetPositionX, int worldAssetPositionY, Player player, int worldTileSize)
+    private boolean checkIfAssetIsInsideTheBoundary(int worldAssetPositionX, int worldAssetPositionY, Player player, int worldTileSize, boolean isWorldMapAsset)
     {
-        boolean isAssetBoundaryUpLimitDraw = worldAssetPositionX + worldTileSize > player.positionX - player.playerScreenX;
-        boolean isAssetBoundaryDownLimitDraw = worldAssetPositionX - worldTileSize < player.positionX + player.playerScreenX;
-        boolean isAssetBoundaryLeftLimitDraw = worldAssetPositionY + worldTileSize > player.positionY - player.playerScreenY;
-        boolean isAssetBoundaryRightLimitDraw = worldAssetPositionY - worldTileSize < player.positionY + player.playerScreenY;
+        boolean isAssetBoundaryRightLimitDraw = worldAssetPositionX + worldTileSize > player.positionX - player.playerScreenX;
+        boolean isAssetBoundaryLeftLimitDraw = worldAssetPositionX - worldTileSize < player.positionX + player.playerScreenX;
+        boolean isAssetBoundaryDownLimitDraw = worldAssetPositionY + worldTileSize > player.positionY - player.playerScreenY;
+        boolean isAssetBoundaryUpLimitDraw = worldAssetPositionY - worldTileSize < player.positionY + player.playerScreenY;
         return isAssetBoundaryUpLimitDraw && isAssetBoundaryDownLimitDraw && isAssetBoundaryLeftLimitDraw && isAssetBoundaryRightLimitDraw;
     }
 }

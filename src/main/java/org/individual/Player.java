@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.helpers.ToolsHelper.getImageFromAssets;
+import static org.game.GamePanel.tileSize;
 
 public class Player extends Individual
 {
@@ -21,8 +22,8 @@ public class Player extends Individual
         super(100, 100, 4, null); // set player position x, y and speed
         this.gamePanel = gamePanel;
         this.keyBoardHandler = keyBoardHandler;
-        this.playerScreenX = (this.gamePanel.screenWith/2) - (this.gamePanel.tileSize/2);
-        this.playerScreenY = (this.gamePanel.screeHeight/2) - (this.gamePanel.tileSize/2);
+        this.playerScreenX = (this.gamePanel.screenWith/2) - (tileSize/2);
+        this.playerScreenY = (this.gamePanel.screenHeight/2) - (tileSize/2);
         buildPlayerCollisionArea();
     }
 
@@ -31,8 +32,8 @@ public class Player extends Individual
         this.collisionArea = new Rectangle();
         this.collisionArea.x = 8;
         this.collisionArea.y = 16;
-        this.collisionArea.height = this.gamePanel.tileSize - 16;
-        this.collisionArea.width = this.gamePanel.tileSize - 16;
+        this.collisionArea.height = tileSize - 16;
+        this.collisionArea.width = tileSize - 16;
     }
 
     @Override
@@ -151,6 +152,6 @@ public class Player extends Individual
                 break;
         }
 
-        g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, tileSize, tileSize, null);
     }
 }

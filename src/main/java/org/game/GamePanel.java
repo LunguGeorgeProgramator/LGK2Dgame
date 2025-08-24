@@ -6,26 +6,25 @@ import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Color;
 
-import org.individual.Enemy;
 import org.individual.Player;
+import org.world.Enemies;
 import org.world.GameWorld;
 
 public class GamePanel extends JPanel implements Runnable
 {
-    final int originalTileSize = 16; // 16 x 16 pixel
-    final int scale = 3;
+    static final int originalTileSize = 16; // 16 x 16 pixel
+    static final int scale = 3;
 
-    public final int tileSize = originalTileSize * scale; // 48 x 48 pixel
-    public final int maxScreenColumns = 16;
-    public final int maxScreenRows = 12;
-    public final int screenWith = tileSize * maxScreenColumns; // 768 pixels
-    public final int screeHeight = tileSize * maxScreenRows; // 576 pixels
+    static public final int tileSize = originalTileSize * scale; // 48 x 48 pixel
+    static public final int maxScreenColumns = 16;
+    static public final int maxScreenRows = 12;
+    static public final int screenWith = tileSize * maxScreenColumns; // 768 pixels
+    static public final int screenHeight = tileSize * maxScreenRows; // 576 pixels
 
     final int framePerSecond = 60;
     final KeyBoardHandler keyBoardHandler;
     public final Player player;
-    final Enemy firtEnemy;
-    final Enemy secondEnemy;
+    final Enemies enemies;
     final GameWorld gameWorld;
     public final CollisionChecker collisionChecker;
     Thread gameThread;
@@ -33,32 +32,13 @@ public class GamePanel extends JPanel implements Runnable
     public GamePanel()
     {
         this.keyBoardHandler = new KeyBoardHandler();
-        this.setPreferredSize(new Dimension(screenWith, screeHeight));
+        this.setPreferredSize(new Dimension(screenWith, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(this.keyBoardHandler);
         this.setFocusable(true);
         this.player = new Player(this, this.keyBoardHandler);
-        this.firtEnemy = new Enemy(
-            this,
-            200,
-            200,
-            300,
-            200,
-            "down",
-            1,
-            "/enemy/color-monster.png"
-        );
-        this.secondEnemy = new Enemy(
-            this,
-            400,
-            200,
-            400,
-            100,
-            "up",
-            4,
-            "/enemy/color-monster.png" // TODO: add new monster images
-        );
+        this.enemies = new Enemies(this, player);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
         this.collisionChecker = new CollisionChecker(this);
     }
@@ -96,10 +76,8 @@ public class GamePanel extends JPanel implements Runnable
 
     public void update()
     {
-
         this.player.update();
-        this.firtEnemy.update();
-        this.secondEnemy.update();
+        this.enemies.update();
     }
 
     public void paintComponent(Graphics g)
@@ -108,24 +86,24 @@ public class GamePanel extends JPanel implements Runnable
         Graphics2D g2D = (Graphics2D) g;
 
         this.gameWorld.draw(g2D);
-
-//        this.secondEnemy.draw(g2D);
+        this.enemies.draw(g2D);
+        this.player.draw(g2D);
 
 //        int pX = this.player.positionX;
 //        int pY = this.player.positionY;
-//        int eX = this.firtEnemy.positionX;
-//        int eY = this.firtEnemy.positionY;
+//        int eX = this.enemy.positionX;
+//        int eY = this.enemy.positionY;
 //        if (pY< eY)
 //        {
 //            this.player.draw(g2D);
-//            this.firtEnemy.draw(g2D);
+//            this.enemy.draw(g2D);
 //        }
 //        else
 //        {
-//            this.firtEnemy.draw(g2D);
+//            this.enemy.draw(g2D);
 //            this.player.draw(g2D);
 //        }
-        this.player.draw(g2D);
+
         g2D.dispose(); // free up memory, destroy after draw
     }
 }

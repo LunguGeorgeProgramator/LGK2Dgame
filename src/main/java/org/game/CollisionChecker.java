@@ -3,6 +3,8 @@ package org.game;
 import org.individual.Individual;
 import org.world.WorldAssets;
 
+import static org.game.GamePanel.tileSize;
+
 public class CollisionChecker
 {
 
@@ -20,10 +22,10 @@ public class CollisionChecker
         int individualTopY = individual.positionY + individual.collisionArea.y;
         int individualBottomY = individual.positionY + individual.collisionArea.y + individual.collisionArea.height;
 
-        int individualLeftCol = individualLeftX / this.gamePanel.tileSize;
-        int individualRightCol = individualRightX / this.gamePanel.tileSize;
-        int individualTopRow = individualTopY / this.gamePanel.tileSize;
-        int individualBottomRow = individualBottomY / this.gamePanel.tileSize;
+        int individualLeftCol = individualLeftX / tileSize;
+        int individualRightCol = individualRightX / tileSize;
+        int individualTopRow = individualTopY / tileSize;
+        int individualBottomRow = individualBottomY / tileSize;
 
         int worldAssetOne;
         int worldAssetTwo;
@@ -31,25 +33,25 @@ public class CollisionChecker
         switch (individual.movementDirection)
         {
             case "up":
-                individualTopRow = (individualTopY - individual.speed) / gamePanel.tileSize;
+                individualTopRow = (individualTopY - individual.speed) / tileSize;
                 worldAssetOne = getWorldAssetIndex(individualLeftCol, individualTopRow);
                 worldAssetTwo = getWorldAssetIndex(individualRightCol, individualTopRow);
                 checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo, individual);
                 break;
             case "down":
-                individualBottomRow = (individualBottomY + individual.speed) / gamePanel.tileSize;
+                individualBottomRow = (individualBottomY + individual.speed) / tileSize;
                 worldAssetOne = getWorldAssetIndex(individualLeftCol, individualBottomRow);
                 worldAssetTwo = getWorldAssetIndex(individualRightCol, individualBottomRow);
                 checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo, individual);
                 break;
             case "left":
-                individualLeftCol = (individualLeftX - individual.speed) / gamePanel.tileSize;
+                individualLeftCol = (individualLeftX - individual.speed) / tileSize;
                 worldAssetOne = getWorldAssetIndex(individualLeftCol, individualTopRow);
                 worldAssetTwo = getWorldAssetIndex(individualLeftCol, individualBottomRow);
                 checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo, individual);
                 break;
             case "right":
-                individualRightCol = (individualRightX + individual.speed) / gamePanel.tileSize;
+                individualRightCol = (individualRightX + individual.speed) / tileSize;
                 worldAssetOne = getWorldAssetIndex(individualRightCol, individualTopRow);
                 worldAssetTwo = getWorldAssetIndex(individualRightCol, individualBottomRow);
                 checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo, individual);

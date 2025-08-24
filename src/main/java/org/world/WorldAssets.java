@@ -7,7 +7,7 @@ import static org.helpers.ToolsHelper.getImageFromAssets;
 public enum WorldAssets
 {
     GRASS(0, getImageFromAssets("/tiles/grass.png"), false),
-    WATER(1, getImageFromAssets("/tiles/water.png"), true),
+    WATER(1, getImageFromAssets("/tiles/water.png"), false),
     WALL(2, getImageFromAssets("/tiles/wall.png"), true),
     SIDE_WALL(3, getImageFromAssets("/tiles/sideWall.png"), true),
     TREE(4, getImageFromAssets("/tiles/tree.png"), true),

@@ -8,6 +8,8 @@ public abstract class Individual
 {
     public int positionX;
     public int positionY;
+    public int initialPositionX;
+    public int initialPositionY;
     public int speed;
     public String movementDirection;
     protected int frameCounter;
@@ -24,6 +26,8 @@ public abstract class Individual
 
     public Individual(int positionX, int positionY, int speed, String assetPath)
     {
+        this.initialPositionX = positionX;
+        this.initialPositionY = positionY;
         this.positionX = positionX;
         this.positionY = positionY;
         this.speed = speed;
