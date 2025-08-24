@@ -16,8 +16,7 @@ Run command
 
 When the game window opens use keyboard w, s, d and a keys to move the white rectangle.
 
-<img width="775" height="608" alt="Screenshot_20250819_222506" src="https://github.com/user-attachments/assets/45ae1cea-3cae-4db9-91be-6cc9f4538a67" />
-
+<img width="776" height="605" alt="yy" src="https://github.com/user-attachments/assets/ab42b13b-d621-40eb-89fa-a0f267f38247" />
 
 # How to build a windows exe ?
 
