@@ -37,7 +37,8 @@ public class Enemies
                 enemyAsset.getDirection(),
                 enemyAsset.getSpeed(),
                 enemyAsset.getEnemyAssetPath(),
-                this.player
+                this.player,
+                enemyAsset.getEnemyAssetsMap()
             ));
         }
     }
