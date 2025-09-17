@@ -13,7 +13,8 @@ import static org.game.GamePanel.tileSize;
 public class GameWorld
 {
 
-    GamePanel gamePanel;
+    final GamePanel gamePanel;
+    final Player player;
     public int[][] worldMap;
     int worldMapCol;
     int worldMapRow;
@@ -23,6 +24,7 @@ public class GameWorld
     public GameWorld(GamePanel gamePanel, String worldMapPath)
     {
         this.gamePanel = gamePanel;
+        this.player = this.gamePanel.player;
         List<String> txtMapLines = getTxtFileFromResources(worldMapPath);
         setWorldMapRange(txtMapLines);
         loadMapIntoMatrix(txtMapLines);
@@ -58,18 +60,17 @@ public class GameWorld
 
     public void draw(Graphics2D g2D)
     {
-        Player player = this.gamePanel.player;
         for (int i = 0; i < this.worldMap.length; i++)
         {
             for (int j = 0; j < this.worldMap[i].length; j++)
             {
                 int worldPositionX = tileSize * i;
                 int worldPositionY = tileSize * j;
-                int worldAssetPositionX = worldPositionX - player.positionX + player.playerScreenX;
-                int worldAssetPositionY = worldPositionY - player.positionY + player.playerScreenY;
+                int worldAssetPositionX = worldPositionX - this.player.positionX + this.player.playerScreenX;
+                int worldAssetPositionY = worldPositionY - this.player.positionY + this.player.playerScreenY;
                 int worldAssetIndex = this.worldMap[i][j];
 
-                if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, player, tileSize, true))
+                if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, this.player, tileSize))
                 {
                     // Draw assets only if they are inside the screen (with x height) plus one tile size to remove popup effect on rendering world assets.
                     g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, tileSize, tileSize, null);
@@ -78,7 +79,7 @@ public class GameWorld
         }
     }
 
-    private boolean checkIfAssetIsInsideTheBoundary(int worldAssetPositionX, int worldAssetPositionY, Player player, int worldTileSize, boolean isWorldMapAsset)
+    static public boolean checkIfAssetIsInsideTheBoundary(int worldAssetPositionX, int worldAssetPositionY, Player player, int worldTileSize)
     {
         boolean isAssetBoundaryRightLimitDraw = worldAssetPositionX + worldTileSize > player.positionX - player.playerScreenX;
         boolean isAssetBoundaryLeftLimitDraw = worldAssetPositionX - worldTileSize < player.positionX + player.playerScreenX;

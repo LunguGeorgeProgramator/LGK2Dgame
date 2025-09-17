@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import static org.helpers.ToolsHelper.getImageFromAssets;
 import static org.game.GamePanel.tileSize;
+import static org.world.GameWorld.checkIfAssetIsInsideTheBoundary;
 
 public class Enemy extends Individual
 {
@@ -45,12 +46,32 @@ public class Enemy extends Individual
     @Override
     public void update()
     {
+        int maxAllowedMoveLeftRight = (this.initialPositionX + maxDistanceAllowedToMove);
+        if (this.positionX < maxAllowedMoveLeftRight && direction.equals("right"))
+        {
+            this.positionX = this.positionX + this.speed;
+        }
+        else if (this.positionX == maxAllowedMoveLeftRight && direction.equals("right"))
+        {
+            direction = "left";
+        }
+
+        int minAllowedMoveLeftRight = this.initialPositionX;
+        if (this.positionX > minAllowedMoveLeftRight && direction.equals("left"))
+        {
+            this.positionX = this.positionX - this.speed;
+        }
+        else if (this.positionX == minAllowedMoveLeftRight && direction.equals("left"))
+        {
+            direction = "right";
+        }
+
         int maxAllowedMove = (this.initialPositionY + maxDistanceAllowedToMove);
         if (this.positionY < maxAllowedMove && direction.equals("down"))
         {
             this.positionY = this.positionY + this.speed;
         }
-        else if (this.positionY == maxAllowedMove)
+        else if (this.positionY == maxAllowedMove && direction.equals("down"))
         {
             direction = "up";
         }
@@ -60,7 +81,7 @@ public class Enemy extends Individual
         {
             this.positionY = this.positionY - this.speed;
         }
-        else if (this.positionY == minAllowedMove)
+        else if (this.positionY == minAllowedMove && direction.equals("up"))
         {
             direction = "down";
         }
@@ -73,20 +94,9 @@ public class Enemy extends Individual
         int worldEnemyAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
 
         // draw enemy only if is inside the screen view
-        if(checkIfAssetIsInsideTheBoundary(worldEnemyAssetPositionX, worldEnemyAssetPositionY, this.player))
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
             g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, tileSize, tileSize, null);
         }
-    }
-
-    private boolean checkIfAssetIsInsideTheBoundary(int worldAssetPositionX, int worldAssetPositionY, Player player)
-    {
-        int halfOfScreenWith = GamePanel.screenWith / 2;
-        int halfOfScreenHeight = GamePanel.screenHeight / 2;
-        boolean isAssetBoundaryLeftLimitDraw = worldAssetPositionX + GamePanel.tileSize > player.playerScreenX - halfOfScreenWith;
-        boolean isAssetBoundaryRightLimitDraw = worldAssetPositionX + GamePanel.tileSize < player.positionX + player.playerScreenX - halfOfScreenWith;
-        boolean isAssetBoundaryDownLimitDraw = worldAssetPositionY + GamePanel.tileSize > player.positionY - player.playerScreenY - GamePanel.screenHeight;
-        boolean isAssetBoundaryUpLimitDraw = worldAssetPositionY - GamePanel.tileSize < player.positionY + halfOfScreenHeight;
-        return isAssetBoundaryUpLimitDraw && isAssetBoundaryDownLimitDraw && isAssetBoundaryLeftLimitDraw && isAssetBoundaryRightLimitDraw;
     }
 }

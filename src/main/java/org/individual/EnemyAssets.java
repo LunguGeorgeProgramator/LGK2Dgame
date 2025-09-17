@@ -6,9 +6,9 @@ public enum EnemyAssets
 {
 
     GHOST_UP_AND_DOWN(1, tileSize * 6, tileSize * 6, 200, "up", 1, "/enemy/color-monster.png"),
-    GHOST_LEFT_AND_RIGHT(2, tileSize * 10, tileSize * 10, 0, "down", 1, "/enemy/color-monster.png"),
+    GHOST_LEFT_AND_RIGHT(2, tileSize * 10, tileSize * 10, 100, "left", 1, "/enemy/color-monster.png"),
     GHOST_LEFT_AND_RIGHT2(3, tileSize * 11, tileSize * 11, 200, "up", 1, "/enemy/color-monster.png"),
-    GHOST_LEFT_AND_RIGHT3(4, tileSize * 12, tileSize * 12, 300, "up", 1, "/enemy/color-monster.png"),
+    GHOST_LEFT_AND_RIGHT3(4, tileSize * 12, tileSize * 12, 300, "right", 1, "/enemy/color-monster.png"),
     GHOST_LEFT_AND_RIGHT4(5, tileSize * 10, tileSize * 5, 400, "down", 1, "/enemy/color-monster.png"),
     GHOST_LEFT_AND_RIGHT5(6, tileSize * 50, tileSize * 18, 200, "up", 2, "/enemy/color-monster.png"),
     GHOST_LEFT_AND_RIGHT6(7, tileSize * 60, tileSize * 15, 200, "down", 1, "/enemy/color-monster.png"),
