@@ -16,15 +16,17 @@ public class Enemy extends Individual
 {
 
     static protected final String COLLISION_ENEMY_ASSET_KEY_PREFIX = "collision-";
-    GamePanel gamePanel;
+    static protected final String ENEMY_DIRECTION_LEFT = "left";
+    static protected final String ENEMY_DIRECTION_RIGHT = "right";
+    static protected final String ENEMY_DIRECTION_UP = "up";
+    static protected final String ENEMY_DIRECTION_DOWN = "down";
+    private final GamePanel gamePanel; // TODO decide what to do wit this or remove it
     private final int maxDistanceAllowedToMove;
     private String direction;
     public BufferedImage enemyAsset;
-    public BufferedImage enemyMovingAsset;
-    public BufferedImage enemyCollisionAsset;
     private boolean isEnemyCollidingWithPlayer = false;
     final private Map<String, BufferedImage> enemyAssetsMap;
-    Player player;
+    private final Player player;
 
     public Enemy(
         GamePanel gamePanel,
@@ -59,8 +61,7 @@ public class Enemy extends Individual
     @Override
     public void getAssetImages(String assetPath)
     {
-        this.enemyMovingAsset = Objects.requireNonNull(getImageFromAssets(assetPath));
-        this.enemyCollisionAsset = Objects.requireNonNull(getImageFromAssets("/enemy/ghost/ghost-panic-left.png")); // TODO: add this in enemy assets class EnemyAssets or create a list of assets
+        this.enemyAsset = Objects.requireNonNull(getImageFromAssets(assetPath));
     }
 
     @Override
@@ -70,43 +71,43 @@ public class Enemy extends Individual
         if (!enemyCheckCollisionWithPlayer())
         {
             int maxAllowedMoveLeftRight = (this.initialPositionX + maxDistanceAllowedToMove);
-            if (this.positionX < maxAllowedMoveLeftRight && direction.equals("right"))
+            if (this.positionX < maxAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_RIGHT))
             {
                 this.positionX = this.positionX + this.speed;
             }
-            else if (this.positionX == maxAllowedMoveLeftRight && direction.equals("right"))
+            else if (this.positionX == maxAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_RIGHT))
             {
-                direction = "left";
+                direction = ENEMY_DIRECTION_LEFT;
             }
 
             int minAllowedMoveLeftRight = this.initialPositionX;
-            if (this.positionX > minAllowedMoveLeftRight && direction.equals("left"))
+            if (this.positionX > minAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_LEFT))
             {
                 this.positionX = this.positionX - this.speed;
             }
-            else if (this.positionX == minAllowedMoveLeftRight && direction.equals("left"))
+            else if (this.positionX == minAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_LEFT))
             {
-                direction = "right";
+                direction = ENEMY_DIRECTION_RIGHT;
             }
 
             int maxAllowedMove = (this.initialPositionY + maxDistanceAllowedToMove);
-            if (this.positionY < maxAllowedMove && direction.equals("down"))
+            if (this.positionY < maxAllowedMove && direction.equals(ENEMY_DIRECTION_DOWN))
             {
                 this.positionY = this.positionY + this.speed;
             }
-            else if (this.positionY == maxAllowedMove && direction.equals("down"))
+            else if (this.positionY == maxAllowedMove && direction.equals(ENEMY_DIRECTION_DOWN))
             {
-                direction = "up";
+                direction = ENEMY_DIRECTION_UP;
             }
 
             int minAllowedMove = this.initialPositionY;
-            if (this.positionY > minAllowedMove && direction.equals("up"))
+            if (this.positionY > minAllowedMove && direction.equals(ENEMY_DIRECTION_UP))
             {
                 this.positionY = this.positionY - this.speed;
             }
-            else if (this.positionY == minAllowedMove && direction.equals("up"))
+            else if (this.positionY == minAllowedMove && direction.equals(ENEMY_DIRECTION_UP))
             {
-                direction = "down";
+                direction = ENEMY_DIRECTION_DOWN;
             }
         }
 
@@ -162,7 +163,6 @@ public class Enemy extends Individual
         // draw enemy only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
-            this.enemyAsset = this.isEnemyCollidingWithPlayer ? this.enemyCollisionAsset : this.enemyMovingAsset;
             if (!this.enemyAssetsMap.isEmpty() && this.enemyAssetsMap.containsKey(this.direction))
             {
                 String collisionAssetKey = COLLISION_ENEMY_ASSET_KEY_PREFIX + this.direction;
