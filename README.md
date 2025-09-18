@@ -18,7 +18,7 @@ When the game window opens use keyboard w, s, d and a keys to move the white rec
 
 <img width="776" height="605" alt="yy" src="https://github.com/user-attachments/assets/ab42b13b-d621-40eb-89fa-a0f267f38247" />
 
-<img width="769" height="606" alt="new_implementation" src="https://github.com/user-attachments/assets/e2c78e8e-5ad4-4756-a6e8-86dcf88b3940" />
+<img width="773" height="610" alt="test_game" src="https://github.com/user-attachments/assets/fdff9275-fbfa-4273-9a97-cebf664a0645" />
 
 # How to build a windows exe ?
 
