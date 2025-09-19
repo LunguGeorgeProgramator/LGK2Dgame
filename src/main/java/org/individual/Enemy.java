@@ -67,8 +67,10 @@ public class Enemy extends Individual
     @Override
     public void update()
     {
+        this.isEnemyCollidingWithPlayer = enemyCheckCollisionWithPlayer();
+
         // stop enemy movement if player is colliding with enemy
-        if (!enemyCheckCollisionWithPlayer())
+        if (!this.isEnemyCollidingWithPlayer)
         {
             int maxAllowedMoveLeftRight = (this.initialPositionX + maxDistanceAllowedToMove);
             if (this.positionX < maxAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_RIGHT))
@@ -141,16 +143,12 @@ public class Enemy extends Individual
 
         if (playerLeftCol == enemyLeftCol && playerTopRow == enemyTopRow)
         {
-            this.isEnemyCollidingWithPlayer = true;
             return true;
         }
         else if (playerRightCol == enemyRightCol && playerBottomRow == enemyBottomRow)
         {
-            this.isEnemyCollidingWithPlayer = true;
             return true;
         }
-
-        this.isEnemyCollidingWithPlayer = false;
         return false;
     }
 

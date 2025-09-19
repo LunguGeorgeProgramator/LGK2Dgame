@@ -19,6 +19,7 @@ public enum WorldAssets
     LAKE_SHORE_UP(10, getImageFromAssets("/tiles/lake-shore-up-exp.png"), true),
     LAKE_SHORE_DOWN(11, getImageFromAssets("/tiles/lake-shore-down-exp.png"), true),
     LAKE_SHORE_LEFT(12, getImageFromAssets("/tiles/lake-shore-left-exp.png"), true),
+    LAKE_SHORE_RIGHT(13, getImageFromAssets("/tiles/lake-shore-right-exp.png"), true),
     LAKE_CORNER_RIGHT_INVERTED_DOWN(14, getImageFromAssets("/tiles/lake-corner-right-inverted-down-exp.png"), true);
 
     private final int index;

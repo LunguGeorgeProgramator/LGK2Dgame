@@ -9,6 +9,7 @@ import java.awt.Color;
 import org.individual.Player;
 import org.world.Enemies;
 import org.world.GameWorld;
+import org.world.WorldItems;
 
 public class GamePanel extends JPanel implements Runnable
 {
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable
     public final Player player;
     final Enemies enemies;
     final GameWorld gameWorld;
+    final WorldItems worldItems;
     public final CollisionChecker collisionChecker;
     Thread gameThread;
 
@@ -40,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable
         this.player = new Player(this, this.keyBoardHandler);
         this.enemies = new Enemies(this, player);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
+        this.worldItems = new WorldItems(this, this.player);
         this.collisionChecker = new CollisionChecker(this);
     }
 
@@ -78,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable
     {
         this.player.update();
         this.enemies.update();
+        this.worldItems.update();
     }
 
     public void paintComponent(Graphics g)
@@ -88,6 +92,7 @@ public class GamePanel extends JPanel implements Runnable
         this.gameWorld.draw(g2D);
         this.enemies.draw(g2D);
         this.player.draw(g2D);
+        this.worldItems.draw(g2D);
 
 //        int pX = this.player.positionX;
 //        int pY = this.player.positionY;
