@@ -1,0 +1,16 @@
+[ {
+  "itemName" : "KEY",
+  "count" : 0,
+  "status" : "active",
+  "itemType" : "KEY"
+}, {
+  "itemName" : "RUBY",
+  "count" : 0,
+  "status" : "active",
+  "itemType" : "QUEST"
+}, {
+  "itemName" : "CHEST",
+  "count" : 2,
+  "status" : "active",
+  "itemType" : "CHEST_DOOR"
+} ]

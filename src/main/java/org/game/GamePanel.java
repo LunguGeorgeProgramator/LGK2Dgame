@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 
 import org.individual.Player;
+import org.inventory.PlayerInventory;
 import org.world.Enemies;
 import org.world.GameWorld;
 import org.world.WorldItems;
@@ -30,9 +31,11 @@ public class GamePanel extends JPanel implements Runnable
     final WorldItems worldItems;
     public final CollisionChecker collisionChecker;
     Thread gameThread;
+    public final PlayerInventory playerInventory;
 
     public GamePanel()
     {
+        this.playerInventory = new PlayerInventory();
         this.keyBoardHandler = new KeyBoardHandler();
         this.setPreferredSize(new Dimension(screenWith, screenHeight));
         this.setBackground(Color.BLACK);
@@ -42,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable
         this.player = new Player(this, this.keyBoardHandler);
         this.enemies = new Enemies(this, player);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
-        this.worldItems = new WorldItems(this, this.player);
+        this.worldItems = new WorldItems(this, this.player, this.playerInventory);
         this.collisionChecker = new CollisionChecker(this);
     }
 
@@ -79,6 +82,10 @@ public class GamePanel extends JPanel implements Runnable
 
     public void update()
     {
+        if (this.keyBoardHandler.pKeyPressed)
+        { // remove all items from player inventory
+            this.playerInventory.removeAllFromInventory();
+        }
         this.player.update();
         this.enemies.update();
         this.worldItems.update();
@@ -91,8 +98,8 @@ public class GamePanel extends JPanel implements Runnable
 
         this.gameWorld.draw(g2D);
         this.enemies.draw(g2D);
+        this.worldItems.draw(g2D, this.playerInventory);
         this.player.draw(g2D);
-        this.worldItems.draw(g2D);
 
 //        int pX = this.player.positionX;
 //        int pY = this.player.positionY;

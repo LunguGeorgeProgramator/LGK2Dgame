@@ -1,4 +1,2 @@
 rootProject.name = 'LGK2DGame'
-include 'individual'
-include 'c'
 
