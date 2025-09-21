@@ -13,8 +13,9 @@ Run command
 ````
 ./gradlew run
 ````
+When the game window opens, use the W, A, S and D keys to move the white rectangle.
 
-When the game window opens use keyboard w, s, d and a keys to move the white rectangle.
+To remove all picked-up items from the map, press the P key to clear the player's inventory.
 
 <img width="776" height="605" alt="yy" src="https://github.com/user-attachments/assets/ab42b13b-d621-40eb-89fa-a0f267f38247" />
 
@@ -24,16 +25,17 @@ When the game window opens use keyboard w, s, d and a keys to move the white rec
 
 # How to build a windows exe ?
 
-Run command as bellow the exe file will be on project path added also bellow:
+Run the following commands to build the project and generate the `.exe`
 
 ```
 ./gradlew clean build
- ./gradlew launch4j
+./gradlew launch4j
 ```
-
+The generated executable will be located at:
 ````
 LGK2Dgame/build/home/georgel/IdeaProjects/LGK2Dgame/build/exe/LGK2DGame.exe
 ````
+For convenience, I've also included a pre-built `.exe`
 
-But for quicker use, I added the exe inside the root folder for this project.
-If you are scared do not open it build it your self with above commands.
+⚠️ If you prefer not to run the included `.exe` , feel free to build it yourself using the commands above.
+
