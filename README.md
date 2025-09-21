@@ -20,6 +20,8 @@ When the game window opens use keyboard w, s, d and a keys to move the white rec
 
 <img width="774" height="605" alt="lake_view" src="https://github.com/user-attachments/assets/35702244-3b03-46cb-9f73-359e4a6866c0" />
 
+<img width="768" height="598" alt="world_items_test" src="https://github.com/user-attachments/assets/55703f9b-d6d0-48b3-a87b-b8108d85719f" />
+
 # How to build a windows exe ?
 
 Run command as bellow the exe file will be on project path added also bellow:
