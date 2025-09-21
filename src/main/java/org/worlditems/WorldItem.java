@@ -86,7 +86,7 @@ public class WorldItem
     {
         if (this.itemAssetType.equals(WorldItemTypes.CHEST_DOOR.name()))
         {
-            PlayerInventoryModel playerInventoryItem = this.playerInventory.getInventoryItemByName(WorldItemsAssets.KEY.name());
+            PlayerInventoryModel playerInventoryItem = this.playerInventory.getInventoryItemByName(WorldItemsAssets.GOLD_KEY.name());
             boolean isKeyInInventoryForChestAsset = playerInventoryItem != null && playerInventoryItem.getCount() > 0;
             this.assetNumber = this.hasPlayerCollidedWithItem && isKeyInInventoryForChestAsset ? 1 : 2;
 
@@ -165,25 +165,13 @@ public class WorldItem
     {
         // Anti-aliasing for smoother text
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // Rectangle position and size
-        int x = 50;
-        int y = 50;
-        int width = 200;
-        int height = 100;
-        // Draw filled black rectangle
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect(x, y, width, height);
         // Set font and color for text
-        g2d.setFont(new Font("Arial", Font.BOLD, 20));
+        g2d.setFont(new Font("Arial", Font.BOLD, 15));
         g2d.setColor(Color.WHITE);
         // Text to draw
         String text = this.textShownOnInteractionWithItem;
-        // Calculate position to center the text
-        FontMetrics fm = g2d.getFontMetrics();
-        int textX = x + (width - fm.stringWidth(text)) / 2;
-        int textY = y + (height - fm.getHeight()) / 2 + fm.getAscent();
         // Draw the string
-        g2d.drawString(text, textX, textY);
+        g2d.drawString(text, tileSize * 2, tileSize * 2);
     }
 
     // Override in child classes if logic needs changing

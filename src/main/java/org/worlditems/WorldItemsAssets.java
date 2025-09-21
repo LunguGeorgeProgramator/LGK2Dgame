@@ -9,7 +9,7 @@ import static org.helpers.ToolsHelper.getImageFromAssets;
 
 public enum WorldItemsAssets
 {
-    KEY(1, WorldItemTypes.KEY.name(), tileSize * 4, tileSize * 4,
+    GOLD_KEY(1, WorldItemTypes.KEY.name(), tileSize * 4, tileSize * 4,
         Map.of(
             1, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-profile-right.png")),
             2, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-spin-one.png")),
