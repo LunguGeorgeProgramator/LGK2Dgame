@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.helpers.ToolsHelper.getImageFromAssets;
+import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 import static org.game.GamePanel.tileSize;
 import static org.world.GameWorld.checkIfAssetIsInsideTheBoundary;
 
@@ -61,7 +61,7 @@ public class Enemy extends Individual
     @Override
     public void getAssetImages(String assetPath)
     {
-        this.enemyAsset = Objects.requireNonNull(getImageFromAssets(assetPath));
+        this.enemyAsset = Objects.requireNonNull(getScaledImageFromAssets(assetPath));
     }
 
     @Override
@@ -173,7 +173,7 @@ public class Enemy extends Individual
                     this.enemyAsset = this.enemyAssetsMap.get(this.direction);
                 }
             }
-            g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, tileSize, tileSize, null);
+            g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, null);
         }
     }
 }

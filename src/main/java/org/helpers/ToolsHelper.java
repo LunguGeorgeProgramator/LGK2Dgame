@@ -2,6 +2,7 @@ package org.helpers;
 
 
 import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +12,9 @@ import java.util.Collections;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
+
+import static org.game.GamePanel.tileSize;
 
 public class ToolsHelper
 {
@@ -29,6 +33,28 @@ public class ToolsHelper
             e.printStackTrace();
         }
         return Collections.emptyList();
+    }
+
+    public static BufferedImage getScaledImageFromAssets(String imagePath)
+    {
+        try
+        {
+            BufferedImage bufferedImage = getImageFromAssets(imagePath);
+            if (bufferedImage == null)
+            {
+                throw new NullPointerException();
+            }
+            BufferedImage scaledBufferedImage = new BufferedImage(tileSize, tileSize, bufferedImage.getType());
+            Graphics2D graphics2D = scaledBufferedImage.createGraphics();
+            graphics2D.drawImage(bufferedImage, 0, 0, tileSize, tileSize, null);
+            graphics2D.dispose();
+            return Objects.requireNonNull(scaledBufferedImage);
+        }
+        catch (NullPointerException ex)
+        {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     // tool used to load game images assets

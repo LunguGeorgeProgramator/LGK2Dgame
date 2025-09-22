@@ -152,26 +152,13 @@ public class WorldItem
         // draw world item only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.worldItemPositionX, this.worldItemPositionY, this.player, tileSize))
         {
-            g2D.drawImage(this.itemsAssetsMap.get(this.assetNumber), worldItemAssetPositionX, worldItemAssetPositionY, tileSize, tileSize, null);
+            g2D.drawImage(this.itemsAssetsMap.get(this.assetNumber), worldItemAssetPositionX, worldItemAssetPositionY, null);
         }
+
         if (hasPlayerCollidedWithItem)
         {
-            paintComponent(g2D);
+            this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.textShownOnInteractionWithItem);
         }
-    }
-
-    // TODO: move this example to a new class or add it to helper static one.
-    protected void paintComponent(Graphics2D g2d)
-    {
-        // Anti-aliasing for smoother text
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // Set font and color for text
-        g2d.setFont(new Font("Arial", Font.BOLD, 15));
-        g2d.setColor(Color.WHITE);
-        // Text to draw
-        String text = this.textShownOnInteractionWithItem;
-        // Draw the string
-        g2d.drawString(text, tileSize * 2, tileSize * 2);
     }
 
     // Override in child classes if logic needs changing

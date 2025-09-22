@@ -5,32 +5,32 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.game.GamePanel.tileSize;
-import static org.helpers.ToolsHelper.getImageFromAssets;
+import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
 public enum WorldItemsAssets
 {
     GOLD_KEY(1, WorldItemTypes.KEY.name(), tileSize * 4, tileSize * 4,
         Map.of(
-            1, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-profile-right.png")),
-            2, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-spin-one.png")),
-            3, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-spin-back.png")),
-            4, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-spin-two.png")),
-            5, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-profile-left.png")),
-            6, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-spin-three.png")),
-            7, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-spin-front.png")),
-            8, Objects.requireNonNull(getImageFromAssets("/worlditems/rusted-key-spin-four.png"))
+            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-right.png")),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-one.png")),
+            3, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-back.png")),
+            4, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-two.png")),
+            5, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-left.png")),
+            6, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-three.png")),
+            7, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-front.png")),
+            8, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-four.png"))
         )),
     RUBY(1, WorldItemTypes.QUEST.name(), tileSize * 5, tileSize * 5,
         Map.of(
-            1, Objects.requireNonNull(getImageFromAssets("/worlditems/ruby-front.png")),
-            2, Objects.requireNonNull(getImageFromAssets("/worlditems/ruby-spin-left.png")),
-            3, Objects.requireNonNull(getImageFromAssets("/worlditems/ruby-side.png")),
-            4, Objects.requireNonNull(getImageFromAssets("/worlditems/ruby-spin-right.png"))
+            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")),
+            3, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")),
+            4, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png"))
         )),
     CHEST(1, WorldItemTypes.CHEST_DOOR.name(), tileSize * 2, tileSize * 6,
         Map.of(
-                1, Objects.requireNonNull(getImageFromAssets("/worlditems/open-chest.png")),
-                2, Objects.requireNonNull(getImageFromAssets("/worlditems/closed-chest.png"))
+                1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")),
+                2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png"))
         ));
 
     private final int itemId;

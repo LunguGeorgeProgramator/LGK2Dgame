@@ -29,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable
     final Enemies enemies;
     final GameWorld gameWorld;
     final WorldItems worldItems;
+    public final GameTextProvider gameTextProvider;
     public final CollisionChecker collisionChecker;
     Thread gameThread;
     public final PlayerInventory playerInventory;
@@ -37,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable
     {
         this.playerInventory = new PlayerInventory();
         this.keyBoardHandler = new KeyBoardHandler();
+        this.gameTextProvider = new GameTextProvider();
         this.setPreferredSize(new Dimension(screenWith, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);

@@ -6,17 +6,22 @@ import java.util.Objects;
 
 import static org.game.GamePanel.tileSize;
 import static org.helpers.ToolsHelper.getImageFromAssets;
-import static org.individual.Enemy.*;
+import static org.helpers.ToolsHelper.getScaledImageFromAssets;
+import static org.individual.Enemy.ENEMY_DIRECTION_RIGHT;
+import static org.individual.Enemy.COLLISION_ENEMY_ASSET_KEY_PREFIX;
+import static org.individual.Enemy.ENEMY_DIRECTION_LEFT;
+import static org.individual.Enemy.ENEMY_DIRECTION_DOWN;
+import static org.individual.Enemy.ENEMY_DIRECTION_UP;
 
 public enum EnemyAssets
 {
 
     GHOST_MONSTER(1, tileSize * 6, tileSize * 6, 400, ENEMY_DIRECTION_LEFT, 8, "/enemy/ghost/ghost-fly-left.png",
         Map.of(
-            ENEMY_DIRECTION_LEFT, Objects.requireNonNull(getImageFromAssets("/enemy/ghost/ghost-fly-left.png")),
-            ENEMY_DIRECTION_RIGHT, Objects.requireNonNull(getImageFromAssets("/enemy/ghost/ghost-fly-right.png")),
-            COLLISION_ENEMY_ASSET_KEY_PREFIX + ENEMY_DIRECTION_RIGHT, Objects.requireNonNull(getImageFromAssets("/enemy/ghost/ghost-panic-right.png")),
-            COLLISION_ENEMY_ASSET_KEY_PREFIX + ENEMY_DIRECTION_LEFT, Objects.requireNonNull(getImageFromAssets("/enemy/ghost/ghost-panic-left.png"))
+            ENEMY_DIRECTION_LEFT, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-left.png")),
+            ENEMY_DIRECTION_RIGHT, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-right.png")),
+            COLLISION_ENEMY_ASSET_KEY_PREFIX + ENEMY_DIRECTION_RIGHT, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-right.png")),
+            COLLISION_ENEMY_ASSET_KEY_PREFIX + ENEMY_DIRECTION_LEFT, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-left.png"))
         )),
     COLOR_MONSTER(2, tileSize * 10, tileSize * 10, 200, ENEMY_DIRECTION_LEFT, 2, "/enemy/color-monster.png", Map.of()),
     COLOR_MONSTER2(3, tileSize * 11, tileSize * 11, 200, ENEMY_DIRECTION_UP, 2, "/enemy/color-monster.png", Map.of()),

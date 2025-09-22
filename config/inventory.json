@@ -10,7 +10,7 @@
   "itemType" : "QUEST"
 }, {
   "itemName" : "CHEST",
-  "count" : 2,
+  "count" : 0,
   "status" : "active",
   "itemType" : "CHEST_DOOR"
 } ]

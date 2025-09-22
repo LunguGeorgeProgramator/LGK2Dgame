@@ -2,12 +2,13 @@ package org.individual;
 import org.game.GamePanel;
 import org.game.KeyBoardHandler;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.helpers.ToolsHelper.getImageFromAssets;
+import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 import static org.game.GamePanel.tileSize;
 
 public class Player extends Individual
@@ -69,7 +70,7 @@ public class Player extends Individual
 
     private BufferedImage getAssetImage(String assetPath)
     {
-        return Objects.requireNonNull(getImageFromAssets(assetPath));
+        return Objects.requireNonNull(getScaledImageFromAssets(assetPath));
     }
 
     @Override
@@ -152,6 +153,6 @@ public class Player extends Individual
                 break;
         }
 
-        g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, tileSize, tileSize, null);
+        g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, null);
     }
 }

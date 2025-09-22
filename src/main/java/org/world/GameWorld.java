@@ -73,7 +73,7 @@ public class GameWorld
                 if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, this.player, tileSize))
                 {
                     // Draw assets only if they are inside the screen (with x height) plus one tile size to remove popup effect on rendering world assets.
-                    g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, tileSize, tileSize, null);
+                    g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, null);
                 }
             }
         }

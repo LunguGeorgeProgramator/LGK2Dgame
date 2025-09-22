@@ -2,25 +2,25 @@ package org.world;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import static org.helpers.ToolsHelper.getImageFromAssets;
+import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
 public enum WorldAssets
 {
-    GRASS(0, getImageFromAssets("/tiles/grass.png"), false),
-    WATER(1, getImageFromAssets("/tiles/water-exp.png"), true),
-    WALL(2, getImageFromAssets("/tiles/wall.png"), true),
-    SIDE_WALL(3, getImageFromAssets("/tiles/sideWall.png"), true),
-    TREE(4, getImageFromAssets("/tiles/tree.png"), true),
-    ROAD(5, getImageFromAssets("/tiles/road.png"), false),
-    LAKE_CORNER_LEFT_UP(6, getImageFromAssets("/tiles/lake-corner-left-up-exp.png"), true),
-    LAKE_CORNER_RIGHT_UP(7, getImageFromAssets("/tiles/lake-corner-right-up-exp.png"), true),
-    LAKE_CORNER_LEFT_DOWN(8, getImageFromAssets("/tiles/lake-corner-left-down-exp.png"), true),
-    LAKE_CORNER_RIGHT_DOWN(9, getImageFromAssets("/tiles/lake-corner-right-down-exp.png"), true),
-    LAKE_SHORE_UP(10, getImageFromAssets("/tiles/lake-shore-up-exp.png"), true),
-    LAKE_SHORE_DOWN(11, getImageFromAssets("/tiles/lake-shore-down-exp.png"), true),
-    LAKE_SHORE_LEFT(12, getImageFromAssets("/tiles/lake-shore-left-exp.png"), true),
-    LAKE_SHORE_RIGHT(13, getImageFromAssets("/tiles/lake-shore-right-exp.png"), true),
-    LAKE_CORNER_RIGHT_INVERTED_DOWN(14, getImageFromAssets("/tiles/lake-corner-right-inverted-down-exp.png"), true);
+    GRASS(0, getScaledImageFromAssets("/tiles/grass.png"), false),
+    WATER(1, getScaledImageFromAssets("/tiles/water-exp.png"), true),
+    WALL(2, getScaledImageFromAssets("/tiles/wall.png"), true),
+    SIDE_WALL(3, getScaledImageFromAssets("/tiles/sideWall.png"), true),
+    TREE(4, getScaledImageFromAssets("/tiles/tree.png"), true),
+    ROAD(5, getScaledImageFromAssets("/tiles/road.png"), false),
+    LAKE_CORNER_LEFT_UP(6, getScaledImageFromAssets("/tiles/lake-corner-left-up-exp.png"), true),
+    LAKE_CORNER_RIGHT_UP(7, getScaledImageFromAssets("/tiles/lake-corner-right-up-exp.png"), true),
+    LAKE_CORNER_LEFT_DOWN(8, getScaledImageFromAssets("/tiles/lake-corner-left-down-exp.png"), true),
+    LAKE_CORNER_RIGHT_DOWN(9, getScaledImageFromAssets("/tiles/lake-corner-right-down-exp.png"), true),
+    LAKE_SHORE_UP(10, getScaledImageFromAssets("/tiles/lake-shore-up-exp.png"), true),
+    LAKE_SHORE_DOWN(11, getScaledImageFromAssets("/tiles/lake-shore-down-exp.png"), true),
+    LAKE_SHORE_LEFT(12, getScaledImageFromAssets("/tiles/lake-shore-left-exp.png"), true),
+    LAKE_SHORE_RIGHT(13, getScaledImageFromAssets("/tiles/lake-shore-right-exp.png"), true),
+    LAKE_CORNER_RIGHT_INVERTED_DOWN(14, getScaledImageFromAssets("/tiles/lake-corner-right-inverted-down-exp.png"), true);
 
     private final int index;
     private final BufferedImage worldAssetImage;
