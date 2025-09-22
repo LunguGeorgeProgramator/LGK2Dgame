@@ -9,7 +9,7 @@ import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
 public enum WorldItemsAssets
 {
-    GOLD_KEY(1, WorldItemTypes.KEY.name(), tileSize * 4, tileSize * 4,
+    GOLD_KEY(1, WorldItemTypes.KEY.name(), false, tileSize * 4, tileSize * 4,
         Map.of(
             1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-right.png")),
             2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-one.png")),
@@ -20,17 +20,22 @@ public enum WorldItemsAssets
             7, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-front.png")),
             8, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-four.png"))
         )),
-    RUBY(1, WorldItemTypes.QUEST.name(), tileSize * 5, tileSize * 5,
+    RUBY(2, WorldItemTypes.QUEST.name(), false, tileSize * 20, tileSize * 2,
         Map.of(
             1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")),
             2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")),
             3, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")),
             4, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png"))
         )),
-    CHEST(1, WorldItemTypes.CHEST_DOOR.name(), tileSize * 2, tileSize * 6,
+    CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6,
         Map.of(
-                1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")),
-                2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png"))
+            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png"))
+        )),
+    DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4,
+        Map.of(
+            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png"))
         ));
 
     private final int itemId;
@@ -38,17 +43,20 @@ public enum WorldItemsAssets
     final private int defaultPositionX;
     final private int defaultPositionY;
     final private Map<Integer, BufferedImage> itemsAssetsMap;
+    final private boolean solidStopOnCollisionWithPlayer;
 
     WorldItemsAssets(
-        int itemId,
-        String itemType,
-        int defaultPositionX,
-        int defaultPositionY,
-        Map<Integer, BufferedImage> itemsAssetsMap
+            int itemId,
+            String itemType,
+            boolean solidStopOnCollisionWithPlayer,
+            int defaultPositionX,
+            int defaultPositionY,
+            Map<Integer, BufferedImage> itemsAssetsMap
     )
     {
         this.itemId = itemId;
         this.itemType = itemType;
+        this.solidStopOnCollisionWithPlayer = solidStopOnCollisionWithPlayer;
         this.defaultPositionX = defaultPositionX;
         this.defaultPositionY = defaultPositionY;
         this.itemsAssetsMap = itemsAssetsMap;
@@ -77,5 +85,10 @@ public enum WorldItemsAssets
     public String getItemType()
     {
         return this.itemType;
+    }
+
+    public Boolean getSolidStopOnCollisionWithPlayer()
+    {
+        return this.solidStopOnCollisionWithPlayer;
     }
 }

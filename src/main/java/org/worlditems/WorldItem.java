@@ -84,7 +84,7 @@ public class WorldItem
 
     private void setAssetNumber()
     {
-        if (this.itemAssetType.equals(WorldItemTypes.CHEST_DOOR.name()))
+        if (this.itemAssetType.equals(WorldItemTypes.CHEST.name()) || this.itemAssetType.equals(WorldItemTypes.DOOR.name()))
         {
             PlayerInventoryModel playerInventoryItem = this.playerInventory.getInventoryItemByName(WorldItemsAssets.GOLD_KEY.name());
             boolean isKeyInInventoryForChestAsset = playerInventoryItem != null && playerInventoryItem.getCount() > 0;
@@ -93,11 +93,11 @@ public class WorldItem
             // TODO rethink this logic a bit maybe add test in enum class or make a a separated lang enum or resource file
             if (this.assetNumber == 2)
             {
-                this.textShownOnInteractionWithItem = "Can not open chest find key.";
+                this.textShownOnInteractionWithItem = "Find the golden key to open.";
             }
             else
             {
-                this.textShownOnInteractionWithItem = "Key used chest empty.";
+                this.textShownOnInteractionWithItem = "You have the key this is open.";
             }
         }
         else

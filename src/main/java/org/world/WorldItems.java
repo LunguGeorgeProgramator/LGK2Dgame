@@ -21,14 +21,18 @@ public class WorldItems
     private final GamePanel gamePanel;
     private final Player player;
     private final PlayerInventory playerInventory;
+    private static final List<WorldItemTypes> itemsTypesAllowedInInventory = List.of(
+        WorldItemTypes.KEY,
+        WorldItemTypes.QUEST
+    );
 
-    public WorldItems(GamePanel gamePanel, Player player, PlayerInventory playerInventory)
+    public WorldItems(GamePanel gamePanel, Player player)
     {
         this.worldItemsAssets = WorldItemsAssets.values();
         this.gamePanel = gamePanel;
         this.player = player;
         this.worldItemsList = new ArrayList<>();
-        this.playerInventory = playerInventory;
+        this.playerInventory = this.player.playerInventory;
         initializeWorldItems();
     }
 
@@ -57,29 +61,28 @@ public class WorldItems
         }
     }
 
-    public void draw(Graphics2D g2D, PlayerInventory playerInventory)
+    public void draw(Graphics2D g2D)
     {
         for (WorldItem worldItem : this.worldItemsList)
         {
-            PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByName(worldItem.itemAssetName);
-            if (inventoryItem == null)
+            if (itemsTypesAllowedInInventory.contains(WorldItemTypes.valueOf(worldItem.itemAssetType)))
             {
-                PlayerInventoryModel playerInventoryModelAdd = new PlayerInventoryModel();
-                playerInventoryModelAdd.setItemName(worldItem.itemAssetName);
-                playerInventoryModelAdd.setCount(0);
-                playerInventoryModelAdd.setStatus("active");
-                playerInventoryModelAdd.setItemType(worldItem.itemAssetType);
-                this.playerInventory.addToInventory(playerInventoryModelAdd);
+                PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByName(worldItem.itemAssetName);
+                if (inventoryItem == null)
+                {
+                    PlayerInventoryModel playerInventoryModelAdd = new PlayerInventoryModel();
+                    playerInventoryModelAdd.setItemName(worldItem.itemAssetName);
+                    playerInventoryModelAdd.setCount(0);
+                    playerInventoryModelAdd.setStatus("active");
+                    playerInventoryModelAdd.setItemType(worldItem.itemAssetType);
+                    this.playerInventory.addToInventory(playerInventoryModelAdd);
+                }
+                if (inventoryItem != null && inventoryItem.getCount() > 0)
+                {
+                    // if item is already in inventory do not draw on game map
+                    continue;
+                }
             }
-
-            if (inventoryItem != null && inventoryItem.getCount() > 0 &&
-                (inventoryItem.getItemType().equals(WorldItemTypes.KEY.name()) ||
-                 inventoryItem.getItemType().equals(WorldItemTypes.QUEST.name())))
-            {
-                // if item is already in inventory do not draw on game map
-                continue;
-            }
-
             worldItem.draw(g2D);
         }
     }

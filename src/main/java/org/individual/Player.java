@@ -1,6 +1,7 @@
 package org.individual;
 import org.game.GamePanel;
 import org.game.KeyBoardHandler;
+import org.inventory.PlayerInventory;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -15,16 +16,18 @@ public class Player extends Individual
 {
     GamePanel gamePanel;
     KeyBoardHandler keyBoardHandler;
+    public PlayerInventory playerInventory;
     public final int playerScreenX;
     public final int playerScreenY;
 
-    public Player(GamePanel gamePanel, KeyBoardHandler keyBoardHandler)
+    public Player(GamePanel gamePanel, KeyBoardHandler keyBoardHandler, PlayerInventory playerInventory)
     {
         super(100, 100, 4, null); // set player position x, y and speed
         this.gamePanel = gamePanel;
         this.keyBoardHandler = keyBoardHandler;
         this.playerScreenX = (this.gamePanel.screenWith/2) - (tileSize/2);
         this.playerScreenY = (this.gamePanel.screenHeight/2) - (tileSize/2);
+        this.playerInventory = playerInventory;
         buildPlayerCollisionArea();
     }
 
@@ -103,6 +106,7 @@ public class Player extends Individual
 
         this.activateCollision = false;
         this.gamePanel.collisionChecker.checkTile(this);
+        this.gamePanel.collisionChecker.checkWorldItems(this);
 
         if (!this.activateCollision)
         {

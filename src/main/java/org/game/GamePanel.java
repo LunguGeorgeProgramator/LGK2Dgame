@@ -44,10 +44,10 @@ public class GamePanel extends JPanel implements Runnable
         this.setDoubleBuffered(true);
         this.addKeyListener(this.keyBoardHandler);
         this.setFocusable(true);
-        this.player = new Player(this, this.keyBoardHandler);
+        this.player = new Player(this, this.keyBoardHandler, this.playerInventory);
         this.enemies = new Enemies(this, player);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
-        this.worldItems = new WorldItems(this, this.player, this.playerInventory);
+        this.worldItems = new WorldItems(this, this.player);
         this.collisionChecker = new CollisionChecker(this);
     }
 
@@ -100,7 +100,7 @@ public class GamePanel extends JPanel implements Runnable
 
         this.gameWorld.draw(g2D);
         this.enemies.draw(g2D);
-        this.worldItems.draw(g2D, this.playerInventory);
+        this.worldItems.draw(g2D);
         this.player.draw(g2D);
 
 //        int pX = this.player.positionX;

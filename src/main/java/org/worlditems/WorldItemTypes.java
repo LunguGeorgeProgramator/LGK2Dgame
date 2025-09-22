@@ -6,5 +6,6 @@ public enum WorldItemTypes
     QUEST,
     PORTAL,
     AREA_ENTRY,
-    CHEST_DOOR;
+    CHEST,
+    DOOR;
 }
