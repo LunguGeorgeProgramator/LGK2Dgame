@@ -8,10 +8,6 @@ import org.inventory.PlayerInventoryModel;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Font;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
@@ -23,13 +19,14 @@ public class WorldItem
 
     WorldItemsAssets[] worldItemsAssets;
     public final String itemAssetName;
+    public final int itemAssetId;
     public final String itemAssetType;
     private final GamePanel gamePanel;
     private final Player player;
     private int frameCounter;
     private int assetNumber;
-    private final int worldItemPositionX;
-    private final int worldItemPositionY;
+    public final int worldItemPositionX;
+    public final int worldItemPositionY;
     private final Map<Integer, BufferedImage> itemsAssetsMap;
     public Rectangle collisionArea;
     public final PlayerInventory playerInventory;
@@ -38,16 +35,18 @@ public class WorldItem
     private final CollisionChecker collisionChecker;
 
     public WorldItem(
-        GamePanel gamePanel,
-        Player player,
-        PlayerInventory playerInventory,
-        String itemAssetName,
-        String itemAssetType,
-        int worldItemPositionX,
-        int worldItemPositionY,
-        Map<Integer, BufferedImage> itemsAssetsMap
+            GamePanel gamePanel,
+            Player player,
+            PlayerInventory playerInventory,
+            String itemAssetName,
+            int itemAssetId,
+            String itemAssetType,
+            int worldItemPositionX,
+            int worldItemPositionY,
+            Map<Integer, BufferedImage> itemsAssetsMap
     )
     {
+        this.itemAssetId = itemAssetId;
         this.gamePanel = gamePanel;
         this.player = player;
         this.itemAssetName = itemAssetName;

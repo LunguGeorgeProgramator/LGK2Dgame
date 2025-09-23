@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PlayerInventoryModel
 {
     private String itemName;
+    private int itemId;
     private int count;
     private String status;
     private String itemType;
@@ -17,6 +18,12 @@ public class PlayerInventoryModel
     public String getItemName()
     {
         return itemName;
+    }
+
+    @JsonProperty("itemId")
+    public int getItemId()
+    {
+        return itemId;
     }
 
     @JsonProperty("count")
@@ -71,5 +78,11 @@ public class PlayerInventoryModel
     public void setItemType(String itemType)
     {
         this.itemType = itemType;
+    }
+
+    @JsonProperty("itemId")
+    public void setItemId(int itemId)
+    {
+        this.itemId = itemId;
     }
 }

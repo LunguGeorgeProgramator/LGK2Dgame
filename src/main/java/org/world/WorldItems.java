@@ -45,6 +45,7 @@ public class WorldItems
                 this.player,
                 this.playerInventory,
                 worldItemAsset.name(),
+                worldItemAsset.getItemId(),
                 worldItemAsset.getItemType(),
                 worldItemAsset.getDefaultPositionX(),
                 worldItemAsset.getDefaultPositionY(),
@@ -54,14 +55,6 @@ public class WorldItems
     }
 
     public void update()
-    {
-        for (WorldItem worldItem : this.worldItemsList)
-        {
-            worldItem.update();
-        }
-    }
-
-    public void draw(Graphics2D g2D)
     {
         for (WorldItem worldItem : this.worldItemsList)
         {
@@ -75,8 +68,23 @@ public class WorldItems
                     playerInventoryModelAdd.setCount(0);
                     playerInventoryModelAdd.setStatus("active");
                     playerInventoryModelAdd.setItemType(worldItem.itemAssetType);
+                    playerInventoryModelAdd.setItemId(worldItem.itemAssetId);
                     this.playerInventory.addToInventory(playerInventoryModelAdd);
                 }
+            }
+            worldItem.update();
+        }
+    }
+
+    public void draw(Graphics2D g2D)
+    {
+
+
+        for (WorldItem worldItem : this.worldItemsList)
+        {
+            if (itemsTypesAllowedInInventory.contains(WorldItemTypes.valueOf(worldItem.itemAssetType)))
+            {
+                PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByName(worldItem.itemAssetName);
                 if (inventoryItem != null && inventoryItem.getCount() > 0)
                 {
                     // if item is already in inventory do not draw on game map
@@ -84,6 +92,20 @@ public class WorldItems
                 }
             }
             worldItem.draw(g2D);
+//            int pX = this.player.positionX;
+//            int pY = this.player.positionY;
+//            int eX = worldItem.worldItemPositionX;
+//            int eY = worldItem.worldItemPositionY;
+//            if (pY< eY)
+//            {
+//                this.player.draw(g2D);
+//                worldItem.draw(g2D);
+//            }
+//            else
+//            {
+//                worldItem.draw(g2D);
+//                this.player.draw(g2D);
+//            }
         }
     }
 }

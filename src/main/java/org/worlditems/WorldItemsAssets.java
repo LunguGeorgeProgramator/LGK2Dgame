@@ -1,6 +1,9 @@
 package org.worlditems;
 
+import org.world.WorldAssets;
+
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
@@ -9,7 +12,7 @@ import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
 public enum WorldItemsAssets
 {
-    GOLD_KEY(1, WorldItemTypes.KEY.name(), false, tileSize * 4, tileSize * 4,
+    GOLD_KEY(1, WorldItemTypes.KEY.name(), false, tileSize * 4, tileSize * 4, 0,
         Map.of(
             1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-right.png")),
             2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-one.png")),
@@ -20,19 +23,24 @@ public enum WorldItemsAssets
             7, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-front.png")),
             8, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-four.png"))
         )),
-    RUBY(2, WorldItemTypes.QUEST.name(), false, tileSize * 20, tileSize * 2,
+    RUBY(2, WorldItemTypes.QUEST.name(), false, tileSize * 20, tileSize * 2, 0,
         Map.of(
             1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")),
             2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")),
             3, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")),
             4, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png"))
         )),
-    CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6,
+    CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6, 0,
         Map.of(
             1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")),
             2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png"))
         )),
-    DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4,
+    DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
+        Map.of(
+            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png"))
+        )),
+    DOOR_2(4, WorldItemTypes.DOOR.name(), true, tileSize * 25, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
             1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")),
             2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png"))
@@ -42,6 +50,7 @@ public enum WorldItemsAssets
     private final String itemType;
     final private int defaultPositionX;
     final private int defaultPositionY;
+    private final int dependencyOnAssetId;
     final private Map<Integer, BufferedImage> itemsAssetsMap;
     final private boolean solidStopOnCollisionWithPlayer;
 
@@ -51,6 +60,7 @@ public enum WorldItemsAssets
             boolean solidStopOnCollisionWithPlayer,
             int defaultPositionX,
             int defaultPositionY,
+            int dependencyOnAssetId,
             Map<Integer, BufferedImage> itemsAssetsMap
     )
     {
@@ -59,6 +69,7 @@ public enum WorldItemsAssets
         this.solidStopOnCollisionWithPlayer = solidStopOnCollisionWithPlayer;
         this.defaultPositionX = defaultPositionX;
         this.defaultPositionY = defaultPositionY;
+        this.dependencyOnAssetId = dependencyOnAssetId;
         this.itemsAssetsMap = itemsAssetsMap;
     }
 
@@ -90,5 +101,19 @@ public enum WorldItemsAssets
     public Boolean getSolidStopOnCollisionWithPlayer()
     {
         return this.solidStopOnCollisionWithPlayer;
+    }
+
+    public int getDependencyOnAssetId()
+    {
+        return this.dependencyOnAssetId;
+    }
+
+    public static String getWorldItemAssetNameById(int id)
+    {
+        WorldItemsAssets worldItemsAssets = Arrays.stream(WorldItemsAssets.values())
+            .filter(s -> s.getItemId() == id)
+            .findFirst()
+            .orElse(null);
+        return worldItemsAssets != null ? worldItemsAssets.name() : null;
     }
 }

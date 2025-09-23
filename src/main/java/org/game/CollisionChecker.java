@@ -6,7 +6,6 @@ import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.inventory.PlayerInventoryModel;
 import org.world.WorldAssets;
-import org.worlditems.WorldItemTypes;
 import org.worlditems.WorldItemsAssets;
 
 import java.awt.Rectangle;
@@ -65,6 +64,9 @@ public class CollisionChecker
         int objectTopRow = objectTopY / tileSize;
         int objectBottomRow = objectBottomY / tileSize;
 
+        // default value if none of condition are meet
+        hasPlayerCollidedWithObject = false;
+
         if (!checkedByLookingOnPlayerDirection)
         {
             if (playerLeftCol == objectLeftCol && playerTopRow == objectTopRow)
@@ -75,67 +77,63 @@ public class CollisionChecker
             {
                 hasPlayerCollidedWithObject = true;
             }
-            else
-            {
-                hasPlayerCollidedWithObject = false;
-            }
         }
         else
         {
-            switch (MovingDirection.getValueByString(player.movementDirection)) {
-                case MovingDirection.LEFT:
-                    if(playerLeftCol == objectRightCol && playerBottomRow == objectBottomRow)
-                    {
-                        player.activateCollision = true;
-                        hasPlayerCollidedWithObject = true;
-                    }
-                    break;
-                case MovingDirection.RIGHT:
-                    if(playerRightCol == objectLeftCol  && playerBottomRow == objectBottomRow)
-                    {
-                        player.activateCollision = true;
-                        hasPlayerCollidedWithObject = true;
-                    }
-                    break;
+            switch (MovingDirection.getValueByString(player.movementDirection))
+            {
                 case MovingDirection.UP:
-                    if(playerTopRow == objectBottomRow  && playerRightCol == objectRightCol)
+                    playerTopRow = (playerTopY - player.speed) / tileSize;
+                    if (playerTopRow == objectBottomRow  && (playerRightCol == objectRightCol || playerLeftCol == objectLeftCol))
                     {
                         player.activateCollision = true;
                         hasPlayerCollidedWithObject = true;
                     }
                     break;
                 case MovingDirection.DOWN:
-                    if(playerBottomRow == objectTopRow  && playerLeftCol == objectLeftCol)
+                    playerBottomRow = (playerBottomY + player.speed) / tileSize;
+                    if (playerBottomRow == objectTopRow  && (playerRightCol == objectRightCol || playerLeftCol == objectLeftCol))
                     {
                         player.activateCollision = true;
                         hasPlayerCollidedWithObject = true;
                     }
                     break;
-                case null:
-                default:
-                    player.activateCollision = false;
-                    hasPlayerCollidedWithObject = false;
+                case MovingDirection.LEFT:
+                    playerLeftCol = (playerLeftX - player.speed) / tileSize;
+                    if (playerLeftCol == objectRightCol && playerBottomRow == objectBottomRow)
+                    {
+                        player.activateCollision = true;
+                        hasPlayerCollidedWithObject = true;
+                    }
+                    break;
+                case MovingDirection.RIGHT:
+                    playerRightCol = (playerRightX + player.speed) / tileSize;
+                    if (playerRightCol == objectLeftCol  && playerBottomRow == objectBottomRow)
+                    {
+                        player.activateCollision = true;
+                        hasPlayerCollidedWithObject = true;
+                    }
+                    break;
+                case null, default:
                     break;
             }
         }
-
         return hasPlayerCollidedWithObject;
     }
 
-    // TODO: this almost good, do more to refract this code
     public void checkWorldItems(Player player)
     {
         PlayerInventory playerInventory = player.playerInventory;
-        PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName("GOLD_KEY");
-        boolean hasGoldKeyOpenDoor = playerInventoryModel != null && playerInventoryModel.getCount() > 0;
-
         for (WorldItemsAssets worldItemsAssets : WorldItemsAssets.values()) {
             if (!worldItemsAssets.getSolidStopOnCollisionWithPlayer())
             {
                 continue;
             }
-            // open door !!!
-            if (worldItemsAssets.getItemType().equals(WorldItemTypes.DOOR.name()) && hasGoldKeyOpenDoor)
+
+            // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
+            String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(worldItemsAssets.getDependencyOnAssetId());
+            PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
+            if (playerInventoryModel != null && playerInventoryModel.getCount() > 0)
             {
                 continue;
             }

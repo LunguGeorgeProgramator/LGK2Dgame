@@ -53,9 +53,11 @@ public class Enemies
 
     public void draw(Graphics2D g2D)
     {
+//        int i = 0;
         for(Enemy enemy : this.enemyList)
         {
             enemy.draw(g2D);
+//            System.out.println("enemy count " + i++ + " position x " + enemy.positionX  + " position Y " + enemy.positionY);
         }
     }
 }

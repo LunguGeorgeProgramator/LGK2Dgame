@@ -103,6 +103,7 @@ public class GamePanel extends JPanel implements Runnable
         this.worldItems.draw(g2D);
         this.player.draw(g2D);
 
+
 //        int pX = this.player.positionX;
 //        int pY = this.player.positionY;
 //        int eX = this.enemy.positionX;
