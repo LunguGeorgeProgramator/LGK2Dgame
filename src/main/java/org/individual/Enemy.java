@@ -1,5 +1,6 @@
 package org.individual;
 
+import org.game.CollisionChecker;
 import org.game.GamePanel;
 
 import java.awt.Graphics2D;
@@ -16,17 +17,17 @@ public class Enemy extends Individual
 {
 
     static protected final String COLLISION_ENEMY_ASSET_KEY_PREFIX = "collision-";
-    static protected final String ENEMY_DIRECTION_LEFT = "left";
-    static protected final String ENEMY_DIRECTION_RIGHT = "right";
-    static protected final String ENEMY_DIRECTION_UP = "up";
-    static protected final String ENEMY_DIRECTION_DOWN = "down";
-    private final GamePanel gamePanel; // TODO decide what to do wit this or remove it
+    private final String ENEMY_DIRECTION_LEFT = MovingDirection.LEFT.getValue();
+    private final String ENEMY_DIRECTION_RIGHT = MovingDirection.RIGHT.getValue();
+    private final String ENEMY_DIRECTION_UP = MovingDirection.UP.getValue();
+    private final String ENEMY_DIRECTION_DOWN = MovingDirection.DOWN.getValue();
     private final int maxDistanceAllowedToMove;
     private String direction;
     public BufferedImage enemyAsset;
     private boolean isEnemyCollidingWithPlayer = false;
     final private Map<String, BufferedImage> enemyAssetsMap;
     private final Player player;
+    private final CollisionChecker collisionChecker;
 
     public Enemy(
         GamePanel gamePanel,
@@ -41,12 +42,12 @@ public class Enemy extends Individual
     )
     {
         super(defaultPositionX, defaultPositionY, speed, assetPath);
-        this.gamePanel = gamePanel;
         this.maxDistanceAllowedToMove = maxDistanceAllowedToMove;
         this.direction = direction;
         this.player = player;
         this.enemyAssetsMap = enemyAssetsMap;
         buildEnemyCollisionArea();
+        this.collisionChecker = gamePanel.collisionChecker;
     }
 
     private void buildEnemyCollisionArea()
@@ -67,7 +68,7 @@ public class Enemy extends Individual
     @Override
     public void update()
     {
-        this.isEnemyCollidingWithPlayer = enemyCheckCollisionWithPlayer();
+        this.isEnemyCollidingWithPlayer = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.positionX, this.positionY, this.isEnemyCollidingWithPlayer, false);
 
         // stop enemy movement if player is colliding with enemy
         if (!this.isEnemyCollidingWithPlayer)
@@ -113,43 +114,6 @@ public class Enemy extends Individual
             }
         }
 
-    }
-
-    private boolean enemyCheckCollisionWithPlayer()
-    {
-        // player collision rectangle
-        int playerLeftX = player.positionX + player.collisionArea.x;
-        int playerRightX = player.positionX + player.collisionArea.x + player.collisionArea.width;
-        int playerTopY = player.positionY + player.collisionArea.y;
-        int playerBottomY = player.positionY + player.collisionArea.y + player.collisionArea.height;
-
-        // enemy collision rectangle
-        int enemyLeftX = this.positionX + this.collisionArea.x;
-        int enemyRightX = this.positionX + this.collisionArea.x + player.collisionArea.width;
-        int enemyTopY = this.positionY + this.collisionArea.y;
-        int enemyBottomY = this.positionY + this.collisionArea.y + player.collisionArea.height;
-
-        // player world matrix index
-        int playerLeftCol = playerLeftX / tileSize;
-        int playerRightCol = playerRightX / tileSize;
-        int playerTopRow = playerTopY / tileSize;
-        int playerBottomRow = playerBottomY / tileSize;
-
-        // enemy world matrix index
-        int enemyLeftCol = enemyLeftX / tileSize;
-        int enemyRightCol = enemyRightX / tileSize;
-        int enemyTopRow = enemyTopY / tileSize;
-        int enemyBottomRow = enemyBottomY / tileSize;
-
-        if (playerLeftCol == enemyLeftCol && playerTopRow == enemyTopRow)
-        {
-            return true;
-        }
-        else if (playerRightCol == enemyRightCol && playerBottomRow == enemyBottomRow)
-        {
-            return true;
-        }
-        return false;
     }
 
     @Override

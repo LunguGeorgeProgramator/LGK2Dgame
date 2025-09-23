@@ -44,11 +44,11 @@ public class GamePanel extends JPanel implements Runnable
         this.setDoubleBuffered(true);
         this.addKeyListener(this.keyBoardHandler);
         this.setFocusable(true);
+        this.collisionChecker = new CollisionChecker(this);
         this.player = new Player(this, this.keyBoardHandler, this.playerInventory);
         this.enemies = new Enemies(this, player);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
         this.worldItems = new WorldItems(this, this.player);
-        this.collisionChecker = new CollisionChecker(this);
     }
 
     public void startGameThread()

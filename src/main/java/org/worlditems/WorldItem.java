@@ -1,5 +1,6 @@
 package org.worlditems;
 
+import org.game.CollisionChecker;
 import org.game.GamePanel;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
@@ -34,6 +35,7 @@ public class WorldItem
     public final PlayerInventory playerInventory;
     private boolean hasPlayerCollidedWithItem = false;
     private String textShownOnInteractionWithItem;
+    private final CollisionChecker collisionChecker;
 
     public WorldItem(
         GamePanel gamePanel,
@@ -56,6 +58,7 @@ public class WorldItem
         this.worldItemsAssets = WorldItemsAssets.values();
         buildEnemyCollisionArea();
         this.playerInventory = playerInventory;
+        this.collisionChecker = gamePanel.collisionChecker;
     }
 
     private void buildEnemyCollisionArea()
@@ -69,7 +72,7 @@ public class WorldItem
 
     public void update()
     {
-        this.hasPlayerCollidedWithItem = enemyCheckCollisionWithPlayer();
+        this.hasPlayerCollidedWithItem = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.worldItemPositionX, this.worldItemPositionY, this.hasPlayerCollidedWithItem, true);
         if (this.hasPlayerCollidedWithItem)
         {
             PlayerInventoryModel playerInventoryModel = this.playerInventory.getInventoryItemByName(this.itemAssetName);
@@ -104,44 +107,6 @@ public class WorldItem
         {
             changeAssetNumberByFrameCounter(this.itemsAssetsMap.size());
         }
-    }
-
-    // TODO add this in a helper class, some logic is in enemy
-    private boolean enemyCheckCollisionWithPlayer()
-    {
-        // player collision rectangle
-        int playerLeftX = player.positionX + player.collisionArea.x;
-        int playerRightX = player.positionX + player.collisionArea.x + player.collisionArea.width;
-        int playerTopY = player.positionY + player.collisionArea.y;
-        int playerBottomY = player.positionY + player.collisionArea.y + player.collisionArea.height;
-
-        // item collision rectangle
-        int itemLeftX = this.worldItemPositionX + this.collisionArea.x;
-        int itemRightX = this.worldItemPositionX + this.collisionArea.x + player.collisionArea.width;
-        int itemTopY = this.worldItemPositionY + this.collisionArea.y;
-        int itemBottomY = this.worldItemPositionY + this.collisionArea.y + player.collisionArea.height;
-
-        // player world matrix index
-        int playerLeftCol = playerLeftX / tileSize;
-        int playerRightCol = playerRightX / tileSize;
-        int playerTopRow = playerTopY / tileSize;
-        int playerBottomRow = playerBottomY / tileSize;
-
-        // enemy world matrix index
-        int enemyLeftCol = itemLeftX / tileSize;
-        int enemyRightCol = itemRightX / tileSize;
-        int enemyTopRow = itemTopY / tileSize;
-        int enemyBottomRow = itemBottomY / tileSize;
-
-        if (playerLeftCol == enemyLeftCol && playerTopRow == enemyTopRow)
-        {
-            return true;
-        }
-        else if (playerRightCol == enemyRightCol && playerBottomRow == enemyBottomRow)
-        {
-            return true;
-        }
-        return false;
     }
 
     public void draw(Graphics2D g2D)
