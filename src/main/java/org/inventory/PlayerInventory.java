@@ -36,7 +36,7 @@ public class PlayerInventory
         return null;
     }
 
-    private PlayerInventoryModel updateModelDependingOnActionRequested(PlayerInventoryModel itemToUseAsValue, PlayerInventoryModel itemToUpdate, String updateAction)
+    private void updateModelDependingOnActionRequested(PlayerInventoryModel itemToUseAsValue, PlayerInventoryModel itemToUpdate, String updateAction)
     {
         switch (updateAction)
         {
@@ -48,7 +48,6 @@ public class PlayerInventory
             default:
                 itemToUpdate.setCount(itemToUseAsValue.getCount());
         }
-        return itemToUpdate;
     }
 
     public List<PlayerInventoryModel> updateInventoryItemByIncrement(PlayerInventoryModel playerInventoryItem)
@@ -61,7 +60,7 @@ public class PlayerInventory
         return updateInventoryItem(playerInventoryItem, "toRemoveValue");
     }
 
-    public List<PlayerInventoryModel> updateInventoryItem(org.inventory.PlayerInventoryModel playerInventoryItem)
+    public List<PlayerInventoryModel> updateInventoryItem(PlayerInventoryModel playerInventoryItem)
     {
         return updateInventoryItem(playerInventoryItem, null);
     }
@@ -74,8 +73,7 @@ public class PlayerInventory
             if (playerInventoryModel.getItemName().equals(playerInventoryItem.getItemName()))
             {
                 playerInventoryModel.setStatus(playerInventoryItem.getStatus());
-                playerInventoryModel = updateModelDependingOnActionRequested(playerInventoryItem, playerInventoryModel, updateAction);
-                playerInventoryModel.addToCount(playerInventoryItem.getCount());
+                updateModelDependingOnActionRequested(playerInventoryItem, playerInventoryModel, updateAction);
                 playerInventoryModel.setItemType(playerInventoryItem.getItemType());
                 break;
             }

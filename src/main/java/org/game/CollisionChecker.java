@@ -6,9 +6,11 @@ import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.inventory.PlayerInventoryModel;
 import org.world.WorldAssets;
+import org.worlditems.WorldItemTypes;
 import org.worlditems.WorldItemsAssets;
 
 import java.awt.Rectangle;
+import java.util.List;
 
 import static org.game.GamePanel.tileSize;
 
@@ -17,6 +19,7 @@ public class CollisionChecker
 
     GamePanel gamePanel;
     public Rectangle collisionArea;
+    private List<WorldItemTypes> WorldAssetsTypesSkippedOnCollisionCheckList;
 
      public CollisionChecker(GamePanel gamePanel)
      {
@@ -31,11 +34,17 @@ public class CollisionChecker
         this.collisionArea.y = 0;
         this.collisionArea.height = tileSize;
         this.collisionArea.width = tileSize;
+        this.WorldAssetsTypesSkippedOnCollisionCheckList = List.of(WorldItemTypes.DOOR);
     }
 
     public void checkPlayerCollisionWithObject(Player player, int objectPositionX, int objectPositionY)
     {
         checkPlayerCollisionWithObject(player, objectPositionX, objectPositionY, false, true);
+    }
+
+    public Boolean checkPlayerCollisionWithObject(Player player, int objectPositionX, int objectPositionY, boolean hasPlayerCollidedWithObject)
+    {
+        return checkPlayerCollisionWithObject(player, objectPositionX, objectPositionY, hasPlayerCollidedWithObject, false);
     }
 
     public Boolean checkPlayerCollisionWithObject(Player player, int objectPositionX, int objectPositionY, boolean hasPlayerCollidedWithObject, boolean checkedByLookingOnPlayerDirection)
@@ -129,13 +138,15 @@ public class CollisionChecker
             {
                 continue;
             }
-
-            // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
-            String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(worldItemsAssets.getDependencyOnAssetId());
-            PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
-            if (playerInventoryModel != null && playerInventoryModel.getCount() > 0)
+            if (this.WorldAssetsTypesSkippedOnCollisionCheckList.contains(WorldItemTypes.valueOf(worldItemsAssets.getItemType())))
             {
-                continue;
+                // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
+                String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(worldItemsAssets.getDependencyOnAssetId());
+                PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
+                if (playerInventoryModel != null && playerInventoryModel.getCount() > 0)
+                {
+                    continue;
+                }
             }
             checkPlayerCollisionWithObject(player, worldItemsAssets.getDefaultPositionX(), worldItemsAssets.getDefaultPositionY());
         }

@@ -30,20 +30,20 @@ public enum WorldItemsAssets
             3, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")),
             4, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png"))
         )),
-    CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6, 0,
+    CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
             1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")),
             2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png"))
         )),
-    DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
+//    DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
+//        Map.of(
+//            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")),
+//            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png"))
+//        )),
+    BIG_DOOR(5, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png"))
-        )),
-    DOOR_2(4, WorldItemTypes.DOOR.name(), true, tileSize * 25, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
-        Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png"))
+            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-big-door.png")),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-big-door.png"))
         ));
 
     private final int itemId;

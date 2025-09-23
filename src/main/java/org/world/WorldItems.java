@@ -46,6 +46,7 @@ public class WorldItems
                 this.playerInventory,
                 worldItemAsset.name(),
                 worldItemAsset.getItemId(),
+                worldItemAsset.getDependencyOnAssetId(),
                 worldItemAsset.getItemType(),
                 worldItemAsset.getDefaultPositionX(),
                 worldItemAsset.getDefaultPositionY(),

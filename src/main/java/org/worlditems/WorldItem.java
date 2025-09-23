@@ -20,6 +20,7 @@ public class WorldItem
     WorldItemsAssets[] worldItemsAssets;
     public final String itemAssetName;
     public final int itemAssetId;
+    public final int itemDependencyOnAssetId;
     public final String itemAssetType;
     private final GamePanel gamePanel;
     private final Player player;
@@ -40,6 +41,7 @@ public class WorldItem
             PlayerInventory playerInventory,
             String itemAssetName,
             int itemAssetId,
+            int itemDependencyOnAssetId,
             String itemAssetType,
             int worldItemPositionX,
             int worldItemPositionY,
@@ -47,6 +49,7 @@ public class WorldItem
     )
     {
         this.itemAssetId = itemAssetId;
+        this.itemDependencyOnAssetId = itemDependencyOnAssetId;
         this.gamePanel = gamePanel;
         this.player = player;
         this.itemAssetName = itemAssetName;
@@ -88,12 +91,14 @@ public class WorldItem
     {
         if (this.itemAssetType.equals(WorldItemTypes.CHEST.name()) || this.itemAssetType.equals(WorldItemTypes.DOOR.name()))
         {
-            PlayerInventoryModel playerInventoryItem = this.playerInventory.getInventoryItemByName(WorldItemsAssets.GOLD_KEY.name());
-            boolean isKeyInInventoryForChestAsset = playerInventoryItem != null && playerInventoryItem.getCount() > 0;
+            // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
+            String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(this.itemDependencyOnAssetId);
+            PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
+            boolean isKeyInInventoryForChestAsset = playerInventoryModel != null && playerInventoryModel.getCount() > 0;
             this.assetNumber = this.hasPlayerCollidedWithItem && isKeyInInventoryForChestAsset ? 1 : 2;
 
             // TODO rethink this logic a bit maybe add test in enum class or make a a separated lang enum or resource file
-            if (this.assetNumber == 2)
+            if (isKeyInInventoryForChestAsset)
             {
                 this.textShownOnInteractionWithItem = "Find the golden key to open.";
             }
