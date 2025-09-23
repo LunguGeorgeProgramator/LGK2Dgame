@@ -14,36 +14,42 @@ public enum WorldItemsAssets
 {
     GOLD_KEY(1, WorldItemTypes.KEY.name(), false, tileSize * 4, tileSize * 4, 0,
         Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-right.png")),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-one.png")),
-            3, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-back.png")),
-            4, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-two.png")),
-            5, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-left.png")),
-            6, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-three.png")),
-            7, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-front.png")),
-            8, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-four.png"))
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-right.png")), null),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-one.png")), null),
+            3, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-back.png")), null),
+            4, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-two.png")), null),
+            5, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-left.png")), null),
+            6, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-three.png")), null),
+            7, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-front.png")), null),
+            8, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-four.png")), null)
         )),
     RUBY(2, WorldItemTypes.QUEST.name(), false, tileSize * 20, tileSize * 2, 0,
         Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")),
-            3, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")),
-            4, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png"))
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")), null),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")), null),
+            3, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")), null),
+            4, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png")), null)
         )),
     CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png"))
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")), "You found the key chest open !"),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png")), "No key no chest open !")
         )),
-//    DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
-//        Map.of(
-//            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")),
-//            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png"))
-//        )),
+    DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 26, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
+        Map.of(
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")), "Good you have the key !"),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png")), "Try to find a key !") // TODO create a resource json lang file and add there all texts and use here the textKey
+        )),
     BIG_DOOR(5, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-big-door.png")),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-big-door.png"))
+            1, new WorldItemAssetsModel(
+                    Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-big-door.png")),
+                    "Key provided door open !"
+                ),
+            2, new WorldItemAssetsModel(
+                    Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-big-door.png")),
+                    "Find Key to open door !"
+                )
         ));
 
     private final int itemId;
@@ -51,7 +57,7 @@ public enum WorldItemsAssets
     final private int defaultPositionX;
     final private int defaultPositionY;
     private final int dependencyOnAssetId;
-    final private Map<Integer, BufferedImage> itemsAssetsMap;
+    final private Map<Integer, WorldItemAssetsModel> itemsAssetsMap;
     final private boolean solidStopOnCollisionWithPlayer;
 
     WorldItemsAssets(
@@ -61,7 +67,7 @@ public enum WorldItemsAssets
             int defaultPositionX,
             int defaultPositionY,
             int dependencyOnAssetId,
-            Map<Integer, BufferedImage> itemsAssetsMap
+            Map<Integer, WorldItemAssetsModel> itemsAssetsMap
     )
     {
         this.itemId = itemId;
@@ -78,7 +84,7 @@ public enum WorldItemsAssets
         return this.itemId;
     }
 
-    public Map<Integer, BufferedImage> getItemsAssetsMap()
+    public Map<Integer, WorldItemAssetsModel> getItemsAssetsMap()
     {
         return this.itemsAssetsMap;
     }

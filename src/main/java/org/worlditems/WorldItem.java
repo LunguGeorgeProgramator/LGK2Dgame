@@ -28,7 +28,7 @@ public class WorldItem
     private int assetNumber;
     public final int worldItemPositionX;
     public final int worldItemPositionY;
-    private final Map<Integer, BufferedImage> itemsAssetsMap;
+    private final Map<Integer, WorldItemAssetsModel> itemsAssetsMap;
     public Rectangle collisionArea;
     public final PlayerInventory playerInventory;
     private boolean hasPlayerCollidedWithItem = false;
@@ -45,7 +45,7 @@ public class WorldItem
             String itemAssetType,
             int worldItemPositionX,
             int worldItemPositionY,
-            Map<Integer, BufferedImage> itemsAssetsMap
+            Map<Integer, WorldItemAssetsModel> itemsAssetsMap
     )
     {
         this.itemAssetId = itemAssetId;
@@ -90,22 +90,12 @@ public class WorldItem
     private void setAssetNumber()
     {
         if (this.itemAssetType.equals(WorldItemTypes.CHEST.name()) || this.itemAssetType.equals(WorldItemTypes.DOOR.name()))
-        {
-            // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
+        { // TODO this can be rethink a bit, the 1,2 solution is not ok
             String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(this.itemDependencyOnAssetId);
             PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
             boolean isKeyInInventoryForChestAsset = playerInventoryModel != null && playerInventoryModel.getCount() > 0;
             this.assetNumber = this.hasPlayerCollidedWithItem && isKeyInInventoryForChestAsset ? 1 : 2;
-
-            // TODO rethink this logic a bit maybe add test in enum class or make a a separated lang enum or resource file
-            if (isKeyInInventoryForChestAsset)
-            {
-                this.textShownOnInteractionWithItem = "Find the golden key to open.";
-            }
-            else
-            {
-                this.textShownOnInteractionWithItem = "You have the key this is open.";
-            }
+            this.textShownOnInteractionWithItem = this.itemsAssetsMap.get(this.assetNumber).getImageTextKey();
         }
         else
         {
@@ -121,7 +111,11 @@ public class WorldItem
         // draw world item only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.worldItemPositionX, this.worldItemPositionY, this.player, tileSize))
         {
-            g2D.drawImage(this.itemsAssetsMap.get(this.assetNumber), worldItemAssetPositionX, worldItemAssetPositionY, null);
+            BufferedImage bufferedImage = this.itemsAssetsMap.get(this.assetNumber).getImageAsset();
+            if (bufferedImage != null)
+            {
+                g2D.drawImage(bufferedImage, worldItemAssetPositionX, worldItemAssetPositionY, null);
+            }
         }
 
         if (hasPlayerCollidedWithItem)
