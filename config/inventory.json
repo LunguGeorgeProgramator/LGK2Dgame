@@ -1,13 +1,13 @@
 [ {
   "itemName" : "GOLD_KEY",
   "itemId" : 1,
-  "count" : 0,
+  "count" : 1,
   "status" : "active",
   "itemType" : "KEY"
 }, {
   "itemName" : "RUBY",
   "itemId" : 2,
-  "count" : 0,
+  "count" : 1,
   "status" : "active",
   "itemType" : "QUEST"
 } ]

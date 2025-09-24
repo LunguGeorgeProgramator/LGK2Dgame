@@ -13,6 +13,7 @@ public abstract class Individual
     public int speed;
     public String movementDirection;
     protected int frameCounter;
+    protected int slowDownFrameCounter;
     protected int assetNumber;
     protected String stoppedDirection;
     protected String defaultStoppedDirection = "down";
@@ -50,5 +51,17 @@ public abstract class Individual
             this.assetNumber = this.assetNumber == 1 ? 2 : 1;
             this.frameCounter = 0;
         }
+    }
+
+    public boolean slowDownGame()
+    {
+        final int numberOfFramesLimit = 25;
+        this.slowDownFrameCounter++;
+        if (this.slowDownFrameCounter > numberOfFramesLimit)
+        {
+            this.slowDownFrameCounter = 0;
+            return true;
+        }
+        return false;
     }
 }

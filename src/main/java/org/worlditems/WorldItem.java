@@ -2,6 +2,7 @@ package org.worlditems;
 
 import org.game.CollisionChecker;
 import org.game.GamePanel;
+import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.inventory.PlayerInventoryModel;
@@ -15,7 +16,7 @@ import java.util.Map;
 import static org.game.GamePanel.tileSize;
 import static org.world.GameWorld.checkIfAssetIsInsideTheBoundary;
 
-public class WorldItem
+public class WorldItem extends Individual
 {
 
     WorldItemsAssets[] worldItemsAssets;
@@ -27,8 +28,8 @@ public class WorldItem
     private final Player player;
     private int frameCounter;
     private int assetNumber;
-    public final int worldItemPositionX;
-    public final int worldItemPositionY;
+    public final int positionX;
+    public final int positionY;
     private final Map<Integer, WorldItemAssetsModel> itemsAssetsMap;
     public Rectangle collisionArea;
     public final PlayerInventory playerInventory;
@@ -49,14 +50,15 @@ public class WorldItem
             Map<Integer, WorldItemAssetsModel> itemsAssetsMap
     )
     {
+        super(worldItemPositionX, worldItemPositionY, gamePanel.player.speed, "");
         this.itemAssetId = itemAssetId;
         this.itemDependencyOnAssetId = itemDependencyOnAssetId;
         this.gamePanel = gamePanel;
         this.player = player;
         this.itemAssetName = itemAssetName;
         this.itemAssetType = itemAssetType;
-        this.worldItemPositionX = worldItemPositionX;
-        this.worldItemPositionY = worldItemPositionY;
+        this.positionX = worldItemPositionX;
+        this.positionY = worldItemPositionY;
         this.itemsAssetsMap = itemsAssetsMap;
         this.worldItemsAssets = WorldItemsAssets.values();
         buildEnemyCollisionArea();
@@ -73,9 +75,15 @@ public class WorldItem
         this.collisionArea.width = tileSize;
     }
 
+    @Override
+    public void getAssetImages(String assetPath)
+    {
+
+    }
+
     public void update()
     {
-        this.hasPlayerCollidedWithItem = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.worldItemPositionX, this.worldItemPositionY, this.hasPlayerCollidedWithItem, true);
+        this.hasPlayerCollidedWithItem = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.positionX, this.positionY, this.hasPlayerCollidedWithItem, true);
         if (this.hasPlayerCollidedWithItem)
         {
             PlayerInventoryModel playerInventoryModel = this.playerInventory.getInventoryItemByName(this.itemAssetName);
@@ -96,11 +104,6 @@ public class WorldItem
             PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
             boolean isKeyInInventoryForChestAsset = playerInventoryModel != null && playerInventoryModel.getCount() > 0;
             this.assetNumber = this.hasPlayerCollidedWithItem && isKeyInInventoryForChestAsset ? 1 : 2;
-            WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.assetNumber);
-            String gameText = worldItemAssetsModel != null ? worldItemAssetsModel.getImageTextKey() : null;
-            this.gamePanel.gameTextProvider.setTextColor(Color.WHITE);
-            this.gamePanel.gameTextProvider.setTextPosition(this.player.playerScreenX - 50, this.player.playerScreenY - 20);
-            this.textShownOnInteractionWithItem = this.gamePanel.gameTextProvider.getGameTextByKey(gameText);
         }
         else
         {
@@ -108,13 +111,23 @@ public class WorldItem
         }
     }
 
+    private void setTextShownOnCollision()
+    {
+        WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.assetNumber);
+        String gameText = worldItemAssetsModel != null ? worldItemAssetsModel.getImageTextKey() : null;
+        this.gamePanel.gameTextProvider.setTextColor(Color.WHITE);
+        this.gamePanel.gameTextProvider.setTextPosition(this.player.playerScreenX - 50, this.player.playerScreenY - 20);
+        this.textShownOnInteractionWithItem = this.gamePanel.gameTextProvider.getGameTextByKey(gameText);
+//        System.out.println(this.textShownOnInteractionWithItem);
+    }
+
     public void draw(Graphics2D g2D)
     {
-        int worldItemAssetPositionX = this.worldItemPositionX - this.player.positionX + this.player.playerScreenX;
-        int worldItemAssetPositionY = this.worldItemPositionY - this.player.positionY + this.player.playerScreenY;
+        int worldItemAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
+        int worldItemAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
 
         // draw world item only if is inside the screen view
-        if(checkIfAssetIsInsideTheBoundary(this.worldItemPositionX, this.worldItemPositionY, this.player, tileSize))
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
             WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.assetNumber);
             BufferedImage bufferedImage =  worldItemAssetsModel != null ? worldItemAssetsModel.getImageAsset() : null;
@@ -124,8 +137,15 @@ public class WorldItem
             }
         }
 
-        if (hasPlayerCollidedWithItem)
+//        System.out.println(this.hasPlayerCollidedWithItem);
+        if (this.hasPlayerCollidedWithItem)
         {
+//            System.out.println(this.assetNumber);
+            if (this.itemAssetName.contains("RUBY") && this.slowDownGame())
+            {
+                System.out.println(this.itemAssetName);
+            }
+            this.setTextShownOnCollision();
             this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.textShownOnInteractionWithItem);
         }
     }

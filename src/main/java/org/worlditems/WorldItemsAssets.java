@@ -25,10 +25,10 @@ public enum WorldItemsAssets
         )),
     RUBY(2, WorldItemTypes.QUEST.name(), false, tileSize * 20, tileSize * 2, 0,
         Map.of(
-            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")), null),
-            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")), null),
-            3, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")), null),
-            4, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png")), null)
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")), "picked-up-ruby"),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")), "picked-up-ruby"),
+            3, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")), "picked-up-ruby"),
+            4, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png")), "picked-up-ruby")
         )),
     CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(

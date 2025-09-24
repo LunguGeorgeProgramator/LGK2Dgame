@@ -79,7 +79,7 @@ public class GameTextProvider
         {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             // These options cause the game to freeze briefly the first time the text is displayed.
-//            g2d.setFont(new Font(this.textFont, this.textStyle, this.textSize));
+            g2d.setFont(new Font(this.textFont, this.textStyle, this.textSize));
             g2d.setColor(this.textColor);
             g2d.drawString(textToShow, this.textPositionX, this.textPositionY);
         }

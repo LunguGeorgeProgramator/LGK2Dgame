@@ -35,7 +35,6 @@ public class Enemy extends Individual
     private final Player player;
     private final CollisionChecker collisionChecker;
     private final GamePanel gamePanel;
-    private int frameCounterDamage;
     private boolean isAllowedToInflictDamage = false;
 
     public Enemy(
@@ -127,12 +126,11 @@ public class Enemy extends Individual
         }
         else
         {
-            this.isAllowedToInflictDamage = this.slowDownHealthDamageTaken();
+            this.isAllowedToInflictDamage = this.slowDownGame();
             if (this.isAllowedToInflictDamage)
             {
                 this.player.playerHealth = this.player.playerHealth - ENEMY_DAMAGE_TO_PLAYER;
                 this.hitDamage = this.hitDamage + ENEMY_DAMAGE_TO_PLAYER; // TODO rethink this display variable is not ok damage is increase over time
-                this.frameCounterDamage = 0;
             }
 
         }
@@ -174,13 +172,6 @@ public class Enemy extends Individual
     {
         Random random = new Random();
         return random.nextInt(10) + 1;
-    }
-
-    protected boolean slowDownHealthDamageTaken()
-    {
-        final int numberOfFramesLimit = 25;
-        this.frameCounterDamage++;
-        return this.frameCounterDamage > numberOfFramesLimit;
     }
 
 }

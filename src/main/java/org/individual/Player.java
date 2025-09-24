@@ -38,7 +38,7 @@ public class Player extends Individual
     private void buildPlayerCollisionArea()
     { // make the collision area small that the player rectangle so upper corners will not hit solid world assets
         this.collisionArea = new Rectangle();
-        this.collisionArea.x = 8;
+        this.collisionArea.x = 4;
         this.collisionArea.y = 16;
         this.collisionArea.height = tileSize - 16;
         this.collisionArea.width = tileSize - 16;

@@ -5,8 +5,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import org.gametexts.GameTextProvider;
+import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.world.Enemies;
@@ -34,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable
     public final CollisionChecker collisionChecker;
     Thread gameThread;
     public final PlayerInventory playerInventory;
+    public List<Individual> individuals;
 
     public GamePanel()
     {
@@ -50,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable
         this.enemies = new Enemies(this, player);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
         this.worldItems = new WorldItems(this, this.player);
+        this.individuals = new ArrayList<>();
     }
 
     public void startGameThread()
@@ -100,32 +106,30 @@ public class GamePanel extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
 
+        this.individuals.add(this.player);
         this.gameWorld.draw(g2D);
-        this.enemies.draw(g2D);
-        this.worldItems.draw(g2D);
-        this.player.draw(g2D);
+        this.enemies.addEnemiesToDrawList();
+        this.worldItems.addItemsToDrawList();
+        // this.player.draw(g2D);
+
+        // Sort Player/Enemies/World items by Y position
+        individuals.sort(Comparator.comparingInt(t -> t.positionY));
+        // draw Player/Enemies/World in game
+        for (Individual individual : this.individuals)
+        {
+            individual.draw(g2D);
+        }
+        // clean draw list so it will not run in a loop adding again and again, making the game to freeze
+        for (int i = 0;  i < this.individuals.size(); i++)
+        {
+            individuals.remove(i);
+        }
 
         // TODO: debug text, remove latter
         this.gameTextProvider.setTextColor(Color.YELLOW);
-        this.gameTextProvider.setTextPosition(tileSize * 11, tileSize);
+        this.gameTextProvider.setTextPosition(tileSize * 10, tileSize);
         String enemyCollisionText = this.gameTextProvider.getGameTextByKey("game-help-debug");
         this.gameTextProvider.showTextInsideGame(g2D, enemyCollisionText);
-
-
-//        int pX = this.player.positionX;
-//        int pY = this.player.positionY;
-//        int eX = this.enemy.positionX;
-//        int eY = this.enemy.positionY;
-//        if (pY< eY)
-//        {
-//            this.player.draw(g2D);
-//            this.enemy.draw(g2D);
-//        }
-//        else
-//        {
-//            this.enemy.draw(g2D);
-//            this.player.draw(g2D);
-//        }
 
         g2D.dispose(); // free up memory, destroy after draw
     }

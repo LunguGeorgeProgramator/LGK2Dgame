@@ -8,7 +8,7 @@ import org.worlditems.WorldItem;
 import org.worlditems.WorldItemTypes;
 import org.worlditems.WorldItemsAssets;
 
-import java.awt.Graphics2D;
+//import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +77,8 @@ public class WorldItems
         }
     }
 
-    public void draw(Graphics2D g2D)
+//    public void draw(Graphics2D g2D)
+    public void addItemsToDrawList()
     {
 
 
@@ -92,21 +93,8 @@ public class WorldItems
                     continue;
                 }
             }
-            worldItem.draw(g2D);
-//            int pX = this.player.positionX;
-//            int pY = this.player.positionY;
-//            int eX = worldItem.worldItemPositionX;
-//            int eY = worldItem.worldItemPositionY;
-//            if (pY< eY)
-//            {
-//                this.player.draw(g2D);
-//                worldItem.draw(g2D);
-//            }
-//            else
-//            {
-//                worldItem.draw(g2D);
-//                this.player.draw(g2D);
-//            }
+//            worldItem.draw(g2D);
+            this.gamePanel.individuals.add(worldItem);
         }
     }
 }

@@ -5,7 +5,7 @@ import org.individual.Enemy;
 import org.individual.EnemyAssets;
 import org.individual.Player;
 
-import java.awt.Graphics2D;
+//import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +51,13 @@ public class Enemies
         }
     }
 
-    public void draw(Graphics2D g2D)
+//    public void draw(Graphics2D g2D)
+    public void addEnemiesToDrawList()
     {
-        for(Enemy enemy : this.enemyList)
-        {
-            enemy.draw(g2D);
-        }
+//        for(Enemy enemy : this.enemyList)
+//        {
+//            enemy.draw(g2D);
+//        }
+        this.gamePanel.individuals.addAll(this.enemyList);
     }
 }
