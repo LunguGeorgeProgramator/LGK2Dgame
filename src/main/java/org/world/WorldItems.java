@@ -8,7 +8,6 @@ import org.worlditems.WorldItem;
 import org.worlditems.WorldItemTypes;
 import org.worlditems.WorldItemsAssets;
 
-//import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class WorldItems
     private final PlayerInventory playerInventory;
     private static final List<WorldItemTypes> itemsTypesAllowedInInventory = List.of(
         WorldItemTypes.KEY,
-        WorldItemTypes.QUEST
+        WorldItemTypes.HEALTH_RESTORATION
     );
 
     public WorldItems(GamePanel gamePanel, Player player)
@@ -72,12 +71,16 @@ public class WorldItems
                     playerInventoryModelAdd.setItemId(worldItem.itemAssetId);
                     this.playerInventory.addToInventory(playerInventoryModelAdd);
                 }
+                else if (inventoryItem.getCount() > 0)
+                {
+                    // do not check collision or other logic for this item, this is hidden from player inside the inventory
+                    continue;
+                }
             }
             worldItem.update();
         }
     }
 
-//    public void draw(Graphics2D g2D)
     public void addItemsToDrawList()
     {
 
@@ -92,8 +95,8 @@ public class WorldItems
                     // if item is already in inventory do not draw on game map
                     continue;
                 }
+
             }
-//            worldItem.draw(g2D);
             this.gamePanel.individuals.add(worldItem);
         }
     }

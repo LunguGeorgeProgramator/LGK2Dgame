@@ -7,5 +7,6 @@ public enum WorldItemTypes
     PORTAL,
     AREA_ENTRY,
     CHEST,
+    HEALTH_RESTORATION,
     DOOR;
 }

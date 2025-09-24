@@ -78,7 +78,6 @@ public class WorldItem extends Individual
     @Override
     public void getAssetImages(String assetPath)
     {
-
     }
 
     public void update()
@@ -93,7 +92,8 @@ public class WorldItem extends Individual
                 this.playerInventory.updateInventoryItem(playerInventoryModel);
             }
         }
-        setAssetNumber();
+        this.healingItemsCollisionBehavior();
+        this.setAssetNumber();
     }
 
     private void setAssetNumber()
@@ -118,7 +118,6 @@ public class WorldItem extends Individual
         this.gamePanel.gameTextProvider.setTextColor(Color.WHITE);
         this.gamePanel.gameTextProvider.setTextPosition(this.player.playerScreenX - 50, this.player.playerScreenY - 20);
         this.textShownOnInteractionWithItem = this.gamePanel.gameTextProvider.getGameTextByKey(gameText);
-//        System.out.println(this.textShownOnInteractionWithItem);
     }
 
     public void draw(Graphics2D g2D)
@@ -136,15 +135,13 @@ public class WorldItem extends Individual
                 g2D.drawImage(bufferedImage, worldItemAssetPositionX, worldItemAssetPositionY, null);
             }
         }
+        this.drawWordItemCollisionText(g2D);
+    }
 
-//        System.out.println(this.hasPlayerCollidedWithItem);
+    public void drawWordItemCollisionText(Graphics2D g2D)
+    {
         if (this.hasPlayerCollidedWithItem)
         {
-//            System.out.println(this.assetNumber);
-            if (this.itemAssetName.contains("RUBY") && this.slowDownGame())
-            {
-                System.out.println(this.itemAssetName);
-            }
             this.setTextShownOnCollision();
             this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.textShownOnInteractionWithItem);
         }
@@ -159,6 +156,14 @@ public class WorldItem extends Individual
         {
             this.assetNumber = this.assetNumber < maxNumberOfAssets ? this.assetNumber + 1 : 1;
             this.frameCounter = 0;
+        }
+    }
+
+    private void healingItemsCollisionBehavior()
+    {
+        if (this.hasPlayerCollidedWithItem && this.itemAssetType.equals(WorldItemTypes.HEALTH_RESTORATION.name()))
+        {
+            this.player.playerHealth = this.player.playerMaxHealth;
         }
     }
 }
