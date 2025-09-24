@@ -1,0 +1,10 @@
+{
+  "open-chest": "You found the key chest open!",
+  "closed-chest": "No key no chest open!",
+  "open-door": "Good you have the key!",
+  "closed-door": "Try to find a key!",
+  "open-big-door": "Key provided door open!",
+  "closed-big-door": "Find Key to open door!",
+  "enemy-collision": "-%.2f Health",
+  "game-help-debug": "To reset game press keyboard P key!"
+}

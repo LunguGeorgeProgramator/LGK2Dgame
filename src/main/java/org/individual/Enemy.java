@@ -4,10 +4,12 @@ import org.game.CollisionChecker;
 import org.game.GamePanel;
 
 import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 import static org.game.GamePanel.tileSize;
@@ -16,7 +18,11 @@ import static org.world.GameWorld.checkIfAssetIsInsideTheBoundary;
 public class Enemy extends Individual
 {
 
-    static protected final String COLLISION_ENEMY_ASSET_KEY_PREFIX = "collision-";
+    protected static final String COLLISION_ENEMY_ASSET_KEY_PREFIX = "collision-";
+    private final String ENEMY_COLLISION_TEXT_KEY = "enemy-collision";
+    private final String enemyCollisionText;
+    private final Double ENEMY_DAMAGE_TO_PLAYER = 0.001;
+    private double hitDamage;
     private final String ENEMY_DIRECTION_LEFT = MovingDirection.LEFT.getValue();
     private final String ENEMY_DIRECTION_RIGHT = MovingDirection.RIGHT.getValue();
     private final String ENEMY_DIRECTION_UP = MovingDirection.UP.getValue();
@@ -28,6 +34,9 @@ public class Enemy extends Individual
     final private Map<String, BufferedImage> enemyAssetsMap;
     private final Player player;
     private final CollisionChecker collisionChecker;
+    private final GamePanel gamePanel;
+    private int frameCounterDamage;
+    private boolean isAllowedToInflictDamage = false;
 
     public Enemy(
         GamePanel gamePanel,
@@ -47,7 +56,10 @@ public class Enemy extends Individual
         this.player = player;
         this.enemyAssetsMap = enemyAssetsMap;
         buildEnemyCollisionArea();
-        this.collisionChecker = gamePanel.collisionChecker;
+        this.gamePanel = gamePanel;
+        this.collisionChecker = this.gamePanel.collisionChecker;
+        this.enemyCollisionText = this.gamePanel.gameTextProvider.getGameTextByKey(ENEMY_COLLISION_TEXT_KEY);
+        this.hitDamage = 0;
     }
 
     private void buildEnemyCollisionArea()
@@ -113,7 +125,17 @@ public class Enemy extends Individual
                 direction = ENEMY_DIRECTION_DOWN;
             }
         }
+        else
+        {
+            this.isAllowedToInflictDamage = this.slowDownHealthDamageTaken();
+            if (this.isAllowedToInflictDamage)
+            {
+                this.player.playerHealth = this.player.playerHealth - ENEMY_DAMAGE_TO_PLAYER;
+                this.hitDamage = this.hitDamage + ENEMY_DAMAGE_TO_PLAYER; // TODO rethink this display variable is not ok damage is increase over time
+                this.frameCounterDamage = 0;
+            }
 
+        }
     }
 
     @Override
@@ -138,6 +160,27 @@ public class Enemy extends Individual
                 }
             }
             g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, null);
+
+            if (this.isEnemyCollidingWithPlayer && this.isAllowedToInflictDamage)
+            {
+                this.gamePanel.gameTextProvider.setTextColor(Color.RED);
+                this.gamePanel.gameTextProvider.setTextPosition(this.player.playerScreenX + 50, this.player.playerScreenY + this.randomXYMultiplier());
+                this.gamePanel.gameTextProvider.showTextInsideGame(g2D, String.format(this.enemyCollisionText, this.hitDamage));
+            }
         }
     }
+
+    private int randomXYMultiplier()
+    {
+        Random random = new Random();
+        return random.nextInt(10) + 1;
+    }
+
+    protected boolean slowDownHealthDamageTaken()
+    {
+        final int numberOfFramesLimit = 25;
+        this.frameCounterDamage++;
+        return this.frameCounterDamage > numberOfFramesLimit;
+    }
+
 }

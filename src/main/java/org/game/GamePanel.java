@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Color;
 
+import org.gametexts.GameTextProvider;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.world.Enemies;
@@ -87,10 +88,11 @@ public class GamePanel extends JPanel implements Runnable
         if (this.keyBoardHandler.pKeyPressed)
         { // remove all items from player inventory
             this.playerInventory.removeAllFromInventory();
+            this.player.playerHealth = this.player.playerMaxHealth;
         }
-        this.player.update();
         this.enemies.update();
         this.worldItems.update();
+        this.player.update();
     }
 
     public void paintComponent(Graphics g)
@@ -102,6 +104,12 @@ public class GamePanel extends JPanel implements Runnable
         this.enemies.draw(g2D);
         this.worldItems.draw(g2D);
         this.player.draw(g2D);
+
+        // TODO: debug text, remove latter
+        this.gameTextProvider.setTextColor(Color.YELLOW);
+        this.gameTextProvider.setTextPosition(tileSize * 11, tileSize);
+        String enemyCollisionText = this.gameTextProvider.getGameTextByKey("game-help-debug");
+        this.gameTextProvider.showTextInsideGame(g2D, enemyCollisionText);
 
 
 //        int pX = this.player.positionX;

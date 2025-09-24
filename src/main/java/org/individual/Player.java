@@ -5,6 +5,7 @@ import org.inventory.PlayerInventory;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +20,9 @@ public class Player extends Individual
     public PlayerInventory playerInventory;
     public final int playerScreenX;
     public final int playerScreenY;
+    public double damageTaken = 0.0;
+    public int playerMaxHealth = 200;
+    public double playerHealth = this.playerMaxHealth;
 
     public Player(GamePanel gamePanel, KeyBoardHandler keyBoardHandler, PlayerInventory playerInventory)
     {
@@ -130,6 +134,7 @@ public class Player extends Individual
         }
 
         this.changeAssetNumberByFrameCounter();
+        this.playerHealth = (int) (this.playerHealth - this.damageTaken);
     }
 
     @Override
@@ -158,5 +163,23 @@ public class Player extends Individual
         }
 
         g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, null);
+        drawRedSlider(g2D, 0, 0);
+    }
+
+    private void drawRedSlider(Graphics2D g2d, int x, int y) {
+
+        int height = 10;
+        // Draw background (gray)
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.fillRect(x, y, this.playerMaxHealth, height);
+
+        // Draw red bar representing the current value
+        int filledWidth = (int) this.playerHealth;
+        g2d.setColor(Color.RED);
+        g2d.fillRect(x, y, filledWidth, height);
+
+        // Optional: Draw border
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(x, y, this.playerMaxHealth, height);
     }
 }

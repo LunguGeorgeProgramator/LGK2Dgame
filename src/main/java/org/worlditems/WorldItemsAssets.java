@@ -32,24 +32,18 @@ public enum WorldItemsAssets
         )),
     CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
-            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")), "You found the key chest open !"),
-            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png")), "No key no chest open !")
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")), "open-chest"),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png")), "closed-chest")
         )),
     DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 26, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
-            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")), "Good you have the key !"),
-            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png")), "Try to find a key !") // TODO create a resource json lang file and add there all texts and use here the textKey
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")), "open-door"),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png")), "closed-door")
         )),
     BIG_DOOR(5, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
-            1, new WorldItemAssetsModel(
-                    Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-big-door.png")),
-                    "Key provided door open !"
-                ),
-            2, new WorldItemAssetsModel(
-                    Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-big-door.png")),
-                    "Find Key to open door !"
-                )
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-big-door.png")), "open-big-door"),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-big-door.png")), "closed-big-door")
         ));
 
     private final int itemId;

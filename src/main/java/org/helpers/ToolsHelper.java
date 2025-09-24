@@ -80,4 +80,22 @@ public class ToolsHelper
             throw new IllegalArgumentException(String.format("File not found %s !", filePath));
         }
     }
+
+    public static InputStream loadJsonFileFromResource(String jsonResourcePath)
+    {
+        try
+        {
+            InputStream inputStream = ToolsHelper.class.getResourceAsStream(jsonResourcePath);
+            if (inputStream == null)
+            {
+                throw new RuntimeException("Json file not found in resources");
+            }
+            return inputStream;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }

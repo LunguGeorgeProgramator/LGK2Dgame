@@ -8,6 +8,7 @@ import org.inventory.PlayerInventoryModel;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
@@ -95,7 +96,11 @@ public class WorldItem
             PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
             boolean isKeyInInventoryForChestAsset = playerInventoryModel != null && playerInventoryModel.getCount() > 0;
             this.assetNumber = this.hasPlayerCollidedWithItem && isKeyInInventoryForChestAsset ? 1 : 2;
-            this.textShownOnInteractionWithItem = this.itemsAssetsMap.get(this.assetNumber).getImageTextKey();
+            WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.assetNumber);
+            String gameText = worldItemAssetsModel != null ? worldItemAssetsModel.getImageTextKey() : null;
+            this.gamePanel.gameTextProvider.setTextColor(Color.WHITE);
+            this.gamePanel.gameTextProvider.setTextPosition(this.player.playerScreenX - 50, this.player.playerScreenY - 20);
+            this.textShownOnInteractionWithItem = this.gamePanel.gameTextProvider.getGameTextByKey(gameText);
         }
         else
         {
@@ -111,7 +116,8 @@ public class WorldItem
         // draw world item only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.worldItemPositionX, this.worldItemPositionY, this.player, tileSize))
         {
-            BufferedImage bufferedImage = this.itemsAssetsMap.get(this.assetNumber).getImageAsset();
+            WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.assetNumber);
+            BufferedImage bufferedImage =  worldItemAssetsModel != null ? worldItemAssetsModel.getImageAsset() : null;
             if (bufferedImage != null)
             {
                 g2D.drawImage(bufferedImage, worldItemAssetPositionX, worldItemAssetPositionY, null);
