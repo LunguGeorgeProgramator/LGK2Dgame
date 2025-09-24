@@ -23,6 +23,9 @@ To remove all picked-up items from the map, press the P key to clear the player'
 
 <img width="768" height="598" alt="world_items_test" src="https://github.com/user-attachments/assets/55703f9b-d6d0-48b3-a87b-b8108d85719f" />
 
+<img width="774" height="601" alt="test_health_bar" src="https://github.com/user-attachments/assets/e7fde302-c77d-4bb9-bf59-24016187e4ab" />
+
+
 # How to build a windows exe ?
 
 Run the following commands to build the project and generate the `.exe`
