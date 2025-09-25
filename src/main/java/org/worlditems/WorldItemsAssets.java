@@ -33,7 +33,7 @@ public enum WorldItemsAssets
             3, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")), null),
             4, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png")), null)
         ), List.of()),
-    CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6, WorldItemsAssets.GOLD_KEY.getItemId(),
+    CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 29, tileSize * 26, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
             1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")), "open-chest"),
             2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png")), "closed-chest")
@@ -65,7 +65,29 @@ public enum WorldItemsAssets
             new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 38).setPositionY(tileSize * 10).build(),
             new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 45).setPositionY(tileSize * 5).build()
         )
-    );
+    ),
+    TOP_OF_TREE(10, WorldItemTypes.VEGETATION.name(), false, tileSize * 25, tileSize * 23, 0,
+        Map.of(
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/impenetrable-tree-top-of-tree.png")), null)
+        ),
+        List.of(
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 25).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 26).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 27).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 28).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 29).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 30).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 31).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 32).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 33).setPositionY(tileSize * 23).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 25).setPositionY(tileSize * 29).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 26).setPositionY(tileSize * 29).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 27).setPositionY(tileSize * 29).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 28).setPositionY(tileSize * 29).build(),
+                new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 29).setPositionY(tileSize * 29).build()
+        ));
+
+
 
     private final int itemId;
     private final String itemType;

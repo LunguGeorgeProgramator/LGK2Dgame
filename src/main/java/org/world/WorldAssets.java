@@ -20,7 +20,12 @@ public enum WorldAssets
     LAKE_SHORE_DOWN(11, getScaledImageFromAssets("/tiles/lake-shore-down-exp.png"), true),
     LAKE_SHORE_LEFT(12, getScaledImageFromAssets("/tiles/lake-shore-left-exp.png"), true),
     LAKE_SHORE_RIGHT(13, getScaledImageFromAssets("/tiles/lake-shore-right-exp.png"), true),
-    LAKE_CORNER_RIGHT_INVERTED_DOWN(14, getScaledImageFromAssets("/tiles/lake-corner-right-inverted-down-exp.png"), true);
+    LAKE_CORNER_RIGHT_INVERTED_DOWN(14, getScaledImageFromAssets("/tiles/lake-corner-right-inverted-down-exp.png"), true),
+    IMPENETRABLE_FOREST_CENTER_TREE(15, getScaledImageFromAssets("/tiles/impenetrable-tree-center-forest.png"), true),
+    IMPENETRABLE_FOREST_BOTTOM_LEFT_TREE(16, getScaledImageFromAssets("/tiles/impenetrable-tree-bottom-left-forest.png"), true),
+    IMPENETRABLE_FOREST_BOTTOM_TREE(17, getScaledImageFromAssets("/tiles/impenetrable-tree-bottom-forest.png"), true),
+    IMPENETRABLE_FOREST_BOTTOM_RIGHT_TREE(18, getScaledImageFromAssets("/tiles/impenetrable-tree-bottom-right-forest.png"), true),
+    IMPENETRABLE_FOREST_TOP_TREE(19, getScaledImageFromAssets("/tiles/impenetrable-tree-top-forest.png"), true);
 
     private final int index;
     private final BufferedImage worldAssetImage;

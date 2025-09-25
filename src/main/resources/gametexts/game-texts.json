@@ -7,5 +7,6 @@
   "open-big-door": "Key provided door open!",
   "closed-big-door": "Find Key to open door!",
   "enemy-collision": "-%.2f Health",
-  "game-help-debug": "To reset game press keyboard P key!"
+  "game-help-debug": "To reset game press keyboard P key!",
+  "impenetrable-forrest": "This forest is to scary you can not enter."
 }
