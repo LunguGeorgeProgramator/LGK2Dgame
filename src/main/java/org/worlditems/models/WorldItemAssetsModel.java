@@ -1,4 +1,4 @@
-package org.worlditems;
+package org.worlditems.models;
 
 import java.awt.image.BufferedImage;
 

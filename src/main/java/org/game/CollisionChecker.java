@@ -4,7 +4,7 @@ import org.individual.Individual;
 import org.individual.MovingDirection;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
-import org.inventory.PlayerInventoryModel;
+import org.inventory.models.PlayerInventoryModel;
 import org.world.WorldAssets;
 import org.worlditems.WorldItemTypes;
 import org.worlditems.WorldItemsAssets;
@@ -133,7 +133,8 @@ public class CollisionChecker
     public void checkWorldItems(Player player)
     {
         PlayerInventory playerInventory = player.playerInventory;
-        for (WorldItemsAssets worldItemsAssets : WorldItemsAssets.values()) {
+        for (WorldItemsAssets worldItemsAssets : WorldItemsAssets.values())
+        {
             if (!worldItemsAssets.getSolidStopOnCollisionWithPlayer())
             {
                 continue;

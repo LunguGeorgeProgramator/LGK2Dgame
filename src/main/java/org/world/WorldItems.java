@@ -3,8 +3,9 @@ package org.world;
 import org.game.GamePanel;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
-import org.inventory.PlayerInventoryModel;
+import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.WorldItem;
+import org.worlditems.models.WorldItemDuplicatedBuilder;
 import org.worlditems.WorldItemTypes;
 import org.worlditems.WorldItemsAssets;
 
@@ -35,22 +36,31 @@ public class WorldItems
         initializeWorldItems();
     }
 
+    private void addToWorldItemsList(WorldItemsAssets worldItemAsset, WorldItemDuplicatedBuilder duplicatedOptions)
+    {
+        this.worldItemsList.add(new WorldItem(
+            this.gamePanel,
+            this.player,
+            this.playerInventory,
+            worldItemAsset.name(),
+            duplicatedOptions != null && duplicatedOptions.getItemId() != null ? duplicatedOptions.getItemId() :worldItemAsset.getItemId(),
+            duplicatedOptions != null && duplicatedOptions.getDependencyOnAssetId() != null ? duplicatedOptions.getDependencyOnAssetId() : worldItemAsset.getDependencyOnAssetId(),
+            duplicatedOptions != null && duplicatedOptions.getItemType() != null ? duplicatedOptions.getItemType() : worldItemAsset.getItemType(),
+            duplicatedOptions != null && duplicatedOptions.getPositionX() != null ? duplicatedOptions.getPositionX() : worldItemAsset.getDefaultPositionX(),
+            duplicatedOptions != null && duplicatedOptions.getPositionY() != null ? duplicatedOptions.getPositionY() : worldItemAsset.getDefaultPositionY(),
+            duplicatedOptions != null && duplicatedOptions.getItemAssetsMap() != null ? duplicatedOptions.getItemAssetsMap() : worldItemAsset.getItemAssetsMap()
+        ));
+    }
+
     private void initializeWorldItems()
     {
         for (WorldItemsAssets worldItemAsset : this.worldItemsAssets)
         {
-            this.worldItemsList.add(new WorldItem(
-                this.gamePanel,
-                this.player,
-                this.playerInventory,
-                worldItemAsset.name(),
-                worldItemAsset.getItemId(),
-                worldItemAsset.getDependencyOnAssetId(),
-                worldItemAsset.getItemType(),
-                worldItemAsset.getDefaultPositionX(),
-                worldItemAsset.getDefaultPositionY(),
-                worldItemAsset.getItemsAssetsMap()
-            ));
+            for(WorldItemDuplicatedBuilder duplicatedItemOptions : worldItemAsset.getPositionOnMapForDuplicatedItemList())
+            {
+                this.addToWorldItemsList(worldItemAsset, duplicatedItemOptions);
+            }
+            this.addToWorldItemsList(worldItemAsset, null);
         }
     }
 
@@ -83,8 +93,6 @@ public class WorldItems
 
     public void addItemsToDrawList()
     {
-
-
         for (WorldItem worldItem : this.worldItemsList)
         {
             if (itemsTypesAllowedInInventory.contains(WorldItemTypes.valueOf(worldItem.itemAssetType)))

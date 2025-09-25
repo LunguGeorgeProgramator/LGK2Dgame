@@ -5,7 +5,8 @@ import org.game.GamePanel;
 import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
-import org.inventory.PlayerInventoryModel;
+import org.inventory.models.PlayerInventoryModel;
+import org.worlditems.models.WorldItemAssetsModel;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;

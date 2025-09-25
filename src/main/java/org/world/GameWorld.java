@@ -18,7 +18,6 @@ public class GameWorld
     public int[][] worldMap;
     int worldMapCol;
     int worldMapRow;
-    static int noneMapAssetsRangeOfViewTileMultiplier = 15;
 
 
     public GameWorld(GamePanel gamePanel, String worldMapPath)

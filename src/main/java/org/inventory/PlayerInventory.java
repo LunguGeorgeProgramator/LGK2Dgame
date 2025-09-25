@@ -2,6 +2,7 @@ package org.inventory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.inventory.models.PlayerInventoryModel;
 
 import java.io.IOException;
 import java.io.File;

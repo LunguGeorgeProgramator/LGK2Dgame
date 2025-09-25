@@ -1,4 +1,4 @@
-package org.inventory;
+package org.inventory.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

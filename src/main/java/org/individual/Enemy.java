@@ -84,6 +84,7 @@ public class Enemy extends Individual
         // stop enemy movement if player is colliding with enemy
         if (!this.isEnemyCollidingWithPlayer)
         {
+            // todo: rethink this logic with max direction, make a map or list per enemy and add with following direction, start, end value use x/y depending of move direction or something like this
             int maxAllowedMoveLeftRight = (this.initialPositionX + maxDistanceAllowedToMove);
             if (this.positionX < maxAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_RIGHT))
             {

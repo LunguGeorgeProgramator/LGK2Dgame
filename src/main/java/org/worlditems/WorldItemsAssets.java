@@ -1,11 +1,14 @@
 package org.worlditems;
 
-import org.world.WorldAssets;
 
-import java.awt.image.BufferedImage;
+import org.worlditems.models.WorldItemAssetsModel;
+import org.worlditems.models.WorldItemDuplicatedBuilder;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.List;
+import java.util.ArrayList;
 
 import static org.game.GamePanel.tileSize;
 import static org.helpers.ToolsHelper.getScaledImageFromAssets;
@@ -22,46 +25,66 @@ public enum WorldItemsAssets
             6, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-three.png")), null),
             7, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-front.png")), null),
             8, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-four.png")), null)
-        )),
+        ), List.of()),
     RUBY(2, WorldItemTypes.HEALTH_RESTORATION.name(), false, tileSize * 20, tileSize * 2, 0,
         Map.of(
             1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")), null),
             2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")), null),
             3, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")), null),
             4, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png")), null)
-        )),
+        ), List.of()),
     CHEST(3, WorldItemTypes.CHEST.name(), true, tileSize * 2, tileSize * 6, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
             1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")), "open-chest"),
             2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png")), "closed-chest")
-        )),
+        ), List.of()),
     DOOR(4, WorldItemTypes.DOOR.name(), true, tileSize * 26, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
             1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-door.png")), null),
             2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-door.png")), "closed-door")
-        )),
+        ), List.of()),
     BIG_DOOR(5, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
             1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-big-door.png")), null),
             2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-big-door.png")), "closed-big-door")
-        ));
+        ), List.of()),
+    OLD_TREE_ITEM(6, WorldItemTypes.VEGETATION.name(), false, tileSize * 33, tileSize * 7, 0,
+        Map.of(
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/old-tree-no-background.png")), null)
+        ),
+        List.of( // set this duplicate item list, so I do not need to keep adding to this enum class for the same item as a tree to build a forest
+            // used a builder POJO class so if needed new options can be used for duplicates like assets map.
+            new WorldItemDuplicatedBuilder.Builder().setItemId(7).setPositionX(tileSize * 33).setPositionY(tileSize * 7).build(),
+            new WorldItemDuplicatedBuilder.Builder().setItemId(8).setPositionX(tileSize * 34).setPositionY(tileSize * 7).build(),
+            new WorldItemDuplicatedBuilder.Builder().setItemId(9).setPositionX(tileSize * 33).setPositionY(tileSize * 6).build(),
+            new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 34).setPositionY(tileSize * 6).build(),
+            new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 33).setPositionY(tileSize * 5).build(),
+            new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 34).setPositionY(tileSize * 5).build(),
+            new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 35).setPositionY(tileSize * 5).build(),
+            new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 35).setPositionY(tileSize * 4).build(),
+            new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 38).setPositionY(tileSize * 10).build(),
+            new WorldItemDuplicatedBuilder.Builder().setPositionX(tileSize * 45).setPositionY(tileSize * 5).build()
+        )
+    );
 
     private final int itemId;
     private final String itemType;
-    final private int defaultPositionX;
-    final private int defaultPositionY;
+    private final int defaultPositionX;
+    private final int defaultPositionY;
     private final int dependencyOnAssetId;
-    final private Map<Integer, WorldItemAssetsModel> itemsAssetsMap;
-    final private boolean solidStopOnCollisionWithPlayer;
+    private final Map<Integer, WorldItemAssetsModel> itemAssetsMap;
+    private final boolean solidStopOnCollisionWithPlayer;
+    private final List<WorldItemDuplicatedBuilder> positionOnMapForDuplicatedItemList;
 
     WorldItemsAssets(
-            int itemId,
-            String itemType,
-            boolean solidStopOnCollisionWithPlayer,
-            int defaultPositionX,
-            int defaultPositionY,
-            int dependencyOnAssetId,
-            Map<Integer, WorldItemAssetsModel> itemsAssetsMap
+        int itemId,
+        String itemType,
+        boolean solidStopOnCollisionWithPlayer,
+        int defaultPositionX,
+        int defaultPositionY,
+        int dependencyOnAssetId,
+        Map<Integer, WorldItemAssetsModel> itemAssetsMap,
+        List<WorldItemDuplicatedBuilder> positionOnMapForDuplicatedItemList
     )
     {
         this.itemId = itemId;
@@ -70,7 +93,8 @@ public enum WorldItemsAssets
         this.defaultPositionX = defaultPositionX;
         this.defaultPositionY = defaultPositionY;
         this.dependencyOnAssetId = dependencyOnAssetId;
-        this.itemsAssetsMap = itemsAssetsMap;
+        this.itemAssetsMap = itemAssetsMap;
+        this.positionOnMapForDuplicatedItemList = positionOnMapForDuplicatedItemList;
     }
 
     public int getItemId()
@@ -78,9 +102,9 @@ public enum WorldItemsAssets
         return this.itemId;
     }
 
-    public Map<Integer, WorldItemAssetsModel> getItemsAssetsMap()
+    public Map<Integer, WorldItemAssetsModel> getItemAssetsMap()
     {
-        return this.itemsAssetsMap;
+        return this.itemAssetsMap;
     }
 
     public int getDefaultPositionX()
@@ -106,6 +130,11 @@ public enum WorldItemsAssets
     public int getDependencyOnAssetId()
     {
         return this.dependencyOnAssetId;
+    }
+
+    public List<WorldItemDuplicatedBuilder> getPositionOnMapForDuplicatedItemList()
+    {
+        return new ArrayList<>(this.positionOnMapForDuplicatedItemList);
     }
 
     public static String getWorldItemAssetNameById(int id)
