@@ -125,6 +125,8 @@ public class GamePanel extends JPanel implements Runnable
             individuals.remove(i);
         }
 
+        this.worldItems.drawTextOmCollision(g2D);
+
         // TODO: debug text, remove latter
         this.gameTextProvider.setTextColor(Color.YELLOW);
         this.gameTextProvider.setTextPosition(tileSize * 10, tileSize);

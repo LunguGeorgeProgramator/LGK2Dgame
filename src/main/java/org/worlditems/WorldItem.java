@@ -23,6 +23,8 @@ public class WorldItem extends Individual
     WorldItemsAssets[] worldItemsAssets;
     public final String itemAssetName;
     public final int itemAssetId;
+    public final int itemWorldMatrixRowIndex;
+    public final int itemWorldMatrixColIndex;
     public final int itemDependencyOnAssetId;
     public final String itemAssetType;
     private final GamePanel gamePanel;
@@ -44,6 +46,8 @@ public class WorldItem extends Individual
             PlayerInventory playerInventory,
             String itemAssetName,
             int itemAssetId,
+            int itemWorldMatrixRowIndex,
+            int itemWorldMatrixColIndex,
             int itemDependencyOnAssetId,
             String itemAssetType,
             int worldItemPositionX,
@@ -53,6 +57,8 @@ public class WorldItem extends Individual
     {
         super(worldItemPositionX, worldItemPositionY, gamePanel.player.speed, "");
         this.itemAssetId = itemAssetId;
+        this.itemWorldMatrixRowIndex = itemWorldMatrixRowIndex;
+        this.itemWorldMatrixColIndex = itemWorldMatrixColIndex;
         this.itemDependencyOnAssetId = itemDependencyOnAssetId;
         this.gamePanel = gamePanel;
         this.player = player;
@@ -83,7 +89,7 @@ public class WorldItem extends Individual
 
     public void update()
     {
-        this.hasPlayerCollidedWithItem = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.positionX, this.positionY, this.hasPlayerCollidedWithItem, true);
+        this.hasPlayerCollidedWithItem = this.collisionChecker.checkOneWorldItemCollision(this.player, this.positionX, this.positionY);
         if (this.hasPlayerCollidedWithItem)
         {
             PlayerInventoryModel playerInventoryModel = this.playerInventory.getInventoryItemByName(this.itemAssetName);
@@ -136,7 +142,6 @@ public class WorldItem extends Individual
                 g2D.drawImage(bufferedImage, worldItemAssetPositionX, worldItemAssetPositionY, null);
             }
         }
-        this.drawWordItemCollisionText(g2D);
     }
 
     public void drawWordItemCollisionText(Graphics2D g2D)

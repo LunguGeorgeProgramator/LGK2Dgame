@@ -4,6 +4,7 @@ import org.game.GamePanel;
 import org.individual.Player;
 
 import java.awt.Graphics2D;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class GameWorld
         int i = 0;
         for(String line : txtMapLines)
         {
-            String[] assetsPosition = line.split(",");
+            String[] assetsPosition = Arrays.stream(line.split(",")).map(String::trim).toArray(String[]::new);
             for(int j = 0; j < assetsPosition.length; j++)
             {
                 this.worldMap[j][i] = Integer.parseInt(assetsPosition[j]);
@@ -68,7 +69,10 @@ public class GameWorld
                 int worldAssetPositionX = worldPositionX - this.player.positionX + this.player.playerScreenX;
                 int worldAssetPositionY = worldPositionY - this.player.positionY + this.player.playerScreenY;
                 int worldAssetIndex = this.worldMap[i][j];
-
+                if (worldAssetIndex < 0)
+                { // skip -1 values
+                    continue;
+                }
                 if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, this.player, tileSize))
                 {
                     // Draw assets only if they are inside the screen (with x height) plus one tile size to remove popup effect on rendering world assets.

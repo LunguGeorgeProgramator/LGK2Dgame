@@ -6,6 +6,8 @@ import java.util.Map;
 public class WorldItemDuplicatedBuilder
 {
     private final Integer itemId;
+    private final Integer itemWorldColIndex;
+    private final Integer itemWorldRowIndex;
     private final String itemType;
     private final Integer positionX;
     private final Integer positionY;
@@ -16,6 +18,8 @@ public class WorldItemDuplicatedBuilder
     private WorldItemDuplicatedBuilder(Builder builder)
     {
         this.itemId = builder.itemId;
+        this.itemWorldColIndex = builder.itemWorldColIndex;
+        this.itemWorldRowIndex = builder.itemWorldRowIndex;
         this.itemType = builder.itemType;
         this.positionX = builder.positionX;
         this.positionY = builder.positionY;
@@ -27,6 +31,16 @@ public class WorldItemDuplicatedBuilder
     public Integer getItemId()
     {
         return itemId;
+    }
+
+    public Integer getItemWorldColIndex()
+    {
+        return itemWorldColIndex;
+    }
+
+    public Integer getItemWorldRowIndex()
+    {
+        return itemWorldRowIndex;
     }
 
     public String getItemType()
@@ -65,6 +79,8 @@ public class WorldItemDuplicatedBuilder
     {
         // all are optional, no required calls variable
         private Integer itemId = null;
+        private Integer itemWorldColIndex = null;
+        private Integer itemWorldRowIndex = null;
         private String itemType = null;
         private Integer positionX = null;
         private Integer positionY = null;
@@ -75,6 +91,18 @@ public class WorldItemDuplicatedBuilder
         public Builder setItemId(Integer itemId)
         {
             this.itemId = itemId;
+            return this;
+        }
+
+        public Builder setItemWorldColIndex(Integer itemWorldColIndex)
+        {
+            this.itemWorldColIndex = itemWorldColIndex;
+            return this;
+        }
+
+        public Builder setItemWorldRowIndex(Integer itemWorldRowIndex)
+        {
+            this.itemWorldRowIndex = itemWorldRowIndex;
             return this;
         }
 

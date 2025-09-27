@@ -79,7 +79,7 @@ public class Enemy extends Individual
     @Override
     public void update()
     {
-        this.isEnemyCollidingWithPlayer = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.positionX, this.positionY, this.isEnemyCollidingWithPlayer);
+        this.isEnemyCollidingWithPlayer = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.positionX, this.positionY);
 
         // stop enemy movement if player is colliding with enemy
         if (!this.isEnemyCollidingWithPlayer)

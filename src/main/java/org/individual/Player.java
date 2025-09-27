@@ -109,8 +109,9 @@ public class Player extends Individual
         }
 
         this.activateCollision = false;
-        this.gamePanel.collisionChecker.checkTile(this);
-        this.gamePanel.collisionChecker.checkWorldItems(this);
+        this.gamePanel.collisionChecker.checkTile(this, false);
+        this.gamePanel.collisionChecker.checkTile(this, true);
+//        this.gamePanel.collisionChecker.checkWorldItems(this);
 
         if (!this.activateCollision)
         {

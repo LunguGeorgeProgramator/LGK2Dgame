@@ -9,5 +9,6 @@ public enum WorldItemTypes
     CHEST,
     HEALTH_RESTORATION,
     DOOR,
-    VEGETATION;
+    VEGETATION,
+    BUILDING;
 }
