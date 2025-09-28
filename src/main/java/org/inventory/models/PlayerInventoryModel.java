@@ -9,6 +9,10 @@ public class PlayerInventoryModel
     private int count;
     private String status;
     private String itemType;
+    private int itemWorldMatrixCol;
+    private int itemWorldMatrixRow;
+    private String itemInventoryId;
+    private boolean inInventory;
 
     public PlayerInventoryModel()
     {
@@ -74,6 +78,30 @@ public class PlayerInventoryModel
         return itemType;
     }
 
+    @JsonProperty("itemWorldMatrixCol")
+    public int getItemWorldMatrixCol()
+    {
+        return itemWorldMatrixCol;
+    }
+
+    @JsonProperty("itemWorldMatrixRow")
+    public int getItemWorldMatrixRow()
+    {
+        return itemWorldMatrixRow;
+    }
+
+    @JsonProperty("itemInventoryId")
+    public String getItemInventoryId()
+    {
+        return itemInventoryId;
+    }
+
+    @JsonProperty("inInventory")
+    public boolean getInInventory()
+    {
+        return inInventory;
+    }
+
     @JsonProperty("itemType")
     public void setItemType(String itemType)
     {
@@ -84,5 +112,29 @@ public class PlayerInventoryModel
     public void setItemId(int itemId)
     {
         this.itemId = itemId;
+    }
+
+    @JsonProperty("itemWorldMatrixCol")
+    public void setItemWorldMatrixCol(int itemWorldMatrixCol)
+    {
+        this.itemWorldMatrixCol = itemWorldMatrixCol;
+    }
+
+    @JsonProperty("itemWorldMatrixRow")
+    public void setItemWorldMatrixRow(int itemWorldMatrixRow)
+    {
+        this.itemWorldMatrixRow = itemWorldMatrixRow;
+    }
+
+    @JsonProperty("itemInventoryId")
+    public void setItemInventoryId(String itemInventoryId)
+    {
+        this.itemInventoryId = itemInventoryId;
+    }
+
+    @JsonProperty("inInventory")
+    public void setInInventory(boolean inInventory)
+    {
+        this.inInventory = inInventory;
     }
 }

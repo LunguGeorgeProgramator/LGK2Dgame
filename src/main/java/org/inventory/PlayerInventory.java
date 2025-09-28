@@ -3,6 +3,7 @@ package org.inventory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.inventory.models.PlayerInventoryModel;
+import org.worlditems.WorldItem;
 
 import java.io.IOException;
 import java.io.File;
@@ -14,6 +15,7 @@ public class PlayerInventory
     private final ObjectMapper mapper;
     private final File inventoryJsonFile;
     private List<PlayerInventoryModel> playerInventoryList;
+    private static String INVENTORY_ID_FORMAT = "%d%d%d";
     private static final String INVENTORY_RESOURCE_PATH = "config/inventory.json";
     private static final String INVENTORY_RESOURCE_PATH_NPT_FOUND_ERROR_MESSAGE = "inventory.json not found please check resource.";
 
@@ -25,16 +27,33 @@ public class PlayerInventory
         this.playerInventoryList = openInventory();
     }
 
-    public PlayerInventoryModel getInventoryItemByName(String itemName)
+    public PlayerInventoryModel getInventoryItemByInventoryId(String itemInventoryId)
     {
         for (PlayerInventoryModel playerInventory : this.playerInventoryList)
         {
-            if (playerInventory.getItemName().equals(itemName))
+            if (playerInventory.getItemInventoryId().equals(itemInventoryId))
             {
                 return playerInventory;
             }
         }
         return null;
+    }
+
+    public PlayerInventoryModel getInventoryItemByName(String itemName)
+    {
+        for (PlayerInventoryModel playerInventory : this.playerInventoryList)
+        {
+            if (playerInventory.getItemName().equals(itemName) && playerInventory.getInInventory())
+            {
+                return playerInventory;
+            }
+        }
+        return null;
+    }
+
+    public String getWorldItemInventoryId(WorldItem worldItem)
+    {
+        return String.format(INVENTORY_ID_FORMAT, worldItem.itemAssetId, worldItem.itemWorldMatrixColIndex, worldItem.itemWorldMatrixRowIndex);
     }
 
     private void updateModelDependingOnActionRequested(PlayerInventoryModel itemToUseAsValue, PlayerInventoryModel itemToUpdate, String updateAction)
@@ -71,7 +90,7 @@ public class PlayerInventory
         List<PlayerInventoryModel> items = this.playerInventoryList;
         for (PlayerInventoryModel playerInventoryModel : items)
         {
-            if (playerInventoryModel.getItemName().equals(playerInventoryItem.getItemName()))
+            if (playerInventoryModel.getItemInventoryId().equals(playerInventoryItem.getItemInventoryId()))
             {
                 playerInventoryModel.setStatus(playerInventoryItem.getStatus());
                 updateModelDependingOnActionRequested(playerInventoryItem, playerInventoryModel, updateAction);
@@ -109,7 +128,7 @@ public class PlayerInventory
     public List<PlayerInventoryModel> addToInventory(PlayerInventoryModel playerInventoryModel)
     {
         List<PlayerInventoryModel> items = this.playerInventoryList;
-        PlayerInventoryModel foundPlayerInventoryItem = getInventoryItemByName(playerInventoryModel.getItemName());
+        PlayerInventoryModel foundPlayerInventoryItem = getInventoryItemByName(playerInventoryModel.getItemInventoryId());
         if (foundPlayerInventoryItem != null)
         { // item already added in inventory
             return items;

@@ -230,7 +230,7 @@ public class CollisionChecker
             // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
             String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(worldItemsAssets.getDependencyOnAssetId());
             PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
-            player.activateCollision = playerInventoryModel == null || playerInventoryModel.getCount() <= 0;
+            player.activateCollision = playerInventoryModel == null || !playerInventoryModel.getInInventory();
         }
         else
         {

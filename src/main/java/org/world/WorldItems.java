@@ -92,7 +92,8 @@ public class WorldItems extends GameWorld {
         {
             if (itemsTypesAllowedInInventory.contains(WorldItemTypes.valueOf(worldItem.itemAssetType)))
             {
-                PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByName(worldItem.itemAssetName);
+                String itemInventoryId = this.playerInventory.getWorldItemInventoryId(worldItem);
+                PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByInventoryId(itemInventoryId);
                 if (inventoryItem == null)
                 {
                     PlayerInventoryModel playerInventoryModelAdd = new PlayerInventoryModel();
@@ -101,9 +102,13 @@ public class WorldItems extends GameWorld {
                     playerInventoryModelAdd.setStatus("active");
                     playerInventoryModelAdd.setItemType(worldItem.itemAssetType);
                     playerInventoryModelAdd.setItemId(worldItem.itemAssetId);
+                    playerInventoryModelAdd.setItemWorldMatrixCol(worldItem.itemWorldMatrixColIndex);
+                    playerInventoryModelAdd.setItemWorldMatrixRow(worldItem.itemWorldMatrixRowIndex);
+                    playerInventoryModelAdd.setItemInventoryId(itemInventoryId);
+                    playerInventoryModelAdd.setInInventory(false);
                     this.playerInventory.addToInventory(playerInventoryModelAdd);
                 }
-                else if (inventoryItem.getCount() > 0)
+                else if (inventoryItem.getInInventory())
                 {
                     // do not check collision or other logic for this item, this is hidden from player inside the inventory
                     continue;
@@ -119,8 +124,9 @@ public class WorldItems extends GameWorld {
         {
             if (itemsTypesAllowedInInventory.contains(WorldItemTypes.valueOf(worldItem.itemAssetType)))
             {
-                PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByName(worldItem.itemAssetName);
-                if (inventoryItem != null && inventoryItem.getCount() > 0)
+                String itemInventoryId = this.playerInventory.getWorldItemInventoryId(worldItem);
+                PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByInventoryId(itemInventoryId);
+                if (inventoryItem != null && inventoryItem.getInInventory())
                 {
                     // if item is already in inventory do not draw on game map
                     continue;
@@ -138,4 +144,5 @@ public class WorldItems extends GameWorld {
             worldItem.drawWordItemCollisionText(g2D);
         }
     }
+
 }

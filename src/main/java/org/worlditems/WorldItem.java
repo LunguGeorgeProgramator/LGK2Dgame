@@ -92,10 +92,12 @@ public class WorldItem extends Individual
         this.hasPlayerCollidedWithItem = this.collisionChecker.checkOneWorldItemCollision(this.player, this.positionX, this.positionY);
         if (this.hasPlayerCollidedWithItem)
         {
-            PlayerInventoryModel playerInventoryModel = this.playerInventory.getInventoryItemByName(this.itemAssetName);
+            String itemInventoryId = this.playerInventory.getWorldItemInventoryId(this);
+            PlayerInventoryModel playerInventoryModel = this.playerInventory.getInventoryItemByInventoryId(itemInventoryId);
             if (playerInventoryModel != null)
             {
                 playerInventoryModel.setCount(1);
+                playerInventoryModel.setInInventory(true);
                 this.playerInventory.updateInventoryItem(playerInventoryModel);
             }
         }
@@ -109,7 +111,7 @@ public class WorldItem extends Individual
         { // TODO this can be rethink a bit, the 1,2 solution is not ok
             String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(this.itemDependencyOnAssetId);
             PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
-            boolean isKeyInInventoryForChestAsset = playerInventoryModel != null && playerInventoryModel.getCount() > 0;
+            boolean isKeyInInventoryForChestAsset = playerInventoryModel != null && playerInventoryModel.getInInventory();
             this.assetNumber = this.hasPlayerCollidedWithItem && isKeyInInventoryForChestAsset ? 1 : 2;
         }
         else

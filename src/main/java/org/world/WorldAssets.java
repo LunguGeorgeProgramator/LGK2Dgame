@@ -23,7 +23,8 @@ public enum WorldAssets
     LAKE_SHORE_LEFT(12, getScaledImageFromAssets("/tiles/lake-shore-left-exp.png"), true),
     LAKE_SHORE_RIGHT(13, getScaledImageFromAssets("/tiles/lake-shore-right-exp.png"), true),
     LAKE_CORNER_RIGHT_INVERTED_DOWN(14, getScaledImageFromAssets("/tiles/lake-corner-right-inverted-down-exp.png"), true),
-    TOP_WALL(20, getScaledImageFromAssets("/tiles/top-wall.png"), true);
+    TOP_WALL(20, getScaledImageFromAssets("/tiles/top-wall.png"), true),
+    INTERIOR_FLOOR(21, getScaledImageFromAssets("/tiles/floor.png"), false);
 
     private final int index;
     private final BufferedImage worldAssetImage;

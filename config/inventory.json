@@ -1,13 +1,41 @@
 [ {
   "itemName" : "GOLD_KEY",
   "itemId" : 1,
-  "count" : 1,
+  "count" : 0,
   "status" : "active",
-  "itemType" : "KEY"
+  "itemType" : "KEY",
+  "itemWorldMatrixCol" : 5,
+  "itemWorldMatrixRow" : 2,
+  "itemInventoryId" : "152",
+  "inInventory" : false
+}, {
+  "itemName" : "GOLD_KEY",
+  "itemId" : 1,
+  "count" : 0,
+  "status" : "active",
+  "itemType" : "KEY",
+  "itemWorldMatrixCol" : 5,
+  "itemWorldMatrixRow" : 5,
+  "itemInventoryId" : "155",
+  "inInventory" : false
+}, {
+  "itemName" : "GOLD_KEY",
+  "itemId" : 1,
+  "count" : 0,
+  "status" : "active",
+  "itemType" : "KEY",
+  "itemWorldMatrixCol" : 5,
+  "itemWorldMatrixRow" : 8,
+  "itemInventoryId" : "158",
+  "inInventory" : false
 }, {
   "itemName" : "RUBY",
   "itemId" : 2,
   "count" : 0,
   "status" : "active",
-  "itemType" : "HEALTH_RESTORATION"
+  "itemType" : "HEALTH_RESTORATION",
+  "itemWorldMatrixCol" : 46,
+  "itemWorldMatrixRow" : 29,
+  "itemInventoryId" : "24629",
+  "inInventory" : false
 } ]
