@@ -17,9 +17,11 @@ When the game window opens, use the W, A, S and D keys to move the white rectang
 
 To remove all picked-up items from the map, press the P key to clear the player's inventory.
 
-<img width="784" height="605" alt="test-forest" src="https://github.com/user-attachments/assets/362ef838-2a57-4f51-b241-fe0c5a32e69e" />
-<img width="777" height="602" alt="test-building" src="https://github.com/user-attachments/assets/a9ca1c8d-6725-4e81-93b8-f534f36a3b59" />
-<img width="776" height="603" alt="first_start" src="https://github.com/user-attachments/assets/19ab5f70-39c2-40e3-995a-aea0cc247fa5" />
+<img width="782" height="602" alt="test-24" src="https://github.com/user-attachments/assets/1312e2d0-afae-45b8-bafe-1149781bb7af" />
+<img width="772" height="602" alt="test-23" src="https://github.com/user-attachments/assets/8d46706b-9160-4b87-88a8-2aba8473ab8c" />
+<img width="770" height="602" alt="test-22" src="https://github.com/user-attachments/assets/c8e9b639-272f-4577-94fa-b05c854fb62a" />
+<img width="781" height="610" alt="test-21" src="https://github.com/user-attachments/assets/aec1090c-2e7f-473d-87a7-838255f7587e" />
+
 
 # How to build a windows exe ?
 
