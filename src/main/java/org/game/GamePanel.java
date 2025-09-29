@@ -129,7 +129,7 @@ public class GamePanel extends JPanel implements Runnable
 
         // TODO: debug text, remove latter
         this.gameTextProvider.setTextColor(Color.YELLOW);
-        this.gameTextProvider.setTextPosition(tileSize * 10, tileSize);
+        this.gameTextProvider.setTextPosition(tileSize * 8 + 20, tileSize - 20);
         String enemyCollisionText = this.gameTextProvider.getGameTextByKey("game-help-debug");
         this.gameTextProvider.showTextInsideGame(g2D, enemyCollisionText);
 

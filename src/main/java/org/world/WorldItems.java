@@ -25,7 +25,8 @@ public class WorldItems extends GameWorld {
     private static String WORLD_MAP_ASSETS_TXT_PATH = "/worldMaps/WorldMapAssets.txt";
     private static final List<WorldItemTypes> itemsTypesAllowedInInventory = List.of(
         WorldItemTypes.KEY,
-        WorldItemTypes.HEALTH_RESTORATION
+        WorldItemTypes.HEALTH_RESTORATION,
+        WorldItemTypes.WEAPON
     );
 
     public WorldItems(GamePanel gamePanel, Player player)

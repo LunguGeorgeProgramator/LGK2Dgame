@@ -10,6 +10,7 @@ public class KeyBoardHandler implements KeyListener
     public boolean leftPressed;
     public boolean rightPressed;
     public boolean pKeyPressed;
+    public boolean spaceBarePressed;
 
     @Override
     public void keyTyped(KeyEvent keyEvent)
@@ -48,6 +49,8 @@ public class KeyBoardHandler implements KeyListener
             case KeyEvent.VK_P:
                 pKeyPressed = keyPressedValue;
                 break;
+            case KeyEvent.VK_SPACE:
+                spaceBarePressed = keyPressedValue;
         }
     }
 }

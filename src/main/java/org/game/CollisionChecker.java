@@ -97,7 +97,7 @@ public class CollisionChecker
 
          int[][] sourceWorldMatrix = checkWorldAssetItem ? worldItemsMatrix : worldMatrix;
 
-        switch (MovingDirection.getValueByString(player.movementDirection))
+        switch (player.movementDirection)
         {
             case MovingDirection.UP:
                 individualTopRow = (individualTopY - player.speed) / tileSize;
@@ -156,7 +156,7 @@ public class CollisionChecker
 
         boolean worldItemCollidingWithPlayer = false;
 
-        switch (MovingDirection.getValueByString(player.movementDirection))
+        switch (player.movementDirection)
         {
             case MovingDirection.UP:
         playerTopRow = (playerTopY - player.speed) / tileSize;

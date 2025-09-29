@@ -10,5 +10,6 @@ public enum WorldItemTypes
     HEALTH_RESTORATION,
     DOOR,
     VEGETATION,
-    BUILDING;
+    BUILDING,
+    WEAPON;
 }

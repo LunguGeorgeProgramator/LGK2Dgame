@@ -1,41 +1,31 @@
 [ {
   "itemName" : "GOLD_KEY",
   "itemId" : 1,
-  "count" : 0,
+  "count" : 1,
   "status" : "active",
   "itemType" : "KEY",
-  "itemWorldMatrixCol" : 5,
-  "itemWorldMatrixRow" : 2,
-  "itemInventoryId" : "152",
-  "inInventory" : false
-}, {
-  "itemName" : "GOLD_KEY",
-  "itemId" : 1,
-  "count" : 0,
-  "status" : "active",
-  "itemType" : "KEY",
-  "itemWorldMatrixCol" : 5,
-  "itemWorldMatrixRow" : 5,
-  "itemInventoryId" : "155",
-  "inInventory" : false
-}, {
-  "itemName" : "GOLD_KEY",
-  "itemId" : 1,
-  "count" : 0,
-  "status" : "active",
-  "itemType" : "KEY",
-  "itemWorldMatrixCol" : 5,
-  "itemWorldMatrixRow" : 8,
-  "itemInventoryId" : "158",
-  "inInventory" : false
+  "itemWorldMatrixCol" : 26,
+  "itemWorldMatrixRow" : 29,
+  "itemInventoryId" : "12629",
+  "inInventory" : true
 }, {
   "itemName" : "RUBY",
   "itemId" : 2,
-  "count" : 0,
+  "count" : 1,
   "status" : "active",
   "itemType" : "HEALTH_RESTORATION",
   "itemWorldMatrixCol" : 46,
   "itemWorldMatrixRow" : 29,
   "itemInventoryId" : "24629",
-  "inInventory" : false
+  "inInventory" : true
+}, {
+  "itemName" : "SWORD",
+  "itemId" : 23,
+  "count" : 1,
+  "status" : "active",
+  "itemType" : "WEAPON",
+  "itemWorldMatrixCol" : 46,
+  "itemWorldMatrixRow" : 43,
+  "itemInventoryId" : "234643",
+  "inInventory" : true
 } ]

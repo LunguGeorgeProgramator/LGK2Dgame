@@ -17,18 +17,28 @@ public enum EnemyAssets
             MovingDirection.RIGHT.getValue(), Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-right.png")),
             COLLISION_ENEMY_ASSET_KEY_PREFIX + MovingDirection.RIGHT.getValue(), Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-right.png")),
             COLLISION_ENEMY_ASSET_KEY_PREFIX + MovingDirection.LEFT.getValue(), Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-left.png"))
+        ),
+        Map.of(
+            MovingDirection.RIGHT.getValue(), Map.of(
+            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-right.png")),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-right-under-attack.png"))
+            ),
+            MovingDirection.LEFT.getValue(), Map.of(
+            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-left.png")),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-left-under-attack.png"))
+            )
         )),
-    COLOR_MONSTER(2, tileSize * 10, tileSize * 10, 200, MovingDirection.LEFT.getValue(), 2, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER2(3, tileSize * 11, tileSize * 11, 200, MovingDirection.UP.getValue(), 2, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER3(4, tileSize * 12, tileSize * 12, 300, MovingDirection.RIGHT.getValue(), 1, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER4(5, tileSize * 10, tileSize * 5, 400, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER5(6, tileSize * 50, tileSize * 18, 200, MovingDirection.UP.getValue(), 2, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER6(7, tileSize * 60, tileSize * 15, 200, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER7(8, tileSize * 25, tileSize * 10, 200, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER8(9, tileSize * 30, tileSize * 12, 200, MovingDirection.UP.getValue(), 1, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER9(10, tileSize * 35, tileSize * 10, 200, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER10(11, tileSize * 40, tileSize * 10, 200, MovingDirection.DOWN.getValue(), 2, "/enemy/color-monster.png", Map.of()),
-    COLOR_MONSTER11(12, tileSize * 25, tileSize * 10, 200, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of());
+    COLOR_MONSTER(2, tileSize * 10, tileSize * 10, 200, MovingDirection.LEFT.getValue(), 2, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER2(3, tileSize * 11, tileSize * 11, 200, MovingDirection.UP.getValue(), 2, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER3(4, tileSize * 12, tileSize * 12, 300, MovingDirection.RIGHT.getValue(), 1, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER4(5, tileSize * 10, tileSize * 5, 400, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER5(6, tileSize * 50, tileSize * 18, 200, MovingDirection.UP.getValue(), 2, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER6(7, tileSize * 60, tileSize * 15, 200, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER7(8, tileSize * 25, tileSize * 10, 200, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER8(9, tileSize * 30, tileSize * 12, 200, MovingDirection.UP.getValue(), 1, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER9(10, tileSize * 35, tileSize * 10, 200, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER10(11, tileSize * 40, tileSize * 10, 200, MovingDirection.DOWN.getValue(), 2, "/enemy/color-monster.png", Map.of(), Map.of()),
+    COLOR_MONSTER11(12, tileSize * 25, tileSize * 10, 200, MovingDirection.DOWN.getValue(), 1, "/enemy/color-monster.png", Map.of(), Map.of());
 
     final private int enemyId;
     final private int defaultPositionX;
@@ -38,6 +48,7 @@ public enum EnemyAssets
     final private int speed;
     final private String enemyAssetPath;
     final private Map<String, BufferedImage> enemyAssetsMap;
+    final private Map<String, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap;
 
     EnemyAssets(
             int enemyId,
@@ -47,8 +58,9 @@ public enum EnemyAssets
             String direction,
             int speed,
             String enemyAssetPath,
-            Map<String, BufferedImage> enemyAssetsMap
-            )
+            Map<String, BufferedImage> enemyAssetsMap,
+            Map<String, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap
+    )
     {
         this.enemyId = enemyId;
         this.defaultPositionX = defaultPositionX;
@@ -58,6 +70,7 @@ public enum EnemyAssets
         this.speed = speed;
         this.enemyAssetPath = enemyAssetPath;
         this.enemyAssetsMap = enemyAssetsMap;
+        this.enemyUnderAttackAssetsMap = enemyUnderAttackAssetsMap;
     }
 
     public int getEnemyId()
@@ -98,5 +111,10 @@ public enum EnemyAssets
     public Map<String, BufferedImage> getEnemyAssetsMap()
     {
         return this.enemyAssetsMap;
+    }
+
+    public  Map<String, Map<Integer, BufferedImage>> getEnamyUnderAttackAssetsMap()
+    {
+        return this.enemyUnderAttackAssetsMap;
     }
 }

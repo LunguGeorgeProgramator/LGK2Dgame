@@ -81,7 +81,13 @@ public class GameTextProvider
             // These options cause the game to freeze briefly the first time the text is displayed.
             g2d.setFont(new Font(this.textFont, this.textStyle, this.textSize));
             g2d.setColor(this.textColor);
-            g2d.drawString(textToShow, this.textPositionX, this.textPositionY);
+            int lineHeight = g2d.getFontMetrics().getHeight();
+
+            String[] lines = textToShow.split("\n");
+
+            for (int i = 0; i < lines.length; i++) {
+                g2d.drawString(lines[i], this.textPositionX, this.textPositionY + i * lineHeight);
+            }
         }
     }
 

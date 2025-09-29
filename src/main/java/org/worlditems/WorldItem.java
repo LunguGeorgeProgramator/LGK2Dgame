@@ -29,8 +29,6 @@ public class WorldItem extends Individual
     public final String itemAssetType;
     private final GamePanel gamePanel;
     private final Player player;
-    private int frameCounter;
-    private int assetNumber;
     public final int positionX;
     public final int positionY;
     private final Map<Integer, WorldItemAssetsModel> itemsAssetsMap;
@@ -112,17 +110,17 @@ public class WorldItem extends Individual
             String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(this.itemDependencyOnAssetId);
             PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
             boolean isKeyInInventoryForChestAsset = playerInventoryModel != null && playerInventoryModel.getInInventory();
-            this.assetNumber = this.hasPlayerCollidedWithItem && isKeyInInventoryForChestAsset ? 1 : 2;
+            this.dynamicAssetNumber = this.hasPlayerCollidedWithItem && isKeyInInventoryForChestAsset ? 1 : 2;
         }
         else
         {
-            changeAssetNumberByFrameCounter(this.itemsAssetsMap.size());
+            this.changeAssetNumberByFrameCounter(this.itemsAssetsMap.size());
         }
     }
 
     private void setTextShownOnCollision()
     {
-        WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.assetNumber);
+        WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.dynamicAssetNumber);
         String gameText = worldItemAssetsModel != null ? worldItemAssetsModel.getImageTextKey() : null;
         this.gamePanel.gameTextProvider.setTextColor(Color.WHITE);
         this.gamePanel.gameTextProvider.setTextPosition(this.player.playerScreenX - 50, this.player.playerScreenY - 20);
@@ -137,7 +135,7 @@ public class WorldItem extends Individual
         // draw world item only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
-            WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.assetNumber);
+            WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.dynamicAssetNumber);
             BufferedImage bufferedImage =  worldItemAssetsModel != null ? worldItemAssetsModel.getImageAsset() : null;
             if (bufferedImage != null)
             {
@@ -152,18 +150,6 @@ public class WorldItem extends Individual
         {
             this.setTextShownOnCollision();
             this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.textShownOnInteractionWithItem);
-        }
-    }
-
-    // Override in child classes if logic needs changing
-    protected void changeAssetNumberByFrameCounter(int maxNumberOfAssets)
-    {
-        final int numberOfFramesLimit = 25;
-        this.frameCounter++;
-        if (this.frameCounter > numberOfFramesLimit)
-        {
-            this.assetNumber = this.assetNumber < maxNumberOfAssets ? this.assetNumber + 1 : 1;
-            this.frameCounter = 0;
         }
     }
 

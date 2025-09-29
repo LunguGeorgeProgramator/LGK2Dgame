@@ -2,6 +2,9 @@ package org.individual;
 import org.game.GamePanel;
 import org.game.KeyBoardHandler;
 import org.inventory.PlayerInventory;
+import org.inventory.models.PlayerInventoryModel;
+import org.worlditems.WorldItemTypes;
+import org.worlditems.WorldItemsAssets;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -23,6 +26,10 @@ public class Player extends Individual
     public double damageTaken = 0.0;
     public int playerMaxHealth = 200;
     public double playerHealth = this.playerMaxHealth;
+    public boolean isPlayerSwordSwing = false;
+    public boolean isSwordInPlayerInventory = false;
+    private Map<Integer, BufferedImage> swordSwingImagesAssetsMap;
+    private Map<Integer, BufferedImage> swordSwingWhenMovingImagesAssetsMap;
 
     public Player(GamePanel gamePanel, KeyBoardHandler keyBoardHandler, PlayerInventory playerInventory)
     {
@@ -68,10 +75,22 @@ public class Player extends Individual
         );
 
         this.standStillImagesAssetsMap = Map.of(
-            "up", getAssetImage("/player/player-stand-still-up.png"),
-            "down", getAssetImage("/player/player-stand-still-down.png"),
-            "left", getAssetImage("/player/player-stand-still-left.png"),
-            "right", getAssetImage("/player/player-stand-still-right.png")
+            MovingDirection.UP, getAssetImage("/player/player-stand-still-up.png"),
+            MovingDirection.DOWN, getAssetImage("/player/player-stand-still-down.png"),
+            MovingDirection.LEFT, getAssetImage("/player/player-stand-still-left.png"),
+            MovingDirection.RIGHT, getAssetImage("/player/player-stand-still-right.png")
+        );
+
+        this.swordSwingImagesAssetsMap = Map.of(
+            1, getAssetImage("/player/player-sword-start-swing.png"),
+            2, getAssetImage("/player/player-sword-middle-swing.png"),
+            3, getAssetImage("/player/player-sword-finish-swing.png")
+        );
+
+        this.swordSwingWhenMovingImagesAssetsMap = Map.of(
+            1, getAssetImage("/player/player-sword-start-swing-moving.png"),
+            2, getAssetImage("/player/player-sword-middle-swing.png"),
+            3, getAssetImage("/player/player-sword-finish-swing-moving.png")
         );
     }
 
@@ -83,25 +102,33 @@ public class Player extends Individual
     @Override
     public void update()
     {
+        // player sword swing
+        PlayerInventoryModel inventoryModel = this.playerInventory.getInventoryItemByName(WorldItemsAssets.SWORD.name());
+        this.isSwordInPlayerInventory = inventoryModel != null && inventoryModel.getInInventory();
+        this.isPlayerSwordSwing = keyBoardHandler.spaceBarePressed && this.isSwordInPlayerInventory;
+
+        this.changeAssetNumberByFrameCounter(this.swordSwingImagesAssetsMap.size());
+
+        // player moving
         if (keyBoardHandler.upPressed)
         {
-            this.movementDirection = "up";
-            this.stoppedDirection = "up";
+            this.movementDirection = MovingDirection.UP;
+            this.stoppedDirection = MovingDirection.UP;
         }
         else if (keyBoardHandler.downPressed)
         {
-            this.movementDirection = "down";
-            this.stoppedDirection = "down";
+            this.movementDirection = MovingDirection.DOWN;
+            this.stoppedDirection = MovingDirection.DOWN;
         }
         else if (keyBoardHandler.leftPressed)
         {
-            this.movementDirection = "left";
-            this.stoppedDirection = "left";
+            this.movementDirection = MovingDirection.LEFT;
+            this.stoppedDirection = MovingDirection.LEFT;
         }
         else if (keyBoardHandler.rightPressed)
         {
-            this.movementDirection = "right";
-            this.stoppedDirection = "right";
+            this.movementDirection = MovingDirection.RIGHT;
+            this.stoppedDirection = MovingDirection.RIGHT;
         }
         else
         {
@@ -115,18 +142,18 @@ public class Player extends Individual
 
         if (!this.activateCollision)
         {
-            switch (this.movementDirection)
+            switch (this.movementDirection != null ? this.movementDirection : null)
             {
-                case "up":
+                case MovingDirection.UP:
                     this.positionY = this.positionY - this.speed;
                     break;
-                case "down":
+                case MovingDirection.DOWN:
                     this.positionY = this.positionY + this.speed;
                     break;
-                case "left":
+                case MovingDirection.LEFT:
                     this.positionX = this.positionX - this.speed;
                     break;
-                case "right":
+                case MovingDirection.RIGHT:
                     this.positionX = this.positionX + this.speed;
                     break;
                 case null , default:
@@ -143,31 +170,37 @@ public class Player extends Individual
     {
         BufferedImage playerAsset;
 
-        switch (this.movementDirection)
+        switch (this.movementDirection != null ? this.movementDirection : null)
         {
-            case "up":
+            case MovingDirection.UP:
                 playerAsset = this.upMovementImagesAssetsMap.get(this.assetNumber);
                 break;
-            case "down":
+            case MovingDirection.DOWN:
                 playerAsset = this.downMovementImagesAssetsMap.get(this.assetNumber);
                 break;
-            case "left":
+            case MovingDirection.LEFT:
                 playerAsset = this.leftMovementImagesAssetsMap.get(this.assetNumber);
                 break;
-            case "right":
+            case MovingDirection.RIGHT:
                 playerAsset = this.rightMovementImagesAssetsMap.get(this.assetNumber);
                 break;
             case null, default:
-                String playerStoppedDirection = this.stoppedDirection != null ? this.stoppedDirection : this.defaultStoppedDirection;
+                MovingDirection playerStoppedDirection = this.stoppedDirection != null ? this.stoppedDirection : this.defaultStoppedDirection;
                 playerAsset = this.standStillImagesAssetsMap.get(playerStoppedDirection);
                 break;
+        }
+
+        if (this.isPlayerSwordSwing)
+        {
+            playerAsset = this.movementDirection == null ? this.swordSwingImagesAssetsMap.get(this.dynamicAssetNumber) : this.swordSwingWhenMovingImagesAssetsMap.get(this.dynamicAssetNumber);
         }
 
         g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, null);
         drawRedSlider(g2D, 0, 0);
     }
 
-    private void drawRedSlider(Graphics2D g2d, int x, int y) {
+    private void drawRedSlider(Graphics2D g2d, int x, int y)
+    {
 
         int height = 10;
         // Draw background (gray)

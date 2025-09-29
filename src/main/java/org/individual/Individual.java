@@ -11,13 +11,15 @@ public abstract class Individual
     public int initialPositionX;
     public int initialPositionY;
     public int speed;
-    public String movementDirection;
+    public MovingDirection movementDirection;
     protected int frameCounter;
+    protected int dynamicFrameCounter;
     protected int slowDownFrameCounter;
     protected int assetNumber;
-    protected String stoppedDirection;
-    protected String defaultStoppedDirection = "down";
-    protected Map<String, BufferedImage> standStillImagesAssetsMap;
+    protected int dynamicAssetNumber;
+    protected MovingDirection stoppedDirection;
+    protected MovingDirection defaultStoppedDirection = MovingDirection.DOWN;
+    protected Map<MovingDirection, BufferedImage> standStillImagesAssetsMap;
     protected Map<Integer, BufferedImage> upMovementImagesAssetsMap;
     protected Map<Integer, BufferedImage> downMovementImagesAssetsMap;
     protected Map<Integer, BufferedImage> leftMovementImagesAssetsMap;
@@ -50,6 +52,17 @@ public abstract class Individual
         {
             this.assetNumber = this.assetNumber == 1 ? 2 : 1;
             this.frameCounter = 0;
+        }
+    }
+
+    protected void changeAssetNumberByFrameCounter(int maxNumberOfAssets)
+    {
+        final int numberOfFramesLimit = 25;
+        this.dynamicFrameCounter++;
+        if (this.dynamicFrameCounter > numberOfFramesLimit)
+        {
+            this.dynamicAssetNumber = this.dynamicAssetNumber < maxNumberOfAssets ? this.dynamicAssetNumber + 1 : 1;
+            this.dynamicFrameCounter = 0;
         }
     }
 

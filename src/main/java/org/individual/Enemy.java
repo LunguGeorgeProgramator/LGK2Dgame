@@ -36,6 +36,7 @@ public class Enemy extends Individual
     private final CollisionChecker collisionChecker;
     private final GamePanel gamePanel;
     private boolean isAllowedToInflictDamage = false;
+    private Map<String, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap;
 
     public Enemy(
         GamePanel gamePanel,
@@ -46,7 +47,8 @@ public class Enemy extends Individual
         int speed,
         String assetPath,
         Player player,
-        Map<String, BufferedImage> enemyAssetsMap
+        Map<String, BufferedImage> enemyAssetsMap,
+        Map<String, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap
     )
     {
         super(defaultPositionX, defaultPositionY, speed, assetPath);
@@ -59,6 +61,7 @@ public class Enemy extends Individual
         this.collisionChecker = this.gamePanel.collisionChecker;
         this.enemyCollisionText = this.gamePanel.gameTextProvider.getGameTextByKey(ENEMY_COLLISION_TEXT_KEY);
         this.hitDamage = 0;
+        this.enemyUnderAttackAssetsMap = enemyUnderAttackAssetsMap;
     }
 
     private void buildEnemyCollisionArea()
@@ -128,13 +131,15 @@ public class Enemy extends Individual
         else
         {
             this.isAllowedToInflictDamage = this.slowDownGame();
-            if (this.isAllowedToInflictDamage)
-            {
+            if (this.isAllowedToInflictDamage && !this.player.isPlayerSwordSwing)
+            { // only inflict damage to player is he is not swinging his sword
                 this.player.playerHealth = this.player.playerHealth - ENEMY_DAMAGE_TO_PLAYER;
                 this.hitDamage = this.hitDamage + ENEMY_DAMAGE_TO_PLAYER; // TODO rethink this display variable is not ok damage is increase over time
             }
 
         }
+
+        this.changeAssetNumberByFrameCounter();
     }
 
     @Override
@@ -151,14 +156,26 @@ public class Enemy extends Individual
                 String collisionAssetKey = COLLISION_ENEMY_ASSET_KEY_PREFIX + this.direction;
                 if (this.isEnemyCollidingWithPlayer && this.enemyAssetsMap.containsKey(collisionAssetKey))
                 {
-                    this.enemyAsset = this.enemyAssetsMap.get(collisionAssetKey);
+                    if (this.player.isPlayerSwordSwing && this.enemyUnderAttackAssetsMap != null && !this.enemyUnderAttackAssetsMap.isEmpty())
+                    {
+                        Map<Integer, BufferedImage> underAttacAssetsMap = this.enemyUnderAttackAssetsMap.get(this.direction);
+                        this.enemyAsset = underAttacAssetsMap != null && !underAttacAssetsMap.isEmpty() ? underAttacAssetsMap.get(this.assetNumber) : null;
+                    }
+                    else
+                    {
+                        this.enemyAsset = this.enemyAssetsMap.get(collisionAssetKey);
+                    }
                 }
                 else
                 {
                     this.enemyAsset = this.enemyAssetsMap.get(this.direction);
                 }
             }
-            g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, null);
+
+            if (this.enemyAsset != null)
+            {
+                g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, null);
+            }
 
             if (this.isEnemyCollidingWithPlayer && this.isAllowedToInflictDamage)
             {

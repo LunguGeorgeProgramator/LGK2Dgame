@@ -38,7 +38,8 @@ public class Enemies
                 enemyAsset.getSpeed(),
                 enemyAsset.getEnemyAssetPath(),
                 this.player,
-                enemyAsset.getEnemyAssetsMap()
+                enemyAsset.getEnemyAssetsMap(),
+                enemyAsset.getEnamyUnderAttackAssetsMap()
             ));
         }
     }
