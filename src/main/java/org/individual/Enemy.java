@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -22,11 +23,8 @@ public class Enemy extends Individual
     private final String ENEMY_COLLISION_TEXT_KEY = "enemy-collision";
     private final String enemyCollisionText;
     private final Double ENEMY_DAMAGE_TO_PLAYER = 0.001;
+    private final Double PLAYER_DAMAGE_TO_ENEMY = 10.1;
     private double hitDamage;
-    private final String ENEMY_DIRECTION_LEFT = MovingDirection.LEFT.getValue();
-    private final String ENEMY_DIRECTION_RIGHT = MovingDirection.RIGHT.getValue();
-    private final String ENEMY_DIRECTION_UP = MovingDirection.UP.getValue();
-    private final String ENEMY_DIRECTION_DOWN = MovingDirection.DOWN.getValue();
     private final int maxDistanceAllowedToMove;
     private String direction;
     public BufferedImage enemyAsset;
@@ -36,14 +34,32 @@ public class Enemy extends Individual
     private final CollisionChecker collisionChecker;
     private final GamePanel gamePanel;
     private boolean isAllowedToInflictDamage = false;
-    private Map<String, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap;
+    private final Map<String, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap;
+    private final List<MovingDirection> enemyMovingDirectionList;
+    private int maxAllowedDownMovement;
+    private int maxAllowedUpMovement;
+    private int maxAllowedRightMovement;
+    private int maxAllowedLeftMovement;
+    private Integer nextMovementIndex;
+    public int enemyMaxHealth = 50;
+    public double enemyHealth = 50;
+    public int enemyId;
+    public String enemyName;
+    public int enemyWorldMatrixCol;
+    public int enemyWorldMatrixRow;
+    public boolean resetEnemyHealth = false;
+
 
     public Enemy(
         GamePanel gamePanel,
+        int enemyId,
+        String enemyName,
+        int enemyWorldMatrixCol,
+        int enemyWorldMatrixRow,
         int defaultPositionX,
         int defaultPositionY,
         int maxDistanceAllowedToMove,
-        String direction,
+        List<MovingDirection> enemyMovingDirectionList,
         int speed,
         String assetPath,
         Player player,
@@ -52,16 +68,39 @@ public class Enemy extends Individual
     )
     {
         super(defaultPositionX, defaultPositionY, speed, assetPath);
+        this.enemyId = enemyId;
+        this.enemyName = enemyName;
+        this.enemyWorldMatrixCol = enemyWorldMatrixCol;
+        this.enemyWorldMatrixRow = enemyWorldMatrixRow;
         this.maxDistanceAllowedToMove = maxDistanceAllowedToMove;
-        this.direction = direction;
         this.player = player;
         this.enemyAssetsMap = enemyAssetsMap;
+        this.enemyMovingDirectionList = enemyMovingDirectionList;
+        this.direction = !this.enemyMovingDirectionList.isEmpty() ? this.enemyMovingDirectionList.getFirst().getValue() : MovingDirection.UP.getValue();
         buildEnemyCollisionArea();
         this.gamePanel = gamePanel;
         this.collisionChecker = this.gamePanel.collisionChecker;
         this.enemyCollisionText = this.gamePanel.gameTextProvider.getGameTextByKey(ENEMY_COLLISION_TEXT_KEY);
         this.hitDamage = 0;
         this.enemyUnderAttackAssetsMap = enemyUnderAttackAssetsMap;
+        this.nextMovementIndex = !this.enemyMovingDirectionList.isEmpty() ? 0 : null;
+        initializeMaxMovementDirection();
+    }
+
+    private void initializeMaxMovementDirection()
+    {
+        this.maxAllowedDownMovement = this.initialPositionY + this.maxDistanceAllowedToMove;
+        this.maxAllowedUpMovement = this.initialPositionY - this.maxDistanceAllowedToMove;
+        this.maxAllowedRightMovement = this.initialPositionX + this.maxDistanceAllowedToMove;
+        this.maxAllowedLeftMovement = this.initialPositionX - this.maxDistanceAllowedToMove;
+    }
+
+    private void resetMaxMovementDirection()
+    {
+        this.maxAllowedDownMovement = this.positionY + this.maxDistanceAllowedToMove;
+        this.maxAllowedUpMovement = this.positionY - this.maxDistanceAllowedToMove;
+        this.maxAllowedRightMovement = this.positionX + this.maxDistanceAllowedToMove;
+        this.maxAllowedLeftMovement = this.positionX - this.maxDistanceAllowedToMove;
     }
 
     private void buildEnemyCollisionArea()
@@ -79,67 +118,84 @@ public class Enemy extends Individual
         this.enemyAsset = Objects.requireNonNull(getScaledImageFromAssets(assetPath));
     }
 
+    private void getNextDirectionOfMovement()
+    {
+        this.nextMovementIndex = this.nextMovementIndex + 1 == this.enemyMovingDirectionList.size() ? 0 : this.nextMovementIndex + 1;
+        MovingDirection nextDirection = this.enemyMovingDirectionList.get(this.nextMovementIndex);
+        this.direction = nextDirection.getValue();
+    }
+
     @Override
     public void update()
     {
         this.isEnemyCollidingWithPlayer = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.positionX, this.positionY);
-
-        // stop enemy movement if player is colliding with enemy
         if (!this.isEnemyCollidingWithPlayer)
         {
-            // todo: rethink this logic with max direction, make a map or list per enemy and add with following direction, start, end value use x/y depending of move direction or something like this
-            int maxAllowedMoveLeftRight = (this.initialPositionX + maxDistanceAllowedToMove);
-            if (this.positionX < maxAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_RIGHT))
-            {
-                this.positionX = this.positionX + this.speed;
-            }
-            else if (this.positionX == maxAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_RIGHT))
-            {
-                direction = ENEMY_DIRECTION_LEFT;
-            }
-
-            int minAllowedMoveLeftRight = this.initialPositionX;
-            if (this.positionX > minAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_LEFT))
-            {
-                this.positionX = this.positionX - this.speed;
-            }
-            else if (this.positionX == minAllowedMoveLeftRight && direction.equals(ENEMY_DIRECTION_LEFT))
-            {
-                direction = ENEMY_DIRECTION_RIGHT;
-            }
-
-            int maxAllowedMove = (this.initialPositionY + maxDistanceAllowedToMove);
-            if (this.positionY < maxAllowedMove && direction.equals(ENEMY_DIRECTION_DOWN))
+            if (this.direction.equals(MovingDirection.DOWN.getValue()) && this.maxAllowedDownMovement > this.positionY)
             {
                 this.positionY = this.positionY + this.speed;
+                if (this.maxAllowedDownMovement <= this.positionY)
+                {
+                    this.getNextDirectionOfMovement();
+                }
             }
-            else if (this.positionY == maxAllowedMove && direction.equals(ENEMY_DIRECTION_DOWN))
-            {
-                direction = ENEMY_DIRECTION_UP;
-            }
-
-            int minAllowedMove = this.initialPositionY;
-            if (this.positionY > minAllowedMove && direction.equals(ENEMY_DIRECTION_UP))
+            else if (this.direction.equals(MovingDirection.UP.getValue()) && this.maxAllowedUpMovement < this.positionY)
             {
                 this.positionY = this.positionY - this.speed;
+                if (this.maxAllowedUpMovement >= this.positionY)
+                {
+                    this.getNextDirectionOfMovement();
+                }
             }
-            else if (this.positionY == minAllowedMove && direction.equals(ENEMY_DIRECTION_UP))
+            else if (this.direction.equals(MovingDirection.RIGHT.getValue()) && this.maxAllowedRightMovement > this.positionX)
             {
-                direction = ENEMY_DIRECTION_DOWN;
+                this.positionX = this.positionX + this.speed;
+                if (this.maxAllowedRightMovement <= this.positionX)
+                {
+                    this.getNextDirectionOfMovement();
+                }
+            }
+            else if (this.direction.equals(MovingDirection.LEFT.getValue()) && this.maxAllowedLeftMovement < this.positionX)
+            {
+                this.positionX = this.positionX - this.speed;
+                if (this.maxAllowedLeftMovement >= this.positionX)
+                {
+                    this.getNextDirectionOfMovement();
+                }
+            }
+            else
+            {
+                this.resetMaxMovementDirection();
             }
         }
         else
         {
             this.isAllowedToInflictDamage = this.slowDownGame();
-            if (this.isAllowedToInflictDamage && !this.player.isPlayerSwordSwing)
+            if (this.isAllowedToInflictDamage)
             { // only inflict damage to player is he is not swinging his sword
-                this.player.playerHealth = this.player.playerHealth - ENEMY_DAMAGE_TO_PLAYER;
-                this.hitDamage = this.hitDamage + ENEMY_DAMAGE_TO_PLAYER; // TODO rethink this display variable is not ok damage is increase over time
+                if (!this.player.isPlayerSwordSwing)
+                {
+                    this.player.playerHealth = this.player.playerHealth - ENEMY_DAMAGE_TO_PLAYER;
+                    this.hitDamage = this.hitDamage + ENEMY_DAMAGE_TO_PLAYER; // TODO rethink this display variable is not ok damage is increase over time
+                }
+                else
+                {
+                    this.enemyHealth = this.enemyHealth - PLAYER_DAMAGE_TO_ENEMY;
+                }
             }
+        }
+        this.changeAssetNumberByFrameCounter(2, 10);
 
+        if (this.resetEnemyHealth)
+        { // for debug
+            this.enemyHealth = this.enemyMaxHealth;
         }
 
-        this.changeAssetNumberByFrameCounter();
+        if (this.enemyHealth <= 0)
+        {
+            String enemyWorldId = this.gamePanel.gameSavedStats.getEnemyWorldIdFormat(this);
+            this.gamePanel.gameSavedStats.updateEnemyAliveStatus(enemyWorldId, false);
+        }
     }
 
     @Override
@@ -159,7 +215,7 @@ public class Enemy extends Individual
                     if (this.player.isPlayerSwordSwing && this.enemyUnderAttackAssetsMap != null && !this.enemyUnderAttackAssetsMap.isEmpty())
                     {
                         Map<Integer, BufferedImage> underAttacAssetsMap = this.enemyUnderAttackAssetsMap.get(this.direction);
-                        this.enemyAsset = underAttacAssetsMap != null && !underAttacAssetsMap.isEmpty() ? underAttacAssetsMap.get(this.assetNumber) : null;
+                        this.enemyAsset = underAttacAssetsMap != null && !underAttacAssetsMap.isEmpty() ? underAttacAssetsMap.get(this.dynamicAssetNumber) : null;
                     }
                     else
                     {
@@ -172,9 +228,10 @@ public class Enemy extends Individual
                 }
             }
 
-            if (this.enemyAsset != null)
+            if (this.enemyAsset != null && this.enemyHealth > 0)
             {
                 g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, null);
+                this.drawEnemyLifeBar(g2D, worldEnemyAssetPositionX - 2, worldEnemyAssetPositionY - 20);
             }
 
             if (this.isEnemyCollidingWithPlayer && this.isAllowedToInflictDamage)
@@ -184,6 +241,23 @@ public class Enemy extends Individual
                 this.gamePanel.gameTextProvider.showTextInsideGame(g2D, String.format(this.enemyCollisionText, this.hitDamage));
             }
         }
+    }
+
+    private void drawEnemyLifeBar(Graphics2D g2d, int positionX, int positionY)
+    {
+        int height = 10;
+        // Draw background (gray)
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.fillRect(positionX, positionY, this.enemyMaxHealth, height);
+
+        // Draw red bar representing the current value
+        int filledWidth = (int) this.enemyHealth;
+        g2d.setColor(Color.RED);
+        g2d.fillRect(positionX, positionY, filledWidth, height);
+
+        // Optional: Draw border
+        g2d.setColor(Color.ORANGE);
+        g2d.drawRect(positionX, positionY, this.enemyMaxHealth, height);
     }
 
     private int randomXYMultiplier()

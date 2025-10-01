@@ -3,7 +3,6 @@ import org.game.GamePanel;
 import org.game.KeyBoardHandler;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
-import org.worlditems.WorldItemTypes;
 import org.worlditems.WorldItemsAssets;
 
 import java.awt.Graphics2D;
@@ -31,14 +30,14 @@ public class Player extends Individual
     private Map<Integer, BufferedImage> swordSwingImagesAssetsMap;
     private Map<Integer, BufferedImage> swordSwingWhenMovingImagesAssetsMap;
 
-    public Player(GamePanel gamePanel, KeyBoardHandler keyBoardHandler, PlayerInventory playerInventory)
+    public Player(GamePanel gamePanel)
     {
         super(100, 100, 4, null); // set player position x, y and speed
         this.gamePanel = gamePanel;
-        this.keyBoardHandler = keyBoardHandler;
-        this.playerScreenX = (this.gamePanel.screenWith/2) - (tileSize/2);
-        this.playerScreenY = (this.gamePanel.screenHeight/2) - (tileSize/2);
-        this.playerInventory = playerInventory;
+        this.keyBoardHandler = this.gamePanel.keyBoardHandler;
+        this.playerScreenX = (GamePanel.screenWith /2) - (tileSize/2);
+        this.playerScreenY = (GamePanel.screenHeight /2) - (tileSize/2);
+        this.playerInventory = this.gamePanel.playerInventory;
         buildPlayerCollisionArea();
     }
 
@@ -107,7 +106,7 @@ public class Player extends Individual
         this.isSwordInPlayerInventory = inventoryModel != null && inventoryModel.getInInventory();
         this.isPlayerSwordSwing = keyBoardHandler.spaceBarePressed && this.isSwordInPlayerInventory;
 
-        this.changeAssetNumberByFrameCounter(this.swordSwingImagesAssetsMap.size());
+        this.changeAssetNumberByFrameCounter(this.swordSwingImagesAssetsMap.size(), 7);
 
         // player moving
         if (keyBoardHandler.upPressed)

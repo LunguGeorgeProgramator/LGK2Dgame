@@ -1,7 +1,6 @@
 package org.world;
 
 import org.game.GamePanel;
-import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.WorldItem;
@@ -16,26 +15,22 @@ import java.util.List;
 import static org.game.GamePanel.tileSize;
 
 
-public class WorldItems extends GameWorld {
+public class WorldItems extends GameWorld
+{
 
     private final List<WorldItem> worldItemsList;
-    private final GamePanel gamePanel;
-    private final Player player;
     private final PlayerInventory playerInventory;
-    private static String WORLD_MAP_ASSETS_TXT_PATH = "/worldMaps/WorldMapAssets.txt";
     private static final List<WorldItemTypes> itemsTypesAllowedInInventory = List.of(
         WorldItemTypes.KEY,
         WorldItemTypes.HEALTH_RESTORATION,
         WorldItemTypes.WEAPON
     );
 
-    public WorldItems(GamePanel gamePanel, Player player)
+    public WorldItems(GamePanel gamePanel, String worldItemsMapPath)
     {
-        super(gamePanel, WORLD_MAP_ASSETS_TXT_PATH);
-        this.gamePanel = gamePanel;
-        this.player = player;
+        super(gamePanel, worldItemsMapPath);
         this.worldItemsList = new ArrayList<>();
-        this.playerInventory = this.player.playerInventory;
+        this.playerInventory = this.gamePanel.playerInventory;
         initializeWorldItems();
     }
 
@@ -97,16 +92,7 @@ public class WorldItems extends GameWorld {
                 PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByInventoryId(itemInventoryId);
                 if (inventoryItem == null)
                 {
-                    PlayerInventoryModel playerInventoryModelAdd = new PlayerInventoryModel();
-                    playerInventoryModelAdd.setItemName(worldItem.itemAssetName);
-                    playerInventoryModelAdd.setCount(0);
-                    playerInventoryModelAdd.setStatus("active");
-                    playerInventoryModelAdd.setItemType(worldItem.itemAssetType);
-                    playerInventoryModelAdd.setItemId(worldItem.itemAssetId);
-                    playerInventoryModelAdd.setItemWorldMatrixCol(worldItem.itemWorldMatrixColIndex);
-                    playerInventoryModelAdd.setItemWorldMatrixRow(worldItem.itemWorldMatrixRowIndex);
-                    playerInventoryModelAdd.setItemInventoryId(itemInventoryId);
-                    playerInventoryModelAdd.setInInventory(false);
+                    PlayerInventoryModel playerInventoryModelAdd = getPlayerInventoryModel(worldItem, itemInventoryId);
                     this.playerInventory.addToInventory(playerInventoryModelAdd);
                 }
                 else if (inventoryItem.getInInventory())
@@ -117,6 +103,20 @@ public class WorldItems extends GameWorld {
             }
             worldItem.update();
         }
+    }
+
+    private static PlayerInventoryModel getPlayerInventoryModel(WorldItem worldItem, String itemInventoryId) {
+        PlayerInventoryModel playerInventoryModelAdd = new PlayerInventoryModel();
+        playerInventoryModelAdd.setItemName(worldItem.itemAssetName);
+        playerInventoryModelAdd.setCount(0);
+        playerInventoryModelAdd.setStatus("active");
+        playerInventoryModelAdd.setItemType(worldItem.itemAssetType);
+        playerInventoryModelAdd.setItemId(worldItem.itemAssetId);
+        playerInventoryModelAdd.setItemWorldMatrixCol(worldItem.itemWorldMatrixColIndex);
+        playerInventoryModelAdd.setItemWorldMatrixRow(worldItem.itemWorldMatrixRowIndex);
+        playerInventoryModelAdd.setItemInventoryId(itemInventoryId);
+        playerInventoryModelAdd.setInInventory(false);
+        return playerInventoryModelAdd;
     }
 
     public void addItemsToDrawList()

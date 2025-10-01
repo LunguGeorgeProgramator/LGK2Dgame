@@ -1,6 +1,7 @@
 package org.individual;
 
-import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
@@ -57,7 +58,11 @@ public abstract class Individual
 
     protected void changeAssetNumberByFrameCounter(int maxNumberOfAssets)
     {
-        final int numberOfFramesLimit = 25;
+        changeAssetNumberByFrameCounter(maxNumberOfAssets, 25);
+    }
+
+    protected void changeAssetNumberByFrameCounter(int maxNumberOfAssets, int numberOfFramesLimit)
+    {
         this.dynamicFrameCounter++;
         if (this.dynamicFrameCounter > numberOfFramesLimit)
         {

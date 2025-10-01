@@ -78,8 +78,9 @@ public enum WorldItemsAssets
     WINDOW_WALL(22, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/window-wall.png")), null))),
     SWORD(23, WorldItemTypes.WEAPON.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/player-sword.png")), null)));
-
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/player-sword.png")), null))),
+    GRASS_PLANT(24, WorldItemTypes.VEGETATION.name(), false, 0, 0, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/grass-plant.png")), null)));
 
     private final int itemId;
     private final String itemType;

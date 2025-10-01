@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.helpers.ToolsHelper.getJsonFileFromAssets;
+
 public class PlayerInventory
 {
     private final ObjectMapper mapper;
@@ -22,7 +24,7 @@ public class PlayerInventory
 
     public PlayerInventory()
     {
-        this.inventoryJsonFile = getJsonFileFromAssets();
+        this.inventoryJsonFile = getJsonFileFromAssets(INVENTORY_RESOURCE_PATH, INVENTORY_RESOURCE_PATH_NPT_FOUND_ERROR_MESSAGE);
         this.mapper = new ObjectMapper();
         this.playerInventoryList = openInventory();
     }
@@ -158,23 +160,5 @@ public class PlayerInventory
         {
             ex.printStackTrace();
         }
-    }
-
-    private File getJsonFileFromAssets()
-    {
-        try
-        {
-            File jsonFile = new File(INVENTORY_RESOURCE_PATH);
-            if (jsonFile == null)
-            {
-                throw new RuntimeException(INVENTORY_RESOURCE_PATH_NPT_FOUND_ERROR_MESSAGE);
-            }
-            return jsonFile;
-        }
-        catch (RuntimeException ex)
-        {
-            ex.printStackTrace();
-        }
-        return null;
     }
 }

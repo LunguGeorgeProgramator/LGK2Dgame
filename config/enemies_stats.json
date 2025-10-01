@@ -1,0 +1,57 @@
+[ {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "622",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "1816",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "4166",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "43020",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "53111",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "43116",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "23713",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "34016",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "4418",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "64419",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "34812",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "34815",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "2499",
+  "isAlive" : true
+}, {
+  "mapName" : "WorldMapEnemies",
+  "enemyWorldId" : "15644",
+  "isAlive" : true
+} ]

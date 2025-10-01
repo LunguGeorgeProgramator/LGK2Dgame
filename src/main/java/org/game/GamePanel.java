@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.gamesavedstats.GameSavedStats;
 import org.gametexts.GameTextProvider;
 import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
-import org.world.Enemies;
+import org.world.WorldEnemies;
 import org.world.GameWorld;
 import org.world.WorldItems;
 
@@ -29,19 +30,21 @@ public class GamePanel extends JPanel implements Runnable
     static public final int screenHeight = tileSize * maxScreenRows; // 576 pixels
 
     final int framePerSecond = 60;
-    final KeyBoardHandler keyBoardHandler;
+    public final KeyBoardHandler keyBoardHandler;
     public final Player player;
-    final Enemies enemies;
+    final WorldEnemies worldEnemies;
     final GameWorld gameWorld;
     final WorldItems worldItems;
     public final GameTextProvider gameTextProvider;
     public final CollisionChecker collisionChecker;
     Thread gameThread;
     public final PlayerInventory playerInventory;
+    public final GameSavedStats gameSavedStats;
     public List<Individual> individuals;
 
     public GamePanel()
     {
+        this.gameSavedStats = new GameSavedStats();
         this.playerInventory = new PlayerInventory();
         this.keyBoardHandler = new KeyBoardHandler();
         this.gameTextProvider = new GameTextProvider();
@@ -51,10 +54,10 @@ public class GamePanel extends JPanel implements Runnable
         this.addKeyListener(this.keyBoardHandler);
         this.setFocusable(true);
         this.collisionChecker = new CollisionChecker(this);
-        this.player = new Player(this, this.keyBoardHandler, this.playerInventory);
-        this.enemies = new Enemies(this, player);
+        this.player = new Player(this);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
-        this.worldItems = new WorldItems(this, this.player);
+        this.worldItems = new WorldItems(this, "/worldMaps/WorldMapAssets.txt");
+        this.worldEnemies = new WorldEnemies(this, "/worldMaps/WorldMapEnemies.txt");
         this.individuals = new ArrayList<>();
     }
 
@@ -91,13 +94,16 @@ public class GamePanel extends JPanel implements Runnable
 
     public void update()
     {
+        boolean resetEnemiesHealth = false;
         if (this.keyBoardHandler.pKeyPressed)
         { // remove all items from player inventory
+            resetEnemiesHealth = true;
             this.playerInventory.removeAllFromInventory();
+            this.gameSavedStats.removeAllFromStats();
             this.player.playerHealth = this.player.playerMaxHealth;
         }
-        this.enemies.update();
         this.worldItems.update();
+        this.worldEnemies.update(resetEnemiesHealth);
         this.player.update();
     }
 
@@ -108,13 +114,13 @@ public class GamePanel extends JPanel implements Runnable
 
         this.individuals.add(this.player);
         this.gameWorld.draw(g2D);
-        this.enemies.addEnemiesToDrawList();
         this.worldItems.addItemsToDrawList();
+        this.worldEnemies.addEnemiesToDrawList();
         // this.player.draw(g2D);
 
-        // Sort Player/Enemies/World items by Y position
+        // Sort Player/WorldEnemies/World items by Y position
         individuals.sort(Comparator.comparingInt(t -> t.positionY));
-        // draw Player/Enemies/World in game
+        // draw Player/WorldEnemies/World in game
         for (Individual individual : this.individuals)
         {
             individual.draw(g2D);

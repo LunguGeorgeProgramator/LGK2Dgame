@@ -4,6 +4,7 @@ package org.helpers;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -98,4 +99,23 @@ public class ToolsHelper
             return null;
         }
     }
+
+    public static File getJsonFileFromAssets(String jsonFilePath, String fileNotFoundErrorMessage)
+    {
+        try
+        {
+            File jsonFile = new File(jsonFilePath);
+            if (jsonFile == null)
+            {
+                throw new RuntimeException(fileNotFoundErrorMessage);
+            }
+            return jsonFile;
+        }
+        catch (RuntimeException ex)
+        {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
 }
