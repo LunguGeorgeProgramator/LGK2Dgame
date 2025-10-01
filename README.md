@@ -17,10 +17,9 @@ When the game window opens, use the W, A, S and D keys to move the white rectang
 
 To remove all picked-up items from the map, press the P key to clear the player's inventory.
 
-<img width="782" height="602" alt="test-24" src="https://github.com/user-attachments/assets/1312e2d0-afae-45b8-bafe-1149781bb7af" />
+<img width="782" height="599" alt="enemyAttack" src="https://github.com/user-attachments/assets/26fa2265-742a-44b8-860c-e7c2bfbe5d90" />
 <img width="772" height="602" alt="test-23" src="https://github.com/user-attachments/assets/8d46706b-9160-4b87-88a8-2aba8473ab8c" />
 <img width="770" height="602" alt="test-22" src="https://github.com/user-attachments/assets/c8e9b639-272f-4577-94fa-b05c854fb62a" />
-<img width="781" height="610" alt="test-21" src="https://github.com/user-attachments/assets/aec1090c-2e7f-473d-87a7-838255f7587e" />
 
 
 # How to build a windows exe ?
