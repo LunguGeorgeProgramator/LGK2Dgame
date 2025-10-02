@@ -18,7 +18,7 @@ When the game window opens, use the W, A, S and D keys to move the white rectang
 To remove all picked-up items from the map, press the P key to clear the player's inventory.
 
 <img width="782" height="599" alt="enemyAttack" src="https://github.com/user-attachments/assets/26fa2265-742a-44b8-860c-e7c2bfbe5d90" />
-<img width="772" height="602" alt="test-23" src="https://github.com/user-attachments/assets/8d46706b-9160-4b87-88a8-2aba8473ab8c" />
+<img width="781" height="601" alt="test_spiders" src="https://github.com/user-attachments/assets/b331dd81-b633-426a-a469-6f4016685a3c" />
 <img width="770" height="602" alt="test-22" src="https://github.com/user-attachments/assets/c8e9b639-272f-4577-94fa-b05c854fb62a" />
 
 
