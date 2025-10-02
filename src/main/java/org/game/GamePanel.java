@@ -112,10 +112,11 @@ public class GamePanel extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
 
-        this.individuals.add(this.player);
         this.gameWorld.draw(g2D);
-        this.worldItems.addItemsToDrawList();
+
+        this.individuals.add(this.player);
         this.worldEnemies.addEnemiesToDrawList();
+        this.worldItems.addItemsToDrawList();
         // this.player.draw(g2D);
 
         // Sort Player/WorldEnemies/World items by Y position
@@ -131,6 +132,7 @@ public class GamePanel extends JPanel implements Runnable
             individuals.remove(i);
         }
 
+        this.worldEnemies.drawEnemyText(g2D);
         this.worldItems.drawTextOmCollision(g2D);
 
         // TODO: debug text, remove latter

@@ -1,5 +1,7 @@
 package org.individual;
 
+import org.individual.models.MovingDirection;
+
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -28,18 +30,16 @@ public abstract class Individual
     public Rectangle collisionArea;
     public boolean activateCollision = false;
 
-    public Individual(int positionX, int positionY, int speed, String assetPath)
+    public Individual(int positionX, int positionY, int speed)
     {
         this.initialPositionX = positionX;
         this.initialPositionY = positionY;
         this.positionX = positionX;
         this.positionY = positionY;
         this.speed = speed;
-        getAssetImages(assetPath);
     }
 
     // force all children classes to have this methods
-    public abstract void getAssetImages(String assetPath);
     public abstract void update();
     public abstract void draw(Graphics2D g2D);
 

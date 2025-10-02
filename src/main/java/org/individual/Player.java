@@ -1,9 +1,10 @@
 package org.individual;
 import org.game.GamePanel;
 import org.game.KeyBoardHandler;
+import org.individual.models.MovingDirection;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
-import org.worlditems.WorldItemsAssets;
+import org.worlditems.models.WorldItemsAssets;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -25,20 +26,21 @@ public class Player extends Individual
     public double damageTaken = 0.0;
     public int playerMaxHealth = 200;
     public double playerHealth = this.playerMaxHealth;
-    public boolean isPlayerSwordSwing = false;
+    public boolean isPlayerSwingSword = false;
     public boolean isSwordInPlayerInventory = false;
     private Map<Integer, BufferedImage> swordSwingImagesAssetsMap;
     private Map<Integer, BufferedImage> swordSwingWhenMovingImagesAssetsMap;
 
     public Player(GamePanel gamePanel)
     {
-        super(100, 100, 4, null); // set player position x, y and speed
+        super(100, 100, 4); // set player position x, y and speed
         this.gamePanel = gamePanel;
         this.keyBoardHandler = this.gamePanel.keyBoardHandler;
         this.playerScreenX = (GamePanel.screenWith /2) - (tileSize/2);
         this.playerScreenY = (GamePanel.screenHeight /2) - (tileSize/2);
         this.playerInventory = this.gamePanel.playerInventory;
         buildPlayerCollisionArea();
+        this.getAssetImages();
     }
 
     private void buildPlayerCollisionArea()
@@ -50,8 +52,7 @@ public class Player extends Individual
         this.collisionArea.width = tileSize - 16;
     }
 
-    @Override
-    public void getAssetImages(String assetPath)
+    public void getAssetImages()
     {
         this.upMovementImagesAssetsMap = Map.of(
             1, getAssetImage("/player/player-walk-up.png"),
@@ -104,7 +105,7 @@ public class Player extends Individual
         // player sword swing
         PlayerInventoryModel inventoryModel = this.playerInventory.getInventoryItemByName(WorldItemsAssets.SWORD.name());
         this.isSwordInPlayerInventory = inventoryModel != null && inventoryModel.getInInventory();
-        this.isPlayerSwordSwing = keyBoardHandler.spaceBarePressed && this.isSwordInPlayerInventory;
+        this.isPlayerSwingSword = keyBoardHandler.spaceBarePressed && this.isSwordInPlayerInventory;
 
         this.changeAssetNumberByFrameCounter(this.swordSwingImagesAssetsMap.size(), 7);
 
@@ -189,7 +190,7 @@ public class Player extends Individual
                 break;
         }
 
-        if (this.isPlayerSwordSwing)
+        if (this.isPlayerSwingSword)
         {
             playerAsset = this.movementDirection == null ? this.swordSwingImagesAssetsMap.get(this.dynamicAssetNumber) : this.swordSwingWhenMovingImagesAssetsMap.get(this.dynamicAssetNumber);
         }

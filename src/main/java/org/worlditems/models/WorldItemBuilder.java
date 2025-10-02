@@ -3,7 +3,7 @@ package org.worlditems.models;
 
 import java.util.Map;
 
-public class WorldItemDuplicatedBuilder
+public class WorldItemBuilder
 {
     private final Integer itemId;
     private final Integer itemWorldColIndex;
@@ -15,7 +15,7 @@ public class WorldItemDuplicatedBuilder
     private final Map<Integer, WorldItemAssetsModel> itemAssetsMap;
     private final Boolean solidStopOnCollisionWithPlayer;
 
-    private WorldItemDuplicatedBuilder(Builder builder)
+    private WorldItemBuilder(Builder builder)
     {
         this.itemId = builder.itemId;
         this.itemWorldColIndex = builder.itemWorldColIndex;
@@ -142,9 +142,9 @@ public class WorldItemDuplicatedBuilder
             return this;
         }
 
-        public WorldItemDuplicatedBuilder build()
+        public WorldItemBuilder build()
         {
-            return new WorldItemDuplicatedBuilder(this);
+            return new WorldItemBuilder(this);
         }
     }
 }

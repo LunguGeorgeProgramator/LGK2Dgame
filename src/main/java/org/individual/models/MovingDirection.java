@@ -1,6 +1,4 @@
-package org.individual;
-
-import org.world.WorldAssets;
+package org.individual.models;
 
 import java.util.Arrays;
 import java.util.Objects;

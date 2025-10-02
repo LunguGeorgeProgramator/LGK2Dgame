@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import static org.game.GamePanel.tileSize;
 
@@ -116,6 +117,12 @@ public class ToolsHelper
             ex.printStackTrace();
         }
         return null;
+    }
+
+    public static int _randomXYMultiplier()
+    {
+        Random random = new Random();
+        return random.nextInt(10) + 1;
     }
 
 }

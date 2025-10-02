@@ -1,4 +1,4 @@
-package org.world;
+package org.world.models;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;

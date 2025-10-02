@@ -4,9 +4,9 @@ import org.game.GamePanel;
 import org.gamesavedstats.GameSavedStats;
 import org.gamesavedstats.models.EnemyStatsModel;
 import org.individual.Enemy;
-import org.individual.EnemyAssets;
+import org.individual.models.EnemyAssets;
 
-//import java.awt.Graphics2D;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,11 +55,11 @@ public class WorldEnemies extends GameWorld
                     worldPositionX,
                     worldPositionY,
                     enemyAsset.getMaxDistanceAllowedToMove(),
-                    enemyAsset.getEnamyMovingDirectionList(),
+                    enemyAsset.getEnemyMovingDirectionList(),
                     enemyAsset.getSpeed(),
-                    enemyAsset.getEnemyAssetPath(),
                     this.gamePanel.player,
                     enemyAsset.getEnemyAssetsMap(),
+                    enemyAsset.getEnemyColisionAssetsMap(),
                     enemyAsset.getEnamyUnderAttackAssetsMap()
                 ));
             }
@@ -96,13 +96,8 @@ public class WorldEnemies extends GameWorld
         return enemyStatsModel;
     }
 
-//    public void draw(Graphics2D g2D)
     public void addEnemiesToDrawList()
     {
-//        for(Enemy enemy : this.enemyList)
-//        {
-//            enemy.draw(g2D);
-//        }
         for(Enemy enemy : this.enemyList)
         {
             String enemyWorldId = this.gameSavedStats.getEnemyWorldIdFormat(enemy);
@@ -113,6 +108,13 @@ public class WorldEnemies extends GameWorld
             }
             this.gamePanel.individuals.add(enemy);
         }
-//        this.gamePanel.individuals.addAll(this.enemyList);
+    }
+
+    public void drawEnemyText(Graphics2D g2D)
+    {
+        for(Enemy enemy : this.enemyList)
+        {
+            enemy.drawEnemyText(g2D);
+        }
     }
 }

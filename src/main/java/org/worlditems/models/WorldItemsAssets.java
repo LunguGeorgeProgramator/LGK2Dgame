@@ -1,7 +1,5 @@
-package org.worlditems;
+package org.worlditems.models;
 
-
-import org.worlditems.models.WorldItemAssetsModel;
 
 import java.util.Arrays;
 import java.util.Map;

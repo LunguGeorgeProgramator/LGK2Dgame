@@ -7,6 +7,8 @@ import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.models.WorldItemAssetsModel;
+import org.worlditems.models.WorldItemTypes;
+import org.worlditems.models.WorldItemsAssets;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -53,7 +55,7 @@ public class WorldItem extends Individual
             Map<Integer, WorldItemAssetsModel> itemsAssetsMap
     )
     {
-        super(worldItemPositionX, worldItemPositionY, gamePanel.player.speed, "");
+        super(worldItemPositionX, worldItemPositionY, gamePanel.player.speed);
         this.itemAssetId = itemAssetId;
         this.itemWorldMatrixRowIndex = itemWorldMatrixRowIndex;
         this.itemWorldMatrixColIndex = itemWorldMatrixColIndex;
@@ -78,11 +80,6 @@ public class WorldItem extends Individual
         this.collisionArea.y = 0;
         this.collisionArea.height = tileSize;
         this.collisionArea.width = tileSize;
-    }
-
-    @Override
-    public void getAssetImages(String assetPath)
-    {
     }
 
     public void update()

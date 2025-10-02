@@ -2,6 +2,7 @@ package org.world;
 
 import org.game.GamePanel;
 import org.individual.Player;
+import org.world.models.WorldAssets;
 
 import java.awt.Graphics2D;
 import java.util.Arrays;

@@ -4,9 +4,9 @@ import org.game.GamePanel;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.WorldItem;
-import org.worlditems.models.WorldItemDuplicatedBuilder;
-import org.worlditems.WorldItemTypes;
-import org.worlditems.WorldItemsAssets;
+import org.worlditems.models.WorldItemBuilder;
+import org.worlditems.models.WorldItemTypes;
+import org.worlditems.models.WorldItemsAssets;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class WorldItems extends GameWorld
         initializeWorldItems();
     }
 
-    private void addToWorldItemsList(WorldItemsAssets worldItemAsset, WorldItemDuplicatedBuilder duplicatedOptions)
+    private void addToWorldItemsList(WorldItemsAssets worldItemAsset, WorldItemBuilder duplicatedOptions)
     {
         this.worldItemsList.add(new WorldItem(
             this.gamePanel,
@@ -70,7 +70,7 @@ public class WorldItems extends GameWorld
                 if (worldItemsAssets != null)
                 {
                     this.addToWorldItemsList(worldItemsAssets,
-                        new WorldItemDuplicatedBuilder.Builder()
+                        new WorldItemBuilder.Builder()
                             .setItemWorldRowIndex(i)
                             .setItemWorldColIndex(j)
                             .setPositionX(worldPositionX)

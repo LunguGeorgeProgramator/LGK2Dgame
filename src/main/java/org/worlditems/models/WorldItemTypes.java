@@ -1,4 +1,4 @@
-package org.worlditems;
+package org.worlditems.models;
 
 public enum WorldItemTypes
 {

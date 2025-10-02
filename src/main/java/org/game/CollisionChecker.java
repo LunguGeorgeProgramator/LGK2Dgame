@@ -1,12 +1,12 @@
 package org.game;
 
-import org.individual.MovingDirection;
+import org.individual.models.MovingDirection;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
-import org.world.WorldAssets;
-import org.worlditems.WorldItemTypes;
-import org.worlditems.WorldItemsAssets;
+import org.world.models.WorldAssets;
+import org.worlditems.models.WorldItemTypes;
+import org.worlditems.models.WorldItemsAssets;
 
 import java.awt.Rectangle;
 import java.util.List;
