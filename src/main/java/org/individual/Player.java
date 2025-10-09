@@ -14,12 +14,16 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.helpers.ToolsHelper.getScaledImageFromAssets;
+import static org.game.GamePanel.originalTileSize;
 import static org.game.GamePanel.tileSize;
 
 public class Player extends Individual
 {
     GamePanel gamePanel;
     KeyBoardHandler keyBoardHandler;
+    private static final int PLAYER_HEALTH_BAR_HEIGHT = 10;
+    private static final int PLAYER_HEALTH_BAR_POSITION_X = 0;
+    private static final int PLAYER_HEALTH_BAR_POSITION_Y = 0;
     public PlayerInventory playerInventory;
     public final int playerScreenX;
     public final int playerScreenY;
@@ -46,10 +50,10 @@ public class Player extends Individual
     private void buildPlayerCollisionArea()
     { // make the collision area small that the player rectangle so upper corners will not hit solid world assets
         this.collisionArea = new Rectangle();
-        this.collisionArea.x = 4;
-        this.collisionArea.y = 16;
-        this.collisionArea.height = tileSize - 16;
-        this.collisionArea.width = tileSize - 16;
+        this.collisionArea.x = 5;
+        this.collisionArea.y = originalTileSize;
+        this.collisionArea.height = tileSize - originalTileSize;
+        this.collisionArea.width = tileSize - originalTileSize;
     }
 
     public void getAssetImages()
@@ -138,7 +142,6 @@ public class Player extends Individual
         this.activateCollision = false;
         this.gamePanel.collisionChecker.checkTile(this, false);
         this.gamePanel.collisionChecker.checkTile(this, true);
-//        this.gamePanel.collisionChecker.checkWorldItems(this);
 
         if (!this.activateCollision)
         {
@@ -196,24 +199,22 @@ public class Player extends Individual
         }
 
         g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, null);
-        drawRedSlider(g2D, 0, 0);
     }
 
-    private void drawRedSlider(Graphics2D g2d, int x, int y)
+    public void drawRedSlider(Graphics2D g2d)
     {
-
-        int height = 10;
+        int height = PLAYER_HEALTH_BAR_HEIGHT;
         // Draw background (gray)
         g2d.setColor(Color.LIGHT_GRAY);
-        g2d.fillRect(x, y, this.playerMaxHealth, height);
+        g2d.fillRect(PLAYER_HEALTH_BAR_POSITION_X, PLAYER_HEALTH_BAR_POSITION_Y, this.playerMaxHealth, height);
 
         // Draw red bar representing the current value
         int filledWidth = (int) this.playerHealth;
         g2d.setColor(Color.RED);
-        g2d.fillRect(x, y, filledWidth, height);
+        g2d.fillRect(PLAYER_HEALTH_BAR_POSITION_X, PLAYER_HEALTH_BAR_POSITION_Y, filledWidth, height);
 
         // Optional: Draw border
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(x, y, this.playerMaxHealth, height);
+        g2d.drawRect(PLAYER_HEALTH_BAR_POSITION_X, PLAYER_HEALTH_BAR_POSITION_Y, this.playerMaxHealth, height);
     }
 }

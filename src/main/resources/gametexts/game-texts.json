@@ -8,5 +8,5 @@
   "closed-big-door": "Find GOLD key to open door!",
   "enemy-collision": "-%.2f Health",
   "game-help-debug": "To reset game press keyboard P key!\nPress the space bar to swing your sword.\nNo damage is taken while swinging the sword.\nQuest: Find the sword by following the south path.",
-  "impenetrable-forrest": "This forest is to scary you can not enter."
+  "impenetrable-forrest": "This forest is too scary. You cannot enter. Enter only by the path."
 }

@@ -24,7 +24,19 @@ public enum WorldAssets
     LAKE_SHORE_RIGHT(13, getScaledImageFromAssets("/tiles/lake-shore-right-exp.png"), true),
     LAKE_CORNER_RIGHT_INVERTED_DOWN(14, getScaledImageFromAssets("/tiles/lake-corner-right-inverted-down-exp.png"), true),
     TOP_WALL(20, getScaledImageFromAssets("/tiles/top-wall.png"), true),
-    INTERIOR_FLOOR(21, getScaledImageFromAssets("/tiles/floor.png"), false);
+    INTERIOR_FLOOR(21, getScaledImageFromAssets("/tiles/floor.png"), false),
+    TEMPLE_FLOOR(22, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor.png"), false),
+    TEMPLE_FLOOR_END_ONE_LEFT(23, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end.png"), false),
+    TEMPLE_FLOOR_END_TWO_LEFT(24, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end-two.png"), false),
+    TEMPLE_FLOOR_END_ONE_RIGHT(25, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end-reverted.png"), false),
+    TEMPLE_FLOOR_END_TWO_RIGHT(26, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end-two-reverted.png"), false),
+    TEMPLE_FLOOR_END_ONE_UP(27, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end-up.png"), false),
+    TEMPLE_FLOOR_END_TWO_UP(28, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end-up-two.png"), false),
+    TEMPLE_FLOOR_END_ONE_DOWN(29, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end-down.png"), false),
+    TEMPLE_FLOOR_END_TWO_DOWN(30, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end-down-two.png"), false),
+    TEMPLE_BROKEN_FLOOR_ONE(31, getScaledImageFromAssets("/tiles/runinedtemple/temple-broken floor-one.png"), false),
+    TEMPLE_BROKEN_FLOOR_TWO(32, getScaledImageFromAssets("/tiles/runinedtemple/temple-broken floor-two.png"), false),
+    TEMPLE_BROKEN_FLOOR_THREE(33, getScaledImageFromAssets("/tiles/runinedtemple/temple-broken floor-three.png"), false);
 
     private final int index;
     private final BufferedImage worldAssetImage;

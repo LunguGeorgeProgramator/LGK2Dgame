@@ -19,23 +19,18 @@ public class CollisionChecker
 
     GamePanel gamePanel;
     public Rectangle collisionArea;
-    private List<WorldItemTypes> WorldAssetsTypesSkippedOnCollisionCheckList;
+    private final List<WorldItemTypes> WorldAssetsTypesSkippedOnCollisionCheckList;
 
      public CollisionChecker(GamePanel gamePanel)
      {
          this.gamePanel = gamePanel;
-         buildWordObjectCollisionArea();
+         this.collisionArea = new Rectangle();
+         this.collisionArea.x = 0;
+         this.collisionArea.y = 0;
+         this.collisionArea.height = tileSize;
+         this.collisionArea.width = tileSize;
+         this.WorldAssetsTypesSkippedOnCollisionCheckList = List.of(WorldItemTypes.DOOR);
      }
-
-    private void buildWordObjectCollisionArea()
-    {
-        this.collisionArea = new Rectangle();
-        this.collisionArea.x = 0;
-        this.collisionArea.y = 0;
-        this.collisionArea.height = tileSize;
-        this.collisionArea.width = tileSize;
-        this.WorldAssetsTypesSkippedOnCollisionCheckList = List.of(WorldItemTypes.DOOR);
-    }
 
     public Boolean checkPlayerCollisionWithObject(Player player, int objectPositionX, int objectPositionY)
     {
@@ -89,9 +84,6 @@ public class CollisionChecker
         int individualTopRow = individualTopY / tileSize;
         int individualBottomRow = individualBottomY / tileSize;
 
-        int worldAssetOne;
-        int worldAssetTwo;
-
          int[][] worldMatrix = gamePanel.gameWorld.worldMap;
          int[][] worldItemsMatrix = gamePanel.worldItems.worldMap;
 
@@ -101,27 +93,19 @@ public class CollisionChecker
         {
             case MovingDirection.UP:
                 individualTopRow = (individualTopY - player.speed) / tileSize;
-                worldAssetOne = getWorldAssetIndex(individualLeftCol, individualTopRow, sourceWorldMatrix);
-                worldAssetTwo = getWorldAssetIndex(individualRightCol, individualTopRow, sourceWorldMatrix);
-                checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo, player, checkWorldAssetItem);
+                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualTopRow, individualRightCol, individualTopRow, player, sourceWorldMatrix, checkWorldAssetItem);
                 break;
             case MovingDirection.DOWN:
                 individualBottomRow = (individualBottomY + player.speed) / tileSize;
-                worldAssetOne = getWorldAssetIndex(individualLeftCol, individualBottomRow, sourceWorldMatrix);
-                worldAssetTwo = getWorldAssetIndex(individualRightCol, individualBottomRow, sourceWorldMatrix);
-                checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo, player, checkWorldAssetItem);
+                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualBottomRow, individualRightCol, individualBottomRow, player, sourceWorldMatrix, checkWorldAssetItem);
                 break;
             case MovingDirection.LEFT:
                 individualLeftCol = (individualLeftX - player.speed) / tileSize;
-                worldAssetOne = getWorldAssetIndex(individualLeftCol, individualTopRow, sourceWorldMatrix);
-                worldAssetTwo = getWorldAssetIndex(individualLeftCol, individualBottomRow, sourceWorldMatrix);
-                checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo, player, checkWorldAssetItem);
+                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualTopRow, individualLeftCol, individualBottomRow, player, sourceWorldMatrix, checkWorldAssetItem);
                 break;
             case MovingDirection.RIGHT:
                 individualRightCol = (individualRightX + player.speed) / tileSize;
-                worldAssetOne = getWorldAssetIndex(individualRightCol, individualTopRow, sourceWorldMatrix);
-                worldAssetTwo = getWorldAssetIndex(individualRightCol, individualBottomRow, sourceWorldMatrix);
-                checkIfWorldAssetsHaveCollisionOn(worldAssetOne, worldAssetTwo, player, checkWorldAssetItem);
+                _checkIfWorldAssetsHaveCollisionOn(individualRightCol, individualTopRow, individualRightCol, individualBottomRow, player, sourceWorldMatrix, checkWorldAssetItem);
                 break;
             case null, default:
                 break;
@@ -159,11 +143,11 @@ public class CollisionChecker
         switch (player.movementDirection)
         {
             case MovingDirection.UP:
-        playerTopRow = (playerTopY - player.speed) / tileSize;
-            if (playerTopRow == objectBottomRow  && (playerRightCol == objectRightCol || playerLeftCol == objectLeftCol))
-            {
-                worldItemCollidingWithPlayer = true;
-            }
+                playerTopRow = (playerTopY - player.speed) / tileSize;
+                if (playerTopRow == objectBottomRow  && (playerRightCol == objectRightCol || playerLeftCol == objectLeftCol))
+                {
+                    worldItemCollidingWithPlayer = true;
+                }
             break;
             case MovingDirection.DOWN:
                 playerBottomRow = (playerBottomY + player.speed) / tileSize;
@@ -192,37 +176,28 @@ public class CollisionChecker
         return worldItemCollidingWithPlayer;
     }
 
-     private void checkIfWorldAssetsHaveCollisionOn(int worldAssetOne, int worldAssetTwo, Player individual, boolean checkWorldAssetItem)
+     private void _checkIfWorldAssetsHaveCollisionOn(int assetOneCol, int assetOneRow, int assetTwoCol, int assetTwoRow, Player player, int[][] sourceWorldMatrix, boolean checkWorldAssetItem)
      {
+         int worldAssetOne = _getWorldAssetIndex(assetOneCol, assetOneRow, sourceWorldMatrix);
+         int worldAssetTwo = _getWorldAssetIndex(assetTwoCol, assetTwoRow, sourceWorldMatrix);
          if(!checkWorldAssetItem)
          {
              WorldAssets worldItemsOne = WorldAssets.getWorldAssetByIndex(worldAssetOne);
              WorldAssets worldItemsTwo = WorldAssets.getWorldAssetByIndex(worldAssetTwo);
-             if (worldItemsOne != null &&  Objects.requireNonNull(WorldAssets.getWorldAssetByIndex(worldAssetOne)).getSolidStopOnCollisionWithPlayer())
-             {
-                 individual.activateCollision = true;
-             }
-             else if (worldItemsTwo != null && Objects.requireNonNull(WorldAssets.getWorldAssetByIndex(worldAssetTwo)).getSolidStopOnCollisionWithPlayer())
-             {
-                 individual.activateCollision = true;
-             }
+             player.activateCollision = worldItemsOne != null &&  worldItemsOne.getSolidStopOnCollisionWithPlayer() || worldItemsTwo != null && worldItemsTwo.getSolidStopOnCollisionWithPlayer();
          }
          else
          {
              WorldItemsAssets worldItemsOne = WorldItemsAssets.getWorldItemAssetByIndex(worldAssetOne);
              WorldItemsAssets worldItemsTwo = WorldItemsAssets.getWorldItemAssetByIndex(worldAssetTwo);
-             if (worldItemsOne != null && Objects.requireNonNull(worldItemsOne.getSolidStopOnCollisionWithPlayer()))
+             if (worldItemsOne != null && worldItemsOne.getSolidStopOnCollisionWithPlayer() || worldItemsTwo != null && worldItemsTwo.getSolidStopOnCollisionWithPlayer())
              {
-                 this.checkWorldItemsCollision(individual, Objects.requireNonNull(worldItemsOne));
-             }
-             else if (worldItemsTwo != null && Objects.requireNonNull(worldItemsTwo).getSolidStopOnCollisionWithPlayer())
-             {
-                 this.checkWorldItemsCollision(individual, Objects.requireNonNull(worldItemsTwo));
+                 this._checkWorldItemsCollision(player, Objects.requireNonNull(worldItemsOne != null ? worldItemsOne : worldItemsTwo));
              }
          }
      }
 
-    public void checkWorldItemsCollision(Player player, WorldItemsAssets worldItemsAssets)
+    public void _checkWorldItemsCollision(Player player, WorldItemsAssets worldItemsAssets)
     {
         PlayerInventory playerInventory = player.playerInventory;
         if (this.WorldAssetsTypesSkippedOnCollisionCheckList.contains(WorldItemTypes.valueOf(worldItemsAssets.getItemType())))
@@ -238,8 +213,7 @@ public class CollisionChecker
         }
     }
 
-
-     private int getWorldAssetIndex(int assetCol, int assetRow, int[][] worldMatrix)
+     private int _getWorldAssetIndex(int assetCol, int assetRow, int[][] worldMatrix)
      {
          if (worldMatrix.length > assetCol && assetCol > -1 && assetRow > -1 && worldMatrix.length > assetRow)
          {

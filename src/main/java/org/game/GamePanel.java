@@ -20,12 +20,14 @@ import org.world.WorldItems;
 
 public class GamePanel extends JPanel implements Runnable
 {
-    static final int originalTileSize = 16; // 16 x 16 pixel
+    public static final int originalTileSize = 16; // 16 x 16 pixel
     static final int scale = 3;
 
     static public final int tileSize = originalTileSize * scale; // 48 x 48 pixel
-    static public final int maxScreenColumns = 16;
-    static public final int maxScreenRows = 12;
+//    static public final int maxScreenColumns = 16;
+    static public final int maxScreenColumns = 25;
+//    static public final int maxScreenRows = 12;
+    static public final int maxScreenRows = 14;
     static public final int screenWith = tileSize * maxScreenColumns; // 768 pixels
     static public final int screenHeight = tileSize * maxScreenRows; // 576 pixels
 
@@ -105,6 +107,15 @@ public class GamePanel extends JPanel implements Runnable
         this.worldItems.update();
         this.worldEnemies.update(resetEnemiesHealth);
         this.player.update();
+
+        if (this.keyBoardHandler.fastKeyPressed && this.player.speed >= 30)
+        { // for debug
+            this.player.speed = 4;
+        }
+        else if  (this.keyBoardHandler.fastKeyPressed )
+        {
+            this.player.speed = 30;
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -134,10 +145,11 @@ public class GamePanel extends JPanel implements Runnable
 
         this.worldEnemies.drawEnemyText(g2D);
         this.worldItems.drawTextOmCollision(g2D);
+        this.player.drawRedSlider(g2D);
 
         // TODO: debug text, remove latter
         this.gameTextProvider.setTextColor(Color.YELLOW);
-        this.gameTextProvider.setTextPosition(tileSize * 8 + 20, tileSize - 20);
+        this.gameTextProvider.setTextPosition(screenWith / 2, tileSize - 20);
         String enemyCollisionText = this.gameTextProvider.getGameTextByKey("game-help-debug");
         this.gameTextProvider.showTextInsideGame(g2D, enemyCollisionText);
 

@@ -78,15 +78,21 @@ public enum WorldItemsAssets
     SWORD(23, WorldItemTypes.WEAPON.name(), false, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/player-sword.png")), null))),
     GRASS_PLANT(24, WorldItemTypes.VEGETATION.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/grass-plant.png")), null)));
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/grass-plant.png")), null))),
+    WOOD_BOARD(25, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/wood-board.png")), "impenetrable-forrest"))),
+    RUINED_BASE_PILLAR(26, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/base-pillar.png")), null))),
+    RUINED_TOP_PILLAR(27, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/top-piller.png")), null)));
 
     private final int itemId;
     private final String itemType;
+    private final boolean solidStopOnCollisionWithPlayer;
     private final int defaultPositionX;
     private final int defaultPositionY;
     private final int dependencyOnAssetId;
     private final Map<Integer, WorldItemAssetsModel> itemAssetsMap;
-    private final boolean solidStopOnCollisionWithPlayer;
 
     WorldItemsAssets(
         int itemId,

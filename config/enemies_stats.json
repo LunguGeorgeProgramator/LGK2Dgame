@@ -1,9 +1,5 @@
 [ {
   "mapName" : "WorldMapEnemies",
-  "enemyWorldId" : "622",
-  "isAlive" : true
-}, {
-  "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "7418",
   "isAlive" : true
 }, {
