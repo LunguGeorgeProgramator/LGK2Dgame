@@ -36,7 +36,13 @@ public enum WorldAssets
     TEMPLE_FLOOR_END_TWO_DOWN(30, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor-side-end-down-two.png"), false),
     TEMPLE_BROKEN_FLOOR_ONE(31, getScaledImageFromAssets("/tiles/runinedtemple/temple-broken floor-one.png"), false),
     TEMPLE_BROKEN_FLOOR_TWO(32, getScaledImageFromAssets("/tiles/runinedtemple/temple-broken floor-two.png"), false),
-    TEMPLE_BROKEN_FLOOR_THREE(33, getScaledImageFromAssets("/tiles/runinedtemple/temple-broken floor-three.png"), false);
+    TEMPLE_BROKEN_FLOOR_THREE(33, getScaledImageFromAssets("/tiles/runinedtemple/temple-broken floor-three.png"), false),
+    TEMPLE_WALL_MIDDLE(34, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_wall_middle.png"), true),
+    TEMPLE_WALL_RIGHT(35, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_wall_right_corner.png"), true),
+    TEMPLE_WALL_LEFT(36, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_wall_left_corner.png"), true),
+    TEMPLE_WALL_TOP_LEFT(37, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_left.png"), true),
+    TEMPLE_WALL_TOP_RIGHT(38, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_right.png"), true),
+    TEMPLE_WALL_TOP_PARALLEL(39, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_middle_parallel.png"), true);
 
     private final int index;
     private final BufferedImage worldAssetImage;

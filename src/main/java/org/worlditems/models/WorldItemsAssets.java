@@ -84,7 +84,14 @@ public enum WorldItemsAssets
     RUINED_BASE_PILLAR(26, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/base-pillar.png")), null))),
     RUINED_TOP_PILLAR(27, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/top-piller.png")), null)));
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/top-piller.png")), null))),
+    RUINED_TOP_WALL_MIDDLE(28, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_middle.png")), null))),
+    RUINED_TEMPLE_DOOR(29, WorldItemTypes.DOOR.name(), true, 0, 0, WorldItemsAssets.GOLD_KEY.getItemId(),
+        Map.of(
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_open_door.png")), null),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_closed_door.png")), "closed-door")
+        ));
 
     private final int itemId;
     private final String itemType;
