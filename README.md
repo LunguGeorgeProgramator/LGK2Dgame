@@ -28,12 +28,23 @@ Run the following commands to build the project and generate the `.exe`
 
 ```
 ./gradlew clean build
+./gradlew run
+./gradlew shadowJar
 ./gradlew launch4j
+
 ```
 The generated executable will be located at:
 ````
 LGK2Dgame/build/home/georgel/IdeaProjects/LGK2Dgame/build/exe/LGK2DGame.exe
+LGK2Dgame/build/home/georgel/IdeaProjects/LGK2Dgame/build/libs/LGK2DGame-1.0-SNAPSHOT.jar
 ````
+For non-Windows users, please use the following JAR commands:
+
+````
+ java -jar build/libs/LGK2DGame-1.0-SNAPSHOT.jar
+ java -jar LGK2DGame-1.0-SNAPSHOT.jar
+````
+
 For convenience, I've also included a pre-built `.exe`
 
 ⚠️ If you prefer not to run the included `.exe` , feel free to build it yourself using the commands above.
