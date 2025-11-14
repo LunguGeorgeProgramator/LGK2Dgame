@@ -2,6 +2,7 @@ package org.inventory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.game.GamePanel;
 import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.WorldItem;
 
@@ -21,13 +22,18 @@ public class PlayerInventory
     private final ObjectMapper mapper;
     private final File inventoryJsonFile;
     private List<PlayerInventoryModel> playerInventoryList;
-    private static String INVENTORY_ID_FORMAT = "%d%d%d";
+    private final static String INVENTORY_ID_FORMAT = "%d%d%d";
     private static final String INVENTORY_RESOURCE_PATH = "config/inventory.json";
     private static final String INVENTORY_RESOURCE_PATH_NPT_FOUND_ERROR_MESSAGE = "inventory.json not found please check resource.";
+    private final GamePanel gamePanel;
+    private final static String INVENTORY_TITLE = "player-inventory-title";
+    private final static String INVENTORY_NR_KEYS = "player-inventory-number-keys";
+    private final static String INVENTORY_NR_RUBIES = "player-inventory-number-rubies";
+    private final static String INVENTORY_SWORD = "player-inventory-sword";
 
-
-    public PlayerInventory()
+    public PlayerInventory(GamePanel gamePanel)
     {
+        this.gamePanel = gamePanel;
         this.inventoryJsonFile = getJsonFileFromAssets(INVENTORY_RESOURCE_PATH, INVENTORY_RESOURCE_PATH_NPT_FOUND_ERROR_MESSAGE);
         this.mapper = new ObjectMapper();
         this.playerInventoryList = openInventory();
@@ -202,10 +208,10 @@ public class PlayerInventory
         }
 
         String[] lines = {
-            "Player inventory", "",
-            "Number of keys: " + numberKeys,
-            "Number of rubies consumed: " + numberOfRubies,
-            hasSword ? "Sword picked." : ""
+            this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_TITLE), "",
+            this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_NR_KEYS) + numberKeys,
+            this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_NR_RUBIES) + numberOfRubies,
+            hasSword ? this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_SWORD) : ""
         };
 
         int startX = 10;

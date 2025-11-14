@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable
     {
         setUpGame();
         this.gameSavedStats = new GameSavedStats();
-        this.playerInventory = new PlayerInventory();
+        this.playerInventory = new PlayerInventory(this);
         this.keyBoardHandler = new KeyBoardHandler(this);
         this.gameTextProvider = new GameTextProvider();
         this.setPreferredSize(new Dimension(screenWith, screenHeight));
