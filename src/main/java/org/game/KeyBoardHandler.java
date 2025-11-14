@@ -12,6 +12,13 @@ public class KeyBoardHandler implements KeyListener
     public boolean pKeyPressed;
     public boolean spaceBarePressed;
     public boolean fastKeyPressed;
+    public boolean playerInventoryKeyPressed;
+    private final GamePanel gamePanel;
+
+    public KeyBoardHandler(GamePanel gamePanel)
+    {
+        this.gamePanel = gamePanel;
+    }
 
     @Override
     public void keyTyped(KeyEvent keyEvent)
@@ -55,6 +62,14 @@ public class KeyBoardHandler implements KeyListener
                 break;
             case KeyEvent.VK_F:
                 fastKeyPressed = keyPressedValue;
+                break;
+            case KeyEvent.VK_I:
+                playerInventoryKeyPressed = keyPressedValue;
+                if (keyPressedValue)
+                {
+                    gamePanel.gameState = gamePanel.gameState == gamePanel.pauseState ? gamePanel.runGameState : gamePanel.pauseState;
+                    gamePanel.openInventoryWindow = !gamePanel.openInventoryWindow;
+                }
                 break;
         }
     }

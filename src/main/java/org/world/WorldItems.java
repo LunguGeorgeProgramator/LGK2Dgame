@@ -34,21 +34,21 @@ public class WorldItems extends GameWorld
         initializeWorldItems();
     }
 
-    private void addToWorldItemsList(WorldItemsAssets worldItemAsset, WorldItemBuilder duplicatedOptions)
+    private void addToWorldItemsList(WorldItemsAssets worldItemAsset, WorldItemBuilder worldItemOptions)
     {
         this.worldItemsList.add(new WorldItem(
             this.gamePanel,
             this.player,
             this.playerInventory,
             worldItemAsset.name(),
-            duplicatedOptions != null && duplicatedOptions.getItemId() != null ? duplicatedOptions.getItemId() :worldItemAsset.getItemId(),
-            duplicatedOptions != null && duplicatedOptions.getItemWorldRowIndex() != null ? duplicatedOptions.getItemWorldRowIndex() : -1,
-            duplicatedOptions != null && duplicatedOptions.getItemWorldColIndex() != null ? duplicatedOptions.getItemWorldColIndex() : -1,
-            duplicatedOptions != null && duplicatedOptions.getDependencyOnAssetId() != null ? duplicatedOptions.getDependencyOnAssetId() : worldItemAsset.getDependencyOnAssetId(),
-            duplicatedOptions != null && duplicatedOptions.getItemType() != null ? duplicatedOptions.getItemType() : worldItemAsset.getItemType(),
-            duplicatedOptions != null && duplicatedOptions.getPositionX() != null ? duplicatedOptions.getPositionX() : worldItemAsset.getDefaultPositionX(),
-            duplicatedOptions != null && duplicatedOptions.getPositionY() != null ? duplicatedOptions.getPositionY() : worldItemAsset.getDefaultPositionY(),
-            duplicatedOptions != null && duplicatedOptions.getItemAssetsMap() != null ? duplicatedOptions.getItemAssetsMap() : worldItemAsset.getItemAssetsMap()
+            worldItemOptions != null && worldItemOptions.getItemId() != null ? worldItemOptions.getItemId() :worldItemAsset.getItemId(),
+            worldItemOptions != null && worldItemOptions.getItemWorldRowIndex() != null ? worldItemOptions.getItemWorldRowIndex() : -1,
+            worldItemOptions != null && worldItemOptions.getItemWorldColIndex() != null ? worldItemOptions.getItemWorldColIndex() : -1,
+            worldItemOptions != null && worldItemOptions.getDependencyOnAssetId() != null ? worldItemOptions.getDependencyOnAssetId() : worldItemAsset.getDependencyOnAssetId(),
+            worldItemOptions != null && worldItemOptions.getItemType() != null ? worldItemOptions.getItemType() : worldItemAsset.getItemType(),
+            worldItemOptions != null && worldItemOptions.getPositionX() != null ? worldItemOptions.getPositionX() : worldItemAsset.getDefaultPositionX(),
+            worldItemOptions != null && worldItemOptions.getPositionY() != null ? worldItemOptions.getPositionY() : worldItemAsset.getDefaultPositionY(),
+            worldItemOptions != null && worldItemOptions.getItemAssetsMap() != null ? worldItemOptions.getItemAssetsMap() : worldItemAsset.getItemAssetsMap()
         ));
     }
 

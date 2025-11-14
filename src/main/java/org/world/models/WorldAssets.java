@@ -1,7 +1,11 @@
 package org.world.models;
 
+import org.worlditems.models.WorldItemAssetsModel;
+import org.worlditems.models.WorldItemTypes;
+
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.helpers.ToolsHelper.getScaledImageFromAssets;
@@ -42,7 +46,10 @@ public enum WorldAssets
     TEMPLE_WALL_LEFT(36, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_wall_left_corner.png"), true),
     TEMPLE_WALL_TOP_LEFT(37, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_left.png"), true),
     TEMPLE_WALL_TOP_RIGHT(38, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_right.png"), true),
-    TEMPLE_WALL_TOP_PARALLEL(39, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_middle_parallel.png"), true);
+    TEMPLE_WALL_TOP_PARALLEL(39, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_middle_parallel.png"), true),
+    WORLD_WALL_END(40, getScaledImageFromAssets("/tiles/end-world-wall.png"), true),
+    WORLD_WALL_START(41, getScaledImageFromAssets("/tiles/start-world-wall.png"), true),
+    WORLD_WALL_TOP_CORNER_LEFT(42, getScaledImageFromAssets("/tiles/top-wall-corner-left-bottom.png"), true);
 
     private final int index;
     private final BufferedImage worldAssetImage;

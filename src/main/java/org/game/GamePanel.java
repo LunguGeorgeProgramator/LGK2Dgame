@@ -43,12 +43,18 @@ public class GamePanel extends JPanel implements Runnable
     public final PlayerInventory playerInventory;
     public final GameSavedStats gameSavedStats;
     public List<Individual> individuals;
+    public boolean openInventoryWindow;
+
+    public int gameState;
+    public int runGameState = 1;
+    public int pauseState = 2;
 
     public GamePanel()
     {
+        setUpGame();
         this.gameSavedStats = new GameSavedStats();
         this.playerInventory = new PlayerInventory();
-        this.keyBoardHandler = new KeyBoardHandler();
+        this.keyBoardHandler = new KeyBoardHandler(this);
         this.gameTextProvider = new GameTextProvider();
         this.setPreferredSize(new Dimension(screenWith, screenHeight));
         this.setBackground(Color.BLACK);
@@ -61,6 +67,12 @@ public class GamePanel extends JPanel implements Runnable
         this.worldItems = new WorldItems(this, "/worldMaps/WorldMapAssets.txt");
         this.worldEnemies = new WorldEnemies(this, "/worldMaps/WorldMapEnemies.txt");
         this.individuals = new ArrayList<>();
+    }
+
+    private void setUpGame()
+    {
+        this.gameState = this.runGameState;
+        this.openInventoryWindow = false;
     }
 
     public void startGameThread()
@@ -86,7 +98,10 @@ public class GamePanel extends JPanel implements Runnable
             if (delta >= 1)
             {
                 // UPDATE, information as player position (update)
-                update();
+                if (gameState == runGameState)
+                {
+                    update();
+                }
                 // DRAW, draw graphic as images, textures (paintComponent)
                 repaint();
                 delta--;
@@ -112,7 +127,7 @@ public class GamePanel extends JPanel implements Runnable
         { // for debug
             this.player.speed = 4;
         }
-        else if  (this.keyBoardHandler.fastKeyPressed )
+        else if (this.keyBoardHandler.fastKeyPressed)
         {
             this.player.speed = 30;
         }
@@ -152,6 +167,12 @@ public class GamePanel extends JPanel implements Runnable
         this.gameTextProvider.setTextPosition(screenWith / 2, tileSize - 20);
         String enemyCollisionText = this.gameTextProvider.getGameTextByKey("game-help-debug");
         this.gameTextProvider.showTextInsideGame(g2D, enemyCollisionText);
+
+
+        if (this.openInventoryWindow)
+        {
+            this.playerInventory.drawPlayerInventoryWindow(g2D);
+        }
 
         g2D.dispose(); // free up memory, destroy after draw
     }

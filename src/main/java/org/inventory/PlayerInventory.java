@@ -5,12 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.WorldItem;
 
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.helpers.ToolsHelper.getJsonFileFromAssets;
+import static org.game.GamePanel.tileSize;
 
 public class PlayerInventory
 {
@@ -159,6 +163,57 @@ public class PlayerInventory
         catch (Exception ex)
         {
             ex.printStackTrace();
+        }
+    }
+
+    public void drawPlayerInventoryWindow(Graphics2D g2D)
+    {
+        Color inventoryBackGroundColor = new Color(0, 255, 187, 190);
+        g2D.setColor(inventoryBackGroundColor);
+        g2D.fillRect(0, 0, tileSize*5, tileSize*3);
+        // Text color
+        g2D.setColor(Color.BLACK);
+        g2D.setFont(new Font("Arial", Font.PLAIN, 10));
+
+        int numberKeys = 0;
+        int numberOfRubies = 0;
+        boolean hasSword = false;
+
+        for (PlayerInventoryModel playerInventoryModel : this.playerInventoryList)
+        {
+            switch (playerInventoryModel.getItemName())
+            {
+                case "SWORD":
+                    hasSword = playerInventoryModel.getInInventory();
+                    break;
+                case "RUBY":
+                    if (playerInventoryModel.getInInventory())
+                    {
+                        numberOfRubies++;
+                    }
+                    break;
+                case "GOLD_KEY":
+                    if (playerInventoryModel.getInInventory())
+                    {
+                        numberKeys++;
+                    }
+                    break;
+            }
+        }
+
+        String[] lines = {
+            "Player inventory", "",
+            "Number of keys: " + numberKeys,
+            "Number of rubies consumed: " + numberOfRubies,
+            hasSword ? "Sword picked." : ""
+        };
+
+        int startX = 10;
+        int startY = 25;     // first text line position
+        int lineSpacing = 20; // pixels between lines
+
+        for (int i = 0; i < lines.length; i++) {
+            g2D.drawString(lines[i], startX, startY + i * lineSpacing);
         }
     }
 }

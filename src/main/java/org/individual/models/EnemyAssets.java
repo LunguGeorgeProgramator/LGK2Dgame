@@ -23,7 +23,7 @@ import static org.individual.models.EnemyAssetsConstance.snakeMovement;
 public enum EnemyAssets
 {
 
-    GHOST_MONSTER(1, 150, 8, leftRight, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
+    GHOST_MONSTER(1, 100, 8, leftRight, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
     COLOR_MONSTER(2, 250, 2, square, colorMosterAssetsMap, Map.of(), Map.of()),
     COLOR_MONSTER_SIDE_MOVING(3, 350, 2, square, colorMosterAssetsMap, Map.of(), Map.of()),
     SLOW_GHOST_MONSTER(4, 150, 4, rightLeft, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
