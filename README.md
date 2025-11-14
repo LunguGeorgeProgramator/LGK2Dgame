@@ -41,8 +41,8 @@ LGK2Dgame/build/home/georgel/IdeaProjects/LGK2Dgame/build/libs/LGK2DGame-1.0-SNA
 For non-Windows users, please use the following JAR commands:
 
 ````
- java -jar build/libs/LGK2DGame-1.0-SNAPSHOT.jar
- java -jar LGK2DGame-1.0-SNAPSHOT.jar
+ java -jar build/libs/LGK2DGame.jar
+ java -jar LGK2DGame.jar
 ````
 
 For convenience, I've also included a pre-built `.exe`
