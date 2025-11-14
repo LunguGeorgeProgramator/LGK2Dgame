@@ -1,10 +1,11 @@
 plugins {
     id 'java'
     id 'edu.sc.seis.launch4j' version '2.5.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'org.LGK2DGame'
-version = '1.0-SNAPSHOT'
+version = ''
 
 repositories {
     mavenCentral()
@@ -14,6 +15,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
@@ -23,16 +25,42 @@ test {
 }
 
 tasks.register('run', JavaExec) {
-    main = 'org.game.Main'
+    mainClass = 'org.game.Main'
     classpath = sourceSets.main.runtimeClasspath
 }
 
-// Launch4j - Windows .exe configuration
+/* --------------------------
+   SHADOW JAR (FAT JAR)
+--------------------------- */
+shadowJar {
+    archiveClassifier.set('')
+    mergeServiceFiles()
+    manifest {
+        attributes('Main-Class': 'org.game.Main')
+    }
+}
+
+/* --------------------------
+   LAUNCH4J CONFIG
+--------------------------- */
 launch4j {
     mainClassName = 'org.game.Main'
     outputDir = "$buildDir/exe"
     outfile = 'LGK2DGame.exe'
+
+    // Use the shadow JAR as input
     jar = "$buildDir/libs/${project.name}-${version}.jar"
+
     bundledJrePath = ''
-    jreMinVersion = '1.8.0'
+    jreMinVersion = '24'
+}
+
+/* ----------------------------------------------------
+   FIX FOR GRADLE 8+: Make launch4j depend on shadowJar
+---------------------------------------------------- */
+tasks.named("createExe") {
+    dependsOn tasks.shadowJar
+}
+tasks.named("launch4j") {
+    dependsOn tasks.shadowJar
 }

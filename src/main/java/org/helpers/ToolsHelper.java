@@ -4,14 +4,13 @@ package org.helpers;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.File;
 import java.util.Collections;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -20,18 +19,21 @@ import static org.game.GamePanel.tileSize;
 
 public class ToolsHelper
 {
-    // tool used to load txt files
     public static List<String> getTxtFileFromResources(String txtFilePath)
     {
-        try
+        try (InputStream is = ToolsHelper.class.getResourceAsStream(txtFilePath))
         {
-            URL resource = ToolsHelper.class.getResource(txtFilePath);
-            fileNullChecker(resource, txtFilePath);
-            return Files.readAllLines(Paths.get(resource.toURI()));
+            if (is == null)
+            {
+                throw new FileNotFoundException("Resource not found: " + txtFilePath);
+            }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is)))
+            {
+                return reader.lines().toList();
+            }
         }
-        catch (IOException | URISyntaxException | IllegalArgumentException e)
+        catch (IOException e)
         {
-//            throw new RuntimeException(String.format("Failed to load txt file %s error %s ", txtFilePath, e.getMessage()));
             e.printStackTrace();
         }
         return Collections.emptyList();

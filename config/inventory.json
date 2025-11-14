@@ -1,13 +1,13 @@
 [ {
   "itemName" : "GOLD_KEY",
   "itemId" : 1,
-  "count" : 1,
+  "count" : 0,
   "status" : "active",
   "itemType" : "KEY",
   "itemWorldMatrixCol" : 26,
   "itemWorldMatrixRow" : 29,
   "itemInventoryId" : "12629",
-  "inInventory" : true
+  "inInventory" : false
 }, {
   "itemName" : "RUBY",
   "itemId" : 2,
