@@ -1,6 +1,6 @@
 package org.game;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.gamesavedstats.GameSavedStats;
 import org.gametexts.GameTextProvider;
+import org.gameuserinterface.GameMenu;
 import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
@@ -32,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable
     static public final int screenHeight = tileSize * maxScreenRows; // 576 pixels
 
     final int framePerSecond = 60;
-    public final KeyBoardHandler keyBoardHandler;
+    public final KeyBoardAndMouseHandler keyBoardAndMouseHandler;
     public final Player player;
     final WorldEnemies worldEnemies;
     final GameWorld gameWorld;
@@ -43,23 +44,30 @@ public class GamePanel extends JPanel implements Runnable
     public final PlayerInventory playerInventory;
     public final GameSavedStats gameSavedStats;
     public List<Individual> individuals;
-    public boolean openInventoryWindow;
+    private final GameMenu gameMenu;
+    boolean resetEnemiesHealth = false;
 
     public int gameState;
+    public int openGameMenuState = 0;
     public int runGameState = 1;
     public int pauseState = 2;
+    public int openPlayerInventory = 3;
+
 
     public GamePanel()
     {
-        setUpGame();
+        this.gameState = this.runGameState;
         this.gameSavedStats = new GameSavedStats();
         this.playerInventory = new PlayerInventory(this);
-        this.keyBoardHandler = new KeyBoardHandler(this);
+        this.keyBoardAndMouseHandler = new KeyBoardAndMouseHandler(this);
         this.gameTextProvider = new GameTextProvider();
+        this.gameMenu = new GameMenu(this, this.keyBoardAndMouseHandler);
         this.setPreferredSize(new Dimension(screenWith, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.addKeyListener(this.keyBoardHandler);
+        this.addKeyListener(this.keyBoardAndMouseHandler);
+        this.addMouseListener(this.keyBoardAndMouseHandler);
+        this.addMouseMotionListener(this.keyBoardAndMouseHandler);
         this.setFocusable(true);
         this.collisionChecker = new CollisionChecker(this);
         this.player = new Player(this);
@@ -69,16 +77,18 @@ public class GamePanel extends JPanel implements Runnable
         this.individuals = new ArrayList<>();
     }
 
-    private void setUpGame()
-    {
-        this.gameState = this.runGameState;
-        this.openInventoryWindow = false;
-    }
-
     public void startGameThread()
     {
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void setGameState(int gameStateValue)
+    {
+        if (gameState != openGameMenuState)
+        {
+            this.gameState = this.isGameState(gameStateValue) ? runGameState: gameStateValue;
+        }
     }
 
     @Override
@@ -92,13 +102,19 @@ public class GamePanel extends JPanel implements Runnable
 
         while (gameThread != null)
         {
+            // on game window starts for the first time open game menu
+            if (delta == 0)
+            {
+                gameState = openGameMenuState;
+            }
+
             currentTime = System.nanoTime();
             delta = delta + ((currentTime - lastTime) / drawInterval);
             lastTime = currentTime;
             if (delta >= 1)
             {
                 // UPDATE, information as player position (update)
-                if (gameState == runGameState)
+                if (this.isGameState(runGameState))
                 {
                     update();
                 }
@@ -109,28 +125,34 @@ public class GamePanel extends JPanel implements Runnable
         }
     }
 
+    public boolean isGameState(int comparedGameState)
+    {
+        return gameState == comparedGameState;
+    }
+
+    public void resetGame()
+    {
+        resetEnemiesHealth = true;
+        this.playerInventory.removeAllFromInventory();
+        this.gameSavedStats.removeAllFromStats();
+        this.player.playerHealth = this.player.playerMaxHealth;
+        this.player.positionX = 100;
+        this.player.positionY = 100;
+        Timer timer = new Timer(500, e -> {
+            resetEnemiesHealth = false;
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
     public void update()
     {
-        boolean resetEnemiesHealth = false;
-        if (this.keyBoardHandler.pKeyPressed)
-        { // remove all items from player inventory
-            resetEnemiesHealth = true;
-            this.playerInventory.removeAllFromInventory();
-            this.gameSavedStats.removeAllFromStats();
-            this.player.playerHealth = this.player.playerMaxHealth;
-        }
         this.worldItems.update();
         this.worldEnemies.update(resetEnemiesHealth);
         this.player.update();
 
-        if (this.keyBoardHandler.fastKeyPressed && this.player.speed >= 30)
-        { // for debug
-            this.player.speed = 4;
-        }
-        else if (this.keyBoardHandler.fastKeyPressed)
-        {
-            this.player.speed = 30;
-        }
+        // for debug, increase player speed when pressing F key
+        this.player.speed = this.keyBoardAndMouseHandler.fastKeyPressed ? 30 : 4;
     }
 
     public void paintComponent(Graphics g)
@@ -168,10 +190,14 @@ public class GamePanel extends JPanel implements Runnable
         String enemyCollisionText = this.gameTextProvider.getGameTextByKey("game-help-debug");
         this.gameTextProvider.showTextInsideGame(g2D, enemyCollisionText);
 
-
-        if (this.openInventoryWindow)
+        if (isGameState(openPlayerInventory))
         {
             this.playerInventory.drawPlayerInventoryWindow(g2D);
+        }
+
+        if (isGameState(openGameMenuState))
+        {
+            this.gameMenu.drawGameMenu(g2D);
         }
 
         g2D.dispose(); // free up memory, destroy after draw

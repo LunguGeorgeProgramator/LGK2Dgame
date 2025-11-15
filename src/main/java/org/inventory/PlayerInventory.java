@@ -9,6 +9,7 @@ import org.worlditems.WorldItem;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.BasicStroke;
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.List;
 
 import static org.helpers.ToolsHelper.getJsonFileFromAssets;
 import static org.game.GamePanel.tileSize;
+import static org.game.GamePanel.screenWith;
+import static org.game.GamePanel.screenHeight;
 
 public class PlayerInventory
 {
@@ -174,16 +177,27 @@ public class PlayerInventory
 
     public void drawPlayerInventoryWindow(Graphics2D g2D)
     {
-        Color inventoryBackGroundColor = new Color(0, 255, 187, 190);
-        g2D.setColor(inventoryBackGroundColor);
-        g2D.fillRect(0, 0, tileSize*5, tileSize*3);
-        // Text color
-        g2D.setColor(Color.BLACK);
-        g2D.setFont(new Font("Arial", Font.PLAIN, 10));
+        int positionX = screenWith / 2 + tileSize;
+        int positionY = screenHeight / 2 - tileSize;
+        int height = tileSize  * 3;
+        int wight = tileSize * 5;
+        int lineSpacing = 20; // pixels between lines
+        int arc = 20; // adjust for more/less roundness
 
         int numberKeys = 0;
         int numberOfRubies = 0;
         boolean hasSword = false;
+
+        Color inventoryBackGroundColor = new Color(43, 76, 75, 214);
+        g2D.setColor(inventoryBackGroundColor);
+        g2D.fillRoundRect(positionX, positionY, wight, height, arc, arc);
+        // Draw a solid border
+        g2D.setColor(new Color(7, 74, 7));  // solid green
+        g2D.setStroke(new BasicStroke(3));   // border thickness
+        g2D.drawRoundRect(positionX, positionY, wight, height, arc, arc);
+        // Text color
+        g2D.setColor(Color.BLACK);
+        g2D.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 10));
 
         for (PlayerInventoryModel playerInventoryModel : this.playerInventoryList)
         {
@@ -214,12 +228,8 @@ public class PlayerInventory
             hasSword ? this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_SWORD) : ""
         };
 
-        int startX = 10;
-        int startY = 25;     // first text line position
-        int lineSpacing = 20; // pixels between lines
-
         for (int i = 0; i < lines.length; i++) {
-            g2D.drawString(lines[i], startX, startY + i * lineSpacing);
+            g2D.drawString(lines[i], positionX + 20, positionY + 30 + i * lineSpacing);
         }
     }
 }

@@ -1,6 +1,6 @@
 package org.individual;
 import org.game.GamePanel;
-import org.game.KeyBoardHandler;
+import org.game.KeyBoardAndMouseHandler;
 import org.individual.models.MovingDirection;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
@@ -20,7 +20,7 @@ import static org.game.GamePanel.tileSize;
 public class Player extends Individual
 {
     GamePanel gamePanel;
-    KeyBoardHandler keyBoardHandler;
+    KeyBoardAndMouseHandler keyBoardAndMouseHandler;
     private static final int PLAYER_HEALTH_BAR_HEIGHT = 10;
     private static final int PLAYER_HEALTH_BAR_POSITION_X = 0;
     private static final int PLAYER_HEALTH_BAR_POSITION_Y = 0;
@@ -39,7 +39,7 @@ public class Player extends Individual
     {
         super(100, 100, 4); // set player position x, y and speed
         this.gamePanel = gamePanel;
-        this.keyBoardHandler = this.gamePanel.keyBoardHandler;
+        this.keyBoardAndMouseHandler = this.gamePanel.keyBoardAndMouseHandler;
         this.playerScreenX = (GamePanel.screenWith /2) - (tileSize/2);
         this.playerScreenY = (GamePanel.screenHeight /2) - (tileSize/2);
         this.playerInventory = this.gamePanel.playerInventory;
@@ -109,27 +109,27 @@ public class Player extends Individual
         // player sword swing
         PlayerInventoryModel inventoryModel = this.playerInventory.getInventoryItemByName(WorldItemsAssets.SWORD.name());
         this.isSwordInPlayerInventory = inventoryModel != null && inventoryModel.getInInventory();
-        this.isPlayerSwingSword = keyBoardHandler.spaceBarePressed && this.isSwordInPlayerInventory;
+        this.isPlayerSwingSword = keyBoardAndMouseHandler.spaceBarePressed && this.isSwordInPlayerInventory;
 
         this.changeAssetNumberByFrameCounter(this.swordSwingImagesAssetsMap.size(), 7);
 
         // player moving
-        if (keyBoardHandler.upPressed)
+        if (keyBoardAndMouseHandler.upPressed)
         {
             this.movementDirection = MovingDirection.UP;
             this.stoppedDirection = MovingDirection.UP;
         }
-        else if (keyBoardHandler.downPressed)
+        else if (keyBoardAndMouseHandler.downPressed)
         {
             this.movementDirection = MovingDirection.DOWN;
             this.stoppedDirection = MovingDirection.DOWN;
         }
-        else if (keyBoardHandler.leftPressed)
+        else if (keyBoardAndMouseHandler.leftPressed)
         {
             this.movementDirection = MovingDirection.LEFT;
             this.stoppedDirection = MovingDirection.LEFT;
         }
-        else if (keyBoardHandler.rightPressed)
+        else if (keyBoardAndMouseHandler.rightPressed)
         {
             this.movementDirection = MovingDirection.RIGHT;
             this.stoppedDirection = MovingDirection.RIGHT;
