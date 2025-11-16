@@ -1,5 +1,7 @@
 package org.game;
 
+import org.game.models.GameState;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -66,7 +68,7 @@ public class KeyBoardAndMouseHandler implements KeyListener, MouseListener, Mous
                 playerInventoryKeyPressed = keyPressedValue;
                 if (keyPressedValue)
                 {
-                    gamePanel.setGameState(gamePanel.openPlayerInventory);
+                    gamePanel.setGameState(GameState.OPEN_PLAYER_INVENTORY);
                 }
                 break;
             case KeyEvent.VK_ENTER:
@@ -75,7 +77,7 @@ public class KeyBoardAndMouseHandler implements KeyListener, MouseListener, Mous
             case KeyEvent.VK_M:
                 if (keyPressedValue)
                 {
-                    gamePanel.setGameState(gamePanel.openGameMenuState);
+                    gamePanel.setGameState(GameState.OPEN_GAME_MENU);
                 }
                 break;
             case KeyEvent.VK_UP:

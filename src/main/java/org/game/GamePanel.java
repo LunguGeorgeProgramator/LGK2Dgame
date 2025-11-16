@@ -1,6 +1,7 @@
 package org.game;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.game.models.GameState;
 import org.gamesavedstats.GameSavedStats;
 import org.gametexts.GameTextProvider;
 import org.gameuserinterface.GameMenu;
@@ -25,10 +27,10 @@ public class GamePanel extends JPanel implements Runnable
     static final int scale = 3;
 
     static public final int tileSize = originalTileSize * scale; // 48 x 48 pixel
-//    static public final int maxScreenColumns = 16;
-    static public final int maxScreenColumns = 25;
-//    static public final int maxScreenRows = 12;
-    static public final int maxScreenRows = 14;
+    static public final int maxScreenColumns = 16;
+//    static public final int maxScreenColumns = 25;
+    static public final int maxScreenRows = 12;
+//    static public final int maxScreenRows = 14;
     static public final int screenWith = tileSize * maxScreenColumns; // 768 pixels
     static public final int screenHeight = tileSize * maxScreenRows; // 576 pixels
 
@@ -40,23 +42,17 @@ public class GamePanel extends JPanel implements Runnable
     final WorldItems worldItems;
     public final GameTextProvider gameTextProvider;
     public final CollisionChecker collisionChecker;
-    Thread gameThread;
+    private final Thread gameThread;
     public final PlayerInventory playerInventory;
     public final GameSavedStats gameSavedStats;
     public List<Individual> individuals;
     private final GameMenu gameMenu;
     boolean resetEnemiesHealth = false;
-
-    public int gameState;
-    public int openGameMenuState = 0;
-    public int runGameState = 1;
-    public int pauseState = 2;
-    public int openPlayerInventory = 3;
-
+    public GameState gameState;
 
     public GamePanel()
     {
-        this.gameState = this.runGameState;
+        this.gameState = GameState.RESUME_GAME;
         this.gameSavedStats = new GameSavedStats();
         this.playerInventory = new PlayerInventory(this);
         this.keyBoardAndMouseHandler = new KeyBoardAndMouseHandler(this);
@@ -75,19 +71,15 @@ public class GamePanel extends JPanel implements Runnable
         this.worldItems = new WorldItems(this, "/worldMaps/WorldMapAssets.txt");
         this.worldEnemies = new WorldEnemies(this, "/worldMaps/WorldMapEnemies.txt");
         this.individuals = new ArrayList<>();
-    }
-
-    public void startGameThread()
-    {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
-    public void setGameState(int gameStateValue)
+    public void setGameState(GameState gameStateValue)
     {
-        if (gameState != openGameMenuState)
+        if (gameState != GameState.OPEN_GAME_MENU)
         {
-            this.gameState = this.isGameState(gameStateValue) ? runGameState: gameStateValue;
+            this.gameState = this.isGameState(gameStateValue) ? GameState.RESUME_GAME: gameStateValue;
         }
     }
 
@@ -105,7 +97,7 @@ public class GamePanel extends JPanel implements Runnable
             // on game window starts for the first time open game menu
             if (delta == 0)
             {
-                gameState = openGameMenuState;
+                gameState = GameState.OPEN_GAME_MENU;
             }
 
             currentTime = System.nanoTime();
@@ -114,7 +106,7 @@ public class GamePanel extends JPanel implements Runnable
             if (delta >= 1)
             {
                 // UPDATE, information as player position (update)
-                if (this.isGameState(runGameState))
+                if (this.isGameState(GameState.RESUME_GAME))
                 {
                     update();
                 }
@@ -125,7 +117,7 @@ public class GamePanel extends JPanel implements Runnable
         }
     }
 
-    public boolean isGameState(int comparedGameState)
+    public boolean isGameState(GameState comparedGameState)
     {
         return gameState == comparedGameState;
     }
@@ -150,9 +142,6 @@ public class GamePanel extends JPanel implements Runnable
         this.worldItems.update();
         this.worldEnemies.update(resetEnemiesHealth);
         this.player.update();
-
-        // for debug, increase player speed when pressing F key
-        this.player.speed = this.keyBoardAndMouseHandler.fastKeyPressed ? 30 : 4;
     }
 
     public void paintComponent(Graphics g)
@@ -184,18 +173,18 @@ public class GamePanel extends JPanel implements Runnable
         this.worldItems.drawTextOmCollision(g2D);
         this.player.drawRedSlider(g2D);
 
-        // TODO: debug text, remove latter
+        // TODO: debug text, remove latter add some window pop up
         this.gameTextProvider.setTextColor(Color.YELLOW);
         this.gameTextProvider.setTextPosition(screenWith / 2, tileSize - 20);
         String enemyCollisionText = this.gameTextProvider.getGameTextByKey("game-help-debug");
         this.gameTextProvider.showTextInsideGame(g2D, enemyCollisionText);
 
-        if (isGameState(openPlayerInventory))
+        if (isGameState(GameState.OPEN_PLAYER_INVENTORY))
         {
             this.playerInventory.drawPlayerInventoryWindow(g2D);
         }
 
-        if (isGameState(openGameMenuState))
+        if (isGameState(GameState.OPEN_GAME_MENU))
         {
             this.gameMenu.drawGameMenu(g2D);
         }

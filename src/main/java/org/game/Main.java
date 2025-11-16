@@ -14,6 +14,5 @@ public class Main {
         gameWindow.pack();
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setVisible(true);
-        gamePanel.startGameThread();
     }
 }

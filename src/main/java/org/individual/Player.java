@@ -166,6 +166,9 @@ public class Player extends Individual
 
         this.changeAssetNumberByFrameCounter();
         this.playerHealth = (int) (this.playerHealth - this.damageTaken);
+
+        // increase player speed when pressing F key
+        this.speed = this.keyBoardAndMouseHandler.fastKeyPressed ? 30 : 4;
     }
 
     @Override

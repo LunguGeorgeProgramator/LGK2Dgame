@@ -13,7 +13,7 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "53111",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "43116",
