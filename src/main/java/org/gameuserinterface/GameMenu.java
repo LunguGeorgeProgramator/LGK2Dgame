@@ -66,7 +66,7 @@ public class GameMenu extends JPanel
 
         if (loadPanelPage.equals(PagesType.MAINE_MENU))
         {
-            drawMainManuPage(g2D);
+            drawMainMenuPage(g2D);
             mainMenuKeyBoardAndMouseListener();
         }
         else if (this.loadPanelPage.equals(PagesType.CONTROLS_MAPPING))
@@ -76,11 +76,17 @@ public class GameMenu extends JPanel
 
     }
 
-    private void drawMainManuPage(Graphics2D g2D)
+    private void drawMainMenuPage(Graphics2D g2D)
     {
         g2D.setColor(new Color(0, 0, 0, 227));
         g2D.fillRect(0, 0, screenWith, screenHeight);
 
+        // game menu title
+        g2D.setColor(new Color(0, 255, 100));
+        g2D.setFont(new Font(titleTextFoundName, Font.BOLD, titleTextFoundSize));
+        g2D.drawString(this.mainMenuGameTitleText, screenWith / 2 - tileSize * 2, screenHeight / 2 - tileSize * 3);
+
+        // main menu buttons
         for (int i = 0; i < menuItems.size(); i++)
         {
             boolean selected = (i == this.selectedIndex);
@@ -92,11 +98,6 @@ public class GameMenu extends JPanel
             // Background color
             g2D.setColor(selected ? new Color(0, 255, 100) : new Color(0, 200, 255));
             g2D.fillRoundRect(x, y, btnWidth, btnHeight, 20, 20);
-
-            // game title
-            g2D.setColor(new Color(0, 255, 100));
-            g2D.setFont(new Font(titleTextFoundName, Font.BOLD, titleTextFoundSize));
-            g2D.drawString(this.mainMenuGameTitleText, screenWith / 2 - tileSize * 2, screenHeight / 2 - tileSize * 3);
 
             // Text
             g2D.setColor(Color.BLACK);
@@ -198,7 +199,7 @@ public class GameMenu extends JPanel
             downKeyPressedIndex++;
         }
 
-        // This workaround functions, but it's not optimal. Since the game loop runs continuously,
+        // This workaround works, but it's not optimal. Since the game loop runs continuously,
         // a single key press is registered multiple times. To prevent repeated triggers, an
         // increment counter is used and the logic runs only when the counter is 0.
         if (!this.keyBoardAndMouseHandler.upKeyPressed)
