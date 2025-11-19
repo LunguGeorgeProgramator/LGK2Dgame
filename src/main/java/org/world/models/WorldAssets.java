@@ -49,7 +49,10 @@ public enum WorldAssets
     TEMPLE_WALL_TOP_PARALLEL(39, getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_top_wall_middle_parallel.png"), true),
     WORLD_WALL_END(40, getScaledImageFromAssets("/tiles/end-world-wall.png"), true),
     WORLD_WALL_START(41, getScaledImageFromAssets("/tiles/start-world-wall.png"), true),
-    WORLD_WALL_TOP_CORNER_LEFT(42, getScaledImageFromAssets("/tiles/top-wall-corner-left-bottom.png"), true);
+    WORLD_WALL_TOP_CORNER_LEFT_BOTTOM(42, getScaledImageFromAssets("/tiles/top-wall-corner-left-bottom.png"), true),
+    WORLD_WALL_TOP_CORNER_LEFT_TOP(43, getScaledImageFromAssets("/tiles/top-wall-corner-left-top.png"), true),
+    TOP_WALL_CORNER_RIGHT_TOP(44, getScaledImageFromAssets("/tiles/top-wall-corner-right-top.png"), true),
+    TOP_WALL_CORNER_RIGHT_BOTTOM(45, getScaledImageFromAssets("/tiles/top-wall-corner-right-bottom.png"), true);
 
     private final int index;
     private final BufferedImage worldAssetImage;

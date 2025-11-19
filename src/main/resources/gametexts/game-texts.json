@@ -7,7 +7,7 @@
   "open-big-door": "Key provided door open!",
   "closed-big-door": "Find GOLD key to open door!",
   "enemy-collision": "-%.2f Health",
-  "game-help-debug": "No damage is taken while swinging the sword.\nQuest: Find the sword by following the south path.",
+  "game-help-debug": "Quest: Find the sword by following the south path.",
   "impenetrable-forrest": "This forest is too scary. You cannot enter. Enter only by the path.",
   "player-inventory-title": "Player inventory",
   "player-inventory-number-keys": "Number of keys: ",
@@ -19,5 +19,6 @@
   "controls-page-btn": "Controls Mapping",
   "exit-game-btn": "Exit Game",
   "back-to-main-menu": "Back to Menu",
-  "main-menu-game-title": "LGK Adventure"
+  "main-menu-game-title": "LGK Adventure",
+  "try-again": "Oops—you died. Let’s give that another shot!"
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gamesavedstats.models.EnemyStatsModel;
 import org.individual.Enemy;
-import org.inventory.models.PlayerInventoryModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,6 +88,10 @@ public class GameSavedStats
         {
             if (enemyStatsModel.getEnemyWorldId().equals(enemyWorldId))
             {
+                if (enemyStatsModel.getIsAlive() == isAlive)
+                { // do not update if it has same value
+                    return items;
+                }
                 enemyStatsModel.setAlive(isAlive);
                 break;
             }
@@ -105,7 +108,7 @@ public class GameSavedStats
         return items;
     }
 
-    public void removeAllFromStats()
+    public void resurrectAllDeadEnemies()
     {
         List<EnemyStatsModel> emptyInventoryList = new ArrayList<>();
         try

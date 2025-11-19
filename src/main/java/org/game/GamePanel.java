@@ -50,6 +50,11 @@ public class GamePanel extends JPanel implements Runnable
     boolean resetEnemiesHealth = false;
     public GameState gameState;
 
+
+    public int testPositionX, testPositionY, testWith, testHeight;
+    public boolean testCollisionArea = false;
+
+
     public GamePanel()
     {
         this.gameState = GameState.RESUME_GAME;
@@ -126,7 +131,7 @@ public class GamePanel extends JPanel implements Runnable
     {
         resetEnemiesHealth = true;
         this.playerInventory.removeAllFromInventory();
-        this.gameSavedStats.removeAllFromStats();
+        this.gameSavedStats.resurrectAllDeadEnemies();
         this.player.playerHealth = this.player.playerMaxHealth;
         this.player.positionX = 100;
         this.player.positionY = 100;
@@ -184,6 +189,11 @@ public class GamePanel extends JPanel implements Runnable
             this.playerInventory.drawPlayerInventoryWindow(g2D);
         }
 
+        if (testCollisionArea)
+        {
+            drawTestDynamicRectangle(g2D);
+        }
+
         if (isGameState(GameState.OPEN_GAME_MENU))
         {
             this.gameMenu.drawGameMenu(g2D);
@@ -191,4 +201,21 @@ public class GamePanel extends JPanel implements Runnable
 
         g2D.dispose(); // free up memory, destroy after draw
     }
+
+    public void drawTestDynamicRectangle(Graphics2D g2D)
+    {
+        g2D.setColor(new Color(0, 255, 100, 190));
+        g2D.fillRect(testPositionX, testPositionY, testWith, testHeight);
+        g2D.setColor(Color.BLACK);
+        g2D.drawRect(testPositionX, testPositionY, testWith, testHeight);
+    }
+
+    public void drawTestDynamicRectangle(Graphics2D g2D, int testPositionX, int testPositionY, int testWith, int testHeight)
+    {
+        g2D.setColor(new Color(0, 255, 100, 190));
+        g2D.fillRect(testPositionX, testPositionY, testWith, testHeight);
+        g2D.setColor(Color.BLACK);
+        g2D.drawRect(testPositionX, testPositionY, testWith, testHeight);
+    }
+
 }

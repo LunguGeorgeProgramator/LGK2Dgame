@@ -34,16 +34,22 @@ public class Player extends Individual
     public boolean isSwordInPlayerInventory = false;
     private Map<Integer, BufferedImage> swordSwingImagesAssetsMap;
     private Map<Integer, BufferedImage> swordSwingWhenMovingImagesAssetsMap;
+    public Rectangle attackCollisionArea;
+    private final int defaultPositionX;
+    private final int defaultPositionY;
+
 
     public Player(GamePanel gamePanel)
     {
         super(100, 100, 4); // set player position x, y and speed
+        this.defaultPositionX = positionX;
+        this.defaultPositionY = positionY;
         this.gamePanel = gamePanel;
         this.keyBoardAndMouseHandler = this.gamePanel.keyBoardAndMouseHandler;
         this.playerScreenX = (GamePanel.screenWith /2) - (tileSize/2);
         this.playerScreenY = (GamePanel.screenHeight /2) - (tileSize/2);
         this.playerInventory = this.gamePanel.playerInventory;
-        buildPlayerCollisionArea();
+        this.buildPlayerCollisionArea();
         this.getAssetImages();
     }
 
@@ -53,7 +59,16 @@ public class Player extends Individual
         this.collisionArea.x = 5;
         this.collisionArea.y = originalTileSize;
         this.collisionArea.height = tileSize - originalTileSize;
-        this.collisionArea.width = tileSize - originalTileSize;
+        this.collisionArea.width = tileSize - originalTileSize + 10;
+    }
+
+    private void clearAttackCollisionArea()
+    {
+        this.attackCollisionArea = new Rectangle();
+        this.attackCollisionArea.x = this.playerScreenX + tileSize;
+        this.attackCollisionArea.y =  this.playerScreenY + tileSize;
+        this.attackCollisionArea.height = tileSize;
+        this.attackCollisionArea.width = tileSize;
     }
 
     public void getAssetImages()
@@ -101,6 +116,11 @@ public class Player extends Individual
     private BufferedImage getAssetImage(String assetPath)
     {
         return Objects.requireNonNull(getScaledImageFromAssets(assetPath));
+    }
+
+    private BufferedImage getAssetImage(String assetPath, int with, int height)
+    {
+        return Objects.requireNonNull(getScaledImageFromAssets(assetPath, with, height));
     }
 
     @Override
@@ -169,6 +189,48 @@ public class Player extends Individual
 
         // increase player speed when pressing F key
         this.speed = this.keyBoardAndMouseHandler.fastKeyPressed ? 30 : 4;
+
+        this._setAttackDirection();
+        this._playerIsDead();
+    }
+
+    private void _setAttackDirection()
+    {
+        if (this.isPlayerSwingSword)
+        {
+            this.clearAttackCollisionArea();
+            if (this.movementDirection == MovingDirection.RIGHT || this.stoppedDirection == MovingDirection.RIGHT)
+            {
+                clearAttackCollisionArea();
+                // extend player collision area if swinging the sward
+                this.attackCollisionArea.y = this.attackCollisionArea.y - tileSize;
+                this.attackCollisionArea.width = this.attackCollisionArea.width / 3;
+            }
+            else if (this.movementDirection == MovingDirection.DOWN || this.stoppedDirection == MovingDirection.DOWN)
+            {
+                clearAttackCollisionArea();
+                this.attackCollisionArea.x = this.attackCollisionArea.x - tileSize;
+                this.attackCollisionArea.height = this.attackCollisionArea.height / 3;
+            }
+            else if (this.movementDirection == MovingDirection.LEFT || this.stoppedDirection == MovingDirection.LEFT)
+            {
+                clearAttackCollisionArea();
+                this.attackCollisionArea.x = this.attackCollisionArea.x - (tileSize + (tileSize / 3));
+                this.attackCollisionArea.y = this.attackCollisionArea.y - tileSize;
+                this.attackCollisionArea.width = this.attackCollisionArea.width / 3;
+            }
+            else if (this.movementDirection == MovingDirection.UP || this.stoppedDirection == MovingDirection.UP)
+            {
+                clearAttackCollisionArea();
+                this.attackCollisionArea.x = this.attackCollisionArea.x - tileSize;
+                this.attackCollisionArea.y = this.attackCollisionArea.y - (tileSize + (tileSize / 3));
+                this.attackCollisionArea.height = this.attackCollisionArea.height / 3;
+            }
+        }
+        else
+        {
+            this.attackCollisionArea = null;
+        }
     }
 
     @Override
@@ -202,6 +264,45 @@ public class Player extends Individual
         }
 
         g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, null);
+        if (this.isPlayerSwingSword)
+        {
+            this._drawPlayerAttackCollisionArea(g2D);
+        }
+    }
+
+    private void _playerIsDead()
+    {
+        if (this.playerHealth <= 0)
+        {
+            this.gamePanel.resetGame();
+        }
+    }
+
+    public void _drawPlayerAttackCollisionArea(Graphics2D g2D)
+    {
+        if (this.attackCollisionArea != null)
+        {
+            Map<MovingDirection, Map<Integer, BufferedImage>> attackImagesAssetsMap = Map.of(
+                MovingDirection.UP, Map.of(
+                        1, getAssetImage("/player/attack/attack_shock_up.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
+                        2, getAssetImage("/player/attack/attack_shock_up_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
+                    ),
+                MovingDirection.DOWN, Map.of(
+                        1, getAssetImage("/player/attack/attack_shock_down.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
+                        2, getAssetImage("/player/attack/attack_shock_down_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
+                    ),
+                MovingDirection.RIGHT, Map.of(
+                        1, getAssetImage("/player/attack/attack_shock_right.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
+                        2, getAssetImage("/player/attack/attack_shock_right_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
+                    ),
+                MovingDirection.LEFT, Map.of(
+                        1, getAssetImage("/player/attack/attack_shock_left.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
+                        2, getAssetImage("/player/attack/attack_shock_left_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
+                    )
+            );
+            g2D.drawImage(attackImagesAssetsMap.get(this.movementDirection != null ? this.movementDirection : this.stoppedDirection).get(this.assetNumber), this.attackCollisionArea.x, this.attackCollisionArea.y, null);
+//            this.gamePanel.drawTestDynamicRectangle(g2D, this.attackCollisionArea.x, this.attackCollisionArea.y, this.attackCollisionArea.width, this.attackCollisionArea.height);
+        }
     }
 
     public void drawRedSlider(Graphics2D g2d)

@@ -18,61 +18,42 @@ public class CollisionChecker
 {
 
     GamePanel gamePanel;
-    public Rectangle collisionArea;
     private final List<WorldItemTypes> WorldAssetsTypesSkippedOnCollisionCheckList;
 
      public CollisionChecker(GamePanel gamePanel)
      {
          this.gamePanel = gamePanel;
-         this.collisionArea = new Rectangle();
-         this.collisionArea.x = 0;
-         this.collisionArea.y = 0;
-         this.collisionArea.height = tileSize;
-         this.collisionArea.width = tileSize;
          this.WorldAssetsTypesSkippedOnCollisionCheckList = List.of(WorldItemTypes.DOOR);
      }
 
-    public Boolean checkPlayerCollisionWithObject(Player player, int objectPositionX, int objectPositionY)
+    public boolean isPlayerCollidingWithIndividual(Player player, Rectangle recTwo)
     {
-        // player collision rectangle
-        int playerLeftX = player.positionX + player.collisionArea.x;
-        int playerRightX = player.positionX + player.collisionArea.x + player.collisionArea.width;
-        int playerTopY = player.positionY + player.collisionArea.y;
-        int playerBottomY = player.positionY + player.collisionArea.y + player.collisionArea.height;
+        Rectangle recOne = new Rectangle();
 
-        // object collision rectangle
-        int objectLeftX = objectPositionX + this.collisionArea.x;
-        int objectRightX = objectPositionX + this.collisionArea.x + player.collisionArea.width;
-        int objectTopY = objectPositionY + this.collisionArea.y;
-        int objectBottomY = objectPositionY + this.collisionArea.y + player.collisionArea.height;
+        recOne.x = player.playerScreenX + player.collisionArea.x - 2;
+        recOne.y = player.playerScreenY + player.collisionArea.y;
+        recOne.width = player.collisionArea.width;
+        recOne.height = player.collisionArea.height;
 
-        // player world matrix index
-        int playerLeftCol = playerLeftX / tileSize;
-        int playerRightCol = playerRightX / tileSize;
-        int playerTopRow = playerTopY / tileSize;
-        int playerBottomRow = playerBottomY / tileSize;
+//        gamePanel.testPositionX = recOne.x;
+//        gamePanel.testPositionY = recOne.y;
+//        gamePanel.testWith = recOne.width;
+//        gamePanel.testHeight = recOne.height;
+//        gamePanel.testCollisionArea = true;
 
-        // object world matrix index
-        int objectLeftCol = objectLeftX / tileSize;
-        int objectRightCol = objectRightX / tileSize;
-        int objectTopRow = objectTopY / tileSize;
-        int objectBottomRow = objectBottomY / tileSize;
-
-        // default value if none of condition are meet
-        boolean hasPlayerCollidedWithObject = false;
-
-        if (playerLeftCol == objectLeftCol && playerTopRow == objectTopRow)
-        {
-            hasPlayerCollidedWithObject = true;
-        }
-        else if (playerRightCol == objectRightCol && playerBottomRow == objectBottomRow)
-        {
-            hasPlayerCollidedWithObject = true;
-        }
-        return hasPlayerCollidedWithObject;
+        return this.isEnemyUnderAttack(recOne, recTwo);
     }
 
-     public void checkTile(Player player, boolean checkWorldAssetItem)
+    public boolean isEnemyUnderAttack(Rectangle recOne, Rectangle recTwo)
+    {
+        return recTwo != null && recOne != null &&
+                recOne.x < recTwo.x + recTwo.width &&
+                recOne.x + recOne.width > recTwo.x &&
+                recOne.y < recTwo.y + recTwo.height &&
+                recOne.y + recOne.height > recTwo.y;
+    }
+
+    public void checkTile(Player player, boolean checkWorldAssetItem)
      {
         int individualLeftX = player.positionX + player.collisionArea.x;
         int individualRightX = player.positionX + player.collisionArea.x + player.collisionArea.width;
@@ -112,70 +93,6 @@ public class CollisionChecker
         }
      }
 
-    public boolean checkOneWorldItemCollision(Player player, int objectPositionX, int objectPositionY)
-    {
-        // player collision rectangle
-        int playerLeftX = player.positionX + player.collisionArea.x;
-        int playerRightX = player.positionX + player.collisionArea.x + player.collisionArea.width;
-        int playerTopY = player.positionY + player.collisionArea.y;
-        int playerBottomY = player.positionY + player.collisionArea.y + player.collisionArea.height;
-
-        // object collision rectangle
-        int objectLeftX = objectPositionX + this.collisionArea.x;
-        int objectRightX = objectPositionX + this.collisionArea.x + player.collisionArea.width;
-        int objectTopY = objectPositionY + this.collisionArea.y;
-        int objectBottomY = objectPositionY + this.collisionArea.y + player.collisionArea.height;
-
-        // player world matrix index
-        int playerLeftCol = playerLeftX / tileSize;
-        int playerRightCol = playerRightX / tileSize;
-        int playerTopRow = playerTopY / tileSize;
-        int playerBottomRow = playerBottomY / tileSize;
-
-        // object world matrix index
-        int objectLeftCol = objectLeftX / tileSize;
-        int objectRightCol = objectRightX / tileSize;
-        int objectTopRow = objectTopY / tileSize;
-        int objectBottomRow = objectBottomY / tileSize;
-
-        boolean worldItemCollidingWithPlayer = false;
-
-        switch (player.movementDirection)
-        {
-            case MovingDirection.UP:
-                playerTopRow = (playerTopY - player.speed) / tileSize;
-                if (playerTopRow == objectBottomRow  && (playerRightCol == objectRightCol || playerLeftCol == objectLeftCol))
-                {
-                    worldItemCollidingWithPlayer = true;
-                }
-            break;
-            case MovingDirection.DOWN:
-                playerBottomRow = (playerBottomY + player.speed) / tileSize;
-                if (playerBottomRow == objectTopRow  && (playerRightCol == objectRightCol || playerLeftCol == objectLeftCol))
-                {
-                    worldItemCollidingWithPlayer = true;
-                }
-                break;
-            case MovingDirection.LEFT:
-                playerLeftCol = (playerLeftX - player.speed) / tileSize;
-                if (playerLeftCol == objectRightCol && playerBottomRow == objectBottomRow)
-                {
-                    worldItemCollidingWithPlayer = true;
-                }
-                break;
-            case MovingDirection.RIGHT:
-                playerRightCol = (playerRightX + player.speed) / tileSize;
-                if (playerRightCol == objectLeftCol  && playerBottomRow == objectBottomRow)
-                {
-                    worldItemCollidingWithPlayer = true;
-                }
-                break;
-            case null, default:
-                break;
-        }
-        return worldItemCollidingWithPlayer;
-    }
-
      private void _checkIfWorldAssetsHaveCollisionOn(int assetOneCol, int assetOneRow, int assetTwoCol, int assetTwoRow, Player player, int[][] sourceWorldMatrix, boolean checkWorldAssetItem)
      {
          int worldAssetOne = _getWorldAssetIndex(assetOneCol, assetOneRow, sourceWorldMatrix);
@@ -197,11 +114,11 @@ public class CollisionChecker
          }
      }
 
-    public void _checkWorldItemsCollision(Player player, WorldItemsAssets worldItemsAssets)
+    private void _checkWorldItemsCollision(Player player, WorldItemsAssets worldItemsAssets)
     {
-        PlayerInventory playerInventory = player.playerInventory;
         if (this.WorldAssetsTypesSkippedOnCollisionCheckList.contains(WorldItemTypes.valueOf(worldItemsAssets.getItemType())))
         {
+            PlayerInventory playerInventory = player.playerInventory;
             // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
             String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(worldItemsAssets.getDependencyOnAssetId());
             PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);

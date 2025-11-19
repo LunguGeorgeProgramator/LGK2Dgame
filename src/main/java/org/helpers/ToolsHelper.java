@@ -41,6 +41,11 @@ public class ToolsHelper
 
     public static BufferedImage getScaledImageFromAssets(String imagePath)
     {
+        return getScaledImageFromAssets(imagePath, tileSize, tileSize);
+    }
+
+    public static BufferedImage getScaledImageFromAssets(String imagePath, int with, int height)
+    {
         try
         {
             BufferedImage bufferedImage = getImageFromAssets(imagePath);
@@ -48,9 +53,9 @@ public class ToolsHelper
             {
                 throw new NullPointerException();
             }
-            BufferedImage scaledBufferedImage = new BufferedImage(tileSize, tileSize, bufferedImage.getType());
+            BufferedImage scaledBufferedImage = new BufferedImage(with, height, bufferedImage.getType());
             Graphics2D graphics2D = scaledBufferedImage.createGraphics();
-            graphics2D.drawImage(bufferedImage, 0, 0, tileSize, tileSize, null);
+            graphics2D.drawImage(bufferedImage, 0, 0, with, height, null);
             graphics2D.dispose();
             return Objects.requireNonNull(scaledBufferedImage);
         }

@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
+import static org.game.GamePanel.originalTileSize;
 import static org.game.GamePanel.tileSize;
 import static org.world.GameWorld.checkIfAssetIsInsideTheBoundary;
 import static org.helpers.ToolsHelper._randomXYMultiplier;
@@ -19,7 +20,7 @@ public class Enemy extends Individual
 {
 
     private static final String ENEMY_COLLISION_TEXT_KEY = "enemy-collision";
-    private static final Double ENEMY_DAMAGE_TO_PLAYER = 0.001;
+    private static final Double ENEMY_DAMAGE_TO_PLAYER = 10.1;
     private static final Double PLAYER_DAMAGE_TO_ENEMY = 10.1;
     private static final int MAX_ASSETS_INDEX = 2;
     private static final int NUMBER_OF_FRAMES_LIMIT = 10;
@@ -53,6 +54,7 @@ public class Enemy extends Individual
     public int enemyWorldMatrixCol;
     public int enemyWorldMatrixRow;
     public boolean resetEnemyHealth = false;
+    public Rectangle damageArea;
 
 
     public Enemy(
@@ -82,7 +84,6 @@ public class Enemy extends Individual
         this.enemyAssetsMap = enemyAssetsMap;
         this.enemyMovingDirectionList = enemyMovingDirectionList;
         this.direction = !this.enemyMovingDirectionList.isEmpty() ? this.enemyMovingDirectionList.getFirst() : MovingDirection.UP;
-        buildEnemyCollisionArea();
         this.gamePanel = gamePanel;
         this.collisionChecker = this.gamePanel.collisionChecker;
         this.enemyCollisionText = this.gamePanel.gameTextProvider.getGameTextByKey(ENEMY_COLLISION_TEXT_KEY);
@@ -92,6 +93,26 @@ public class Enemy extends Individual
         this.nextMovementIndex = !this.enemyMovingDirectionList.isEmpty() ? 0 : null;
         _resetMaxMovementDirection();
         this.setAssetImages();
+        this.buildEnemyCollisionArea();
+        this.buildEnemyDamageCollisionArea();
+    }
+
+    private void buildEnemyCollisionArea()
+    {
+        this.collisionArea = new Rectangle();
+        this.collisionArea.x = 0;
+        this.collisionArea.y = 0;
+        this.collisionArea.height = tileSize / 2;
+        this.collisionArea.width = tileSize / 2;
+    }
+
+    private void buildEnemyDamageCollisionArea()
+    {
+        this.damageArea = new Rectangle();
+        this.damageArea.x = 0;
+        this.damageArea.y = 0;
+        this.damageArea.height = tileSize;
+        this.damageArea.width = tileSize;
     }
 
     private void _resetMaxMovementDirection()
@@ -100,15 +121,6 @@ public class Enemy extends Individual
         this.maxAllowedUpMovement = this.positionY - this.maxDistanceAllowedToMove;
         this.maxAllowedRightMovement = this.positionX + this.maxDistanceAllowedToMove;
         this.maxAllowedLeftMovement = this.positionX - this.maxDistanceAllowedToMove;
-    }
-
-    private void buildEnemyCollisionArea()
-    { // make the collision area small that the player rectangle so upper corners will not hit solid world assets
-        this.collisionArea = new Rectangle();
-        this.collisionArea.x = 0;
-        this.collisionArea.y = 0;
-        this.collisionArea.height = tileSize;
-        this.collisionArea.width = tileSize;
     }
 
     public void setAssetImages()
@@ -130,7 +142,8 @@ public class Enemy extends Individual
     @Override
     public void update()
     {
-        this.isEnemyCollidingWithPlayer = this.collisionChecker.checkPlayerCollisionWithObject(this.player, this.positionX, this.positionY);
+        this.isAllowedToInflictDamage = this.slowDownGame();
+        this.isEnemyCollidingWithPlayer = this.collisionChecker.isPlayerCollidingWithIndividual(this.player, this.damageArea);
         if (!this.isEnemyCollidingWithPlayer)
         {
             if (this.direction.equals(MovingDirection.DOWN) && this.maxAllowedDownMovement > this.positionY)
@@ -172,19 +185,17 @@ public class Enemy extends Individual
         }
         else
         {
-            this.isAllowedToInflictDamage = this.slowDownGame();
             if (this.isAllowedToInflictDamage)
-            { // only inflict damage to player is he is not swinging his sword
-                if (!this.player.isPlayerSwingSword)
-                {
-                    this.player.playerHealth = this.player.playerHealth - ENEMY_DAMAGE_TO_PLAYER;
-                    this.hitDamage = this.hitDamage + ENEMY_DAMAGE_TO_PLAYER; // TODO rethink this display variable is not ok damage is increase over time
-                }
-                else
-                {
-                    this.enemyHealth = this.enemyHealth - PLAYER_DAMAGE_TO_ENEMY;
-                }
+            { // only inflict damage to player if colliding
+                this.player.playerHealth = this.player.playerHealth - ENEMY_DAMAGE_TO_PLAYER;
+                this.hitDamage = this.hitDamage + ENEMY_DAMAGE_TO_PLAYER; // TODO rethink this display variable is not ok damage is increase over time
             }
+        }
+
+        boolean isUnderAttack = this.collisionChecker.isEnemyUnderAttack(this.player.attackCollisionArea, this.collisionArea);
+        if (isUnderAttack && this.isAllowedToInflictDamage)
+        {
+            this.enemyHealth = this.enemyHealth - PLAYER_DAMAGE_TO_ENEMY;
         }
 
         this.changeAssetNumberByFrameCounter(MAX_ASSETS_INDEX, NUMBER_OF_FRAMES_LIMIT);
@@ -208,17 +219,23 @@ public class Enemy extends Individual
     {
         int worldEnemyAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
         int worldEnemyAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
+        this.collisionArea.x = worldEnemyAssetPositionX + (tileSize / 2) / 2;
+        this.collisionArea.y = worldEnemyAssetPositionY + (tileSize / 2) / 2;
+        this.damageArea.x = worldEnemyAssetPositionX;
+        this.damageArea.y = worldEnemyAssetPositionY;
 
         // draw enemy only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
-            this.setEnemyAsset();
+            this._setEnemyAsset();
             if (this.enemyAsset != null && this.enemyHealth > 0)
             {
                 g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, null);
                 this._drawEnemyLifeBar(g2D, worldEnemyAssetPositionX - 2, worldEnemyAssetPositionY - 20);
             }
         }
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.damageArea.x, this.damageArea.y, this.damageArea.width, this.damageArea.height);
     }
 
     public void drawEnemyText(Graphics2D g2D)
@@ -231,7 +248,7 @@ public class Enemy extends Individual
         }
     }
 
-    private void setEnemyAsset()
+    private void _setEnemyAsset()
     {
         this._checkAssetsMap(ENEMY_ASSETS_MAP_KEY_NAME);
         if (this.isEnemyCollidingWithPlayer)
