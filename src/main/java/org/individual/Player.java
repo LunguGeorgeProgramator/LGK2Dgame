@@ -34,16 +34,13 @@ public class Player extends Individual
     public boolean isSwordInPlayerInventory = false;
     private Map<Integer, BufferedImage> swordSwingImagesAssetsMap;
     private Map<Integer, BufferedImage> swordSwingWhenMovingImagesAssetsMap;
+    private Map<Integer, BufferedImage> swordSwingAttackImagesAssetsMap;
     public Rectangle attackCollisionArea;
-    private final int defaultPositionX;
-    private final int defaultPositionY;
 
 
     public Player(GamePanel gamePanel)
     {
         super(100, 100, 4); // set player position x, y and speed
-        this.defaultPositionX = positionX;
-        this.defaultPositionY = positionY;
         this.gamePanel = gamePanel;
         this.keyBoardAndMouseHandler = this.gamePanel.keyBoardAndMouseHandler;
         this.playerScreenX = (GamePanel.screenWith /2) - (tileSize/2);
@@ -98,6 +95,12 @@ public class Player extends Individual
             MovingDirection.DOWN, getAssetImage("/player/player-stand-still-down.png"),
             MovingDirection.LEFT, getAssetImage("/player/player-stand-still-left.png"),
             MovingDirection.RIGHT, getAssetImage("/player/player-stand-still-right.png")
+        );
+
+        this.swordSwingAttackImagesAssetsMap = Map.of(
+            1, getAssetImage("/player/attack/sword-swing-up.png"),
+            2, getAssetImage("/player/attack/sword-swing-center.png"),
+            3, getAssetImage("/player/attack/sword-swing-down.png")
         );
 
         this.swordSwingImagesAssetsMap = Map.of(
@@ -204,27 +207,23 @@ public class Player extends Individual
                 clearAttackCollisionArea();
                 // extend player collision area if swinging the sward
                 this.attackCollisionArea.y = this.attackCollisionArea.y - tileSize;
-                this.attackCollisionArea.width = this.attackCollisionArea.width / 3;
             }
             else if (this.movementDirection == MovingDirection.DOWN || this.stoppedDirection == MovingDirection.DOWN)
             {
                 clearAttackCollisionArea();
                 this.attackCollisionArea.x = this.attackCollisionArea.x - tileSize;
-                this.attackCollisionArea.height = this.attackCollisionArea.height / 3;
             }
             else if (this.movementDirection == MovingDirection.LEFT || this.stoppedDirection == MovingDirection.LEFT)
             {
                 clearAttackCollisionArea();
-                this.attackCollisionArea.x = this.attackCollisionArea.x - (tileSize + (tileSize / 3));
+                this.attackCollisionArea.x = this.attackCollisionArea.x - tileSize * 2;
                 this.attackCollisionArea.y = this.attackCollisionArea.y - tileSize;
-                this.attackCollisionArea.width = this.attackCollisionArea.width / 3;
             }
             else if (this.movementDirection == MovingDirection.UP || this.stoppedDirection == MovingDirection.UP)
             {
                 clearAttackCollisionArea();
                 this.attackCollisionArea.x = this.attackCollisionArea.x - tileSize;
-                this.attackCollisionArea.y = this.attackCollisionArea.y - (tileSize + (tileSize / 3));
-                this.attackCollisionArea.height = this.attackCollisionArea.height / 3;
+                this.attackCollisionArea.y = this.attackCollisionArea.y - tileSize * 2;
             }
         }
         else
@@ -282,26 +281,31 @@ public class Player extends Individual
     {
         if (this.attackCollisionArea != null)
         {
-            Map<MovingDirection, Map<Integer, BufferedImage>> attackImagesAssetsMap = Map.of(
-                MovingDirection.UP, Map.of(
-                        1, getAssetImage("/player/attack/attack_shock_up.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
-                        2, getAssetImage("/player/attack/attack_shock_up_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
-                    ),
-                MovingDirection.DOWN, Map.of(
-                        1, getAssetImage("/player/attack/attack_shock_down.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
-                        2, getAssetImage("/player/attack/attack_shock_down_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
-                    ),
-                MovingDirection.RIGHT, Map.of(
-                        1, getAssetImage("/player/attack/attack_shock_right.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
-                        2, getAssetImage("/player/attack/attack_shock_right_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
-                    ),
-                MovingDirection.LEFT, Map.of(
-                        1, getAssetImage("/player/attack/attack_shock_left.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
-                        2, getAssetImage("/player/attack/attack_shock_left_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
-                    )
-            );
-            g2D.drawImage(attackImagesAssetsMap.get(this.movementDirection != null ? this.movementDirection : this.stoppedDirection).get(this.assetNumber), this.attackCollisionArea.x, this.attackCollisionArea.y, null);
-//            this.gamePanel.drawTestDynamicRectangle(g2D, this.attackCollisionArea.x, this.attackCollisionArea.y, this.attackCollisionArea.width, this.attackCollisionArea.height);
+//            Map<MovingDirection, Map<Integer, BufferedImage>> attackImagesAssetsMap = Map.of(
+//                MovingDirection.UP, Map.of(
+//                        1, getAssetImage("/player/attack/attack_shock_up.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
+//                        2, getAssetImage("/player/attack/attack_shock_up_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
+//                    ),
+//                MovingDirection.DOWN, Map.of(
+//                        1, getAssetImage("/player/attack/attack_shock_down.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
+//                        2, getAssetImage("/player/attack/attack_shock_down_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
+//                    ),
+//                MovingDirection.RIGHT, Map.of(
+//                        1, getAssetImage("/player/attack/attack_shock_right.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
+//                        2, getAssetImage("/player/attack/attack_shock_right_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
+//                    ),
+//                MovingDirection.LEFT, Map.of(
+//                        1, getAssetImage("/player/attack/attack_shock_left.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
+//                        2, getAssetImage("/player/attack/attack_shock_left_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
+//                    )
+//            );
+
+//            g2D.drawImage(attackImagesAssetsMap.get(this.movementDirection != null ? this.movementDirection : this.stoppedDirection).get(this.assetNumber), this.attackCollisionArea.x, this.attackCollisionArea.y, null);
+            g2D.drawImage( swordSwingAttackImagesAssetsMap.get(this.dynamicAssetNumber), this.attackCollisionArea.x, this.attackCollisionArea.y, null);
+           if (attackCollisionArea != null)
+           {
+               this.gamePanel.drawTestDynamicRectangle(g2D, this.attackCollisionArea.x, this.attackCollisionArea.y, this.attackCollisionArea.width, this.attackCollisionArea.height);
+           }
         }
     }
 

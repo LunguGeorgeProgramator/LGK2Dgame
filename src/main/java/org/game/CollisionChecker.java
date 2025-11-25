@@ -35,11 +35,11 @@ public class CollisionChecker
         recOne.width = player.collisionArea.width;
         recOne.height = player.collisionArea.height;
 
-//        gamePanel.testPositionX = recOne.x;
-//        gamePanel.testPositionY = recOne.y;
-//        gamePanel.testWith = recOne.width;
-//        gamePanel.testHeight = recOne.height;
-//        gamePanel.testCollisionArea = true;
+        gamePanel.testPositionX = recOne.x;
+        gamePanel.testPositionY = recOne.y;
+        gamePanel.testWith = recOne.width;
+        gamePanel.testHeight = recOne.height;
+        gamePanel.testCollisionArea = true;
 
         return this.isEnemyUnderAttack(recOne, recTwo);
     }
