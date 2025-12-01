@@ -159,7 +159,7 @@ public class Enemy extends Individual
     public void update()
     {
         this.isAllowedToInflictDamage = this.slowDownGame();
-        this.isEnemyCollidingWithPlayer = this.collisionChecker.isPlayerCollidingWithIndividual(this.player, this.attackArea);
+        this.isEnemyCollidingWithPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.attackArea);
         if (!this.isEnemyCollidingWithPlayer)
         {
             if (!this.enemyReturnToDefaultPosition)
@@ -211,7 +211,7 @@ public class Enemy extends Individual
             }
         }
 
-        boolean isUnderAttack = this.collisionChecker.isEnemyUnderAttack(this.player.attackCollisionArea, this.collisionArea);
+        boolean isUnderAttack = this.collisionChecker.areRectanglesIntersecting(this.player.attackCollisionArea, this.collisionArea);
         if (isUnderAttack && this.isAllowedToInflictDamage)
         {
             this.enemyHealth = this.enemyHealth - PLAYER_DAMAGE_TO_ENEMY;
@@ -237,11 +237,28 @@ public class Enemy extends Individual
 
     private void _trackMovementTowardPlayer()
     {
-        boolean trackPlayer = this.collisionChecker.isPlayerCollidingWithIndividual(this.player, this.detectionArea);
+        boolean trackPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.detectionArea);
         if (trackPlayer)
         {
-            this.positionY = this._moveTowardScreenPosition(positionY, player.positionY, this.speed);
-            this.positionX = this._moveTowardScreenPosition(positionX, player.positionX + tileSize, this.speed);
+            int playerPositionX = player.positionX;
+            int playerPositionY = player.positionY;
+            switch (this.direction)
+            {
+                case MovingDirection.LEFT:
+                    playerPositionX = player.positionX + tileSize;
+                    break;
+                case MovingDirection.RIGHT:
+                    playerPositionX = player.positionX - tileSize;
+                    break;
+                case MovingDirection.UP:
+                    playerPositionY = player.positionY - tileSize;
+                    break;
+                case MovingDirection.DOWN:
+                    playerPositionY = player.positionY + tileSize;
+                    break;
+            }
+            this.positionY = this._moveTowardScreenPosition(positionY, playerPositionY, this.speed);
+            this.positionX = this._moveTowardScreenPosition(positionX, playerPositionX, this.speed);
             this.enemyReturnToDefaultPosition = true;
         }
         if (this.enemyReturnToDefaultPosition && !trackPlayer)
@@ -289,10 +306,10 @@ public class Enemy extends Individual
                 g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, null);
                 this._drawEnemyLifeBar(g2D, worldEnemyAssetPositionX - 2, worldEnemyAssetPositionY - 20);
             }
-        }
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.attackArea.x, this.attackArea.y, this.attackArea.width, this.attackArea.height);
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.detectionArea.x, this.detectionArea.y, this.detectionArea.width, this.detectionArea.height);
+        }
     }
 
     public void drawEnemyText(Graphics2D g2D)

@@ -78,13 +78,13 @@ public class WorldItem extends Individual
         this.collisionArea = new Rectangle();
         this.collisionArea.x = 0;
         this.collisionArea.y = 0;
-        this.collisionArea.height = tileSize + 8;
-        this.collisionArea.width = tileSize + 8;
+        this.collisionArea.height = tileSize;
+        this.collisionArea.width = tileSize;
     }
 
     public void update()
     {
-        this.hasPlayerCollidedWithItem = this.collisionChecker.isPlayerCollidingWithIndividual(this.player, this.collisionArea);
+        this.hasPlayerCollidedWithItem = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.collisionArea);
         if (this.hasPlayerCollidedWithItem)
         {
             String itemInventoryId = this.playerInventory.getWorldItemInventoryId(this);
@@ -128,8 +128,8 @@ public class WorldItem extends Individual
     {
         int worldItemAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
         int worldItemAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
-        this.collisionArea.x = worldItemAssetPositionX - 6;
-        this.collisionArea.y = worldItemAssetPositionY - 5;
+        this.collisionArea.x = worldItemAssetPositionX;
+        this.collisionArea.y = worldItemAssetPositionY;
 
         // draw world item only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
@@ -140,8 +140,8 @@ public class WorldItem extends Individual
             {
                 g2D.drawImage(bufferedImage, worldItemAssetPositionX, worldItemAssetPositionY, null);
             }
+//            this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
         }
-//        this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
     }
 
     public void drawWordItemCollisionText(Graphics2D g2D)

@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.helpers.ToolsHelper.getScaledImageFromAssets;
-import static org.game.GamePanel.originalTileSize;
 import static org.game.GamePanel.tileSize;
 
 public class Player extends Individual
@@ -32,31 +31,44 @@ public class Player extends Individual
     public double playerHealth = this.playerMaxHealth;
     public boolean isPlayerSwingSword = false;
     public boolean isSwordInPlayerInventory = false;
-    private Map<Integer, BufferedImage> swordSwingImagesAssetsMap;
-    private Map<Integer, BufferedImage> swordSwingWhenMovingImagesAssetsMap;
-    private Map<Integer, BufferedImage> swordSwingAttackImagesAssetsMap;
+    private Map<MovingDirection, BufferedImage> swordSwingStandStillImagesAssetsMap;
+    private Map<MovingDirection, Map<Integer, BufferedImage>> swordSwingWhenMovingImagesAssetsMap;
+    private Map<MovingDirection, Map<Integer, BufferedImage>> swordSwingAttackImagesAssetsMap;
     public Rectangle attackCollisionArea;
+    public Rectangle worldItemCollisionArea;
+    public final int defaultMovementSpeed;
 
 
     public Player(GamePanel gamePanel)
     {
-        super(100, 100, 4); // set player position x, y and speed
+        super(tileSize * 2, tileSize * 2, 6); // set player position x, y and speed
+        this.defaultMovementSpeed = 6;
         this.gamePanel = gamePanel;
         this.keyBoardAndMouseHandler = this.gamePanel.keyBoardAndMouseHandler;
         this.playerScreenX = (GamePanel.screenWith /2) - (tileSize/2);
         this.playerScreenY = (GamePanel.screenHeight /2) - (tileSize/2);
         this.playerInventory = this.gamePanel.playerInventory;
         this.buildPlayerCollisionArea();
+        this.buildPlayerWorldItemCollisionArea();
         this.getAssetImages();
     }
 
     private void buildPlayerCollisionArea()
     { // make the collision area small that the player rectangle so upper corners will not hit solid world assets
         this.collisionArea = new Rectangle();
-        this.collisionArea.x = 5;
-        this.collisionArea.y = originalTileSize;
-        this.collisionArea.height = tileSize - originalTileSize;
-        this.collisionArea.width = tileSize - originalTileSize + 10;
+        this.collisionArea.x = (((tileSize / 2) / 2) / 2) / 2;
+        this.collisionArea.y = tileSize / 2 - (((tileSize / 2) / 2) / 2) / 2 + 1;
+        this.collisionArea.height = tileSize / 2;
+        this.collisionArea.width = tileSize - (((tileSize / 2) / 2) / 2);
+    }
+
+    private void buildPlayerWorldItemCollisionArea()
+    {
+        this.worldItemCollisionArea = new Rectangle();
+        this.worldItemCollisionArea.x = 0;
+        this.worldItemCollisionArea.y =  0;
+        this.worldItemCollisionArea.height = tileSize + ((tileSize / 2) / 2);
+        this.worldItemCollisionArea.width = tileSize + ((tileSize / 2) / 2);
     }
 
     private void clearAttackCollisionArea()
@@ -68,26 +80,32 @@ public class Player extends Individual
         this.attackCollisionArea.width = tileSize;
     }
 
+    private void updateCollisionAreaRectanglesPositions()
+    {
+        this.worldItemCollisionArea.x = this.playerScreenX - (((tileSize / 2) / 2) / 2);
+        this.worldItemCollisionArea.y =  this.playerScreenY - (((tileSize / 2) / 2) / 2);
+    }
+
     public void getAssetImages()
     {
         this.upMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-walk-up.png"),
-            2, getAssetImage("/player/player-walk-up-two.png")
+            1, getAssetImage("/player/walking/player-walk-up.png"),
+            2, getAssetImage("/player/walking/player-walk-up-two.png")
         );
 
         this.downMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-walk-down.png"),
-            2, getAssetImage("/player/player-walk-down-two.png")
+            1, getAssetImage("/player/walking/player-walk-down.png"),
+            2, getAssetImage("/player/walking/player-walk-down-two.png")
         );
 
         this.leftMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-walk-left.png"),
-            2, getAssetImage("/player/player-walk-left-two.png")
+            1, getAssetImage("/player/walking/player-walk-left.png"),
+            2, getAssetImage("/player/walking/player-walk-left-two.png")
         );
 
         this.rightMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-walk-right.png"),
-            2, getAssetImage("/player/player-walk-right-two.png")
+            1, getAssetImage("/player/walking/player-walk-right.png"),
+            2, getAssetImage("/player/walking/player-walk-right-two.png")
         );
 
         this.standStillImagesAssetsMap = Map.of(
@@ -97,33 +115,59 @@ public class Player extends Individual
             MovingDirection.RIGHT, getAssetImage("/player/player-stand-still-right.png")
         );
 
-        this.swordSwingAttackImagesAssetsMap = Map.of(
+        this.swordSwingAttackImagesAssetsMap =  Map.of(
+            MovingDirection.RIGHT, Map.of(
             1, getAssetImage("/player/attack/sword-swing-up.png"),
             2, getAssetImage("/player/attack/sword-swing-center.png"),
             3, getAssetImage("/player/attack/sword-swing-down.png")
-        );
-
-        this.swordSwingImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-sword-start-swing.png"),
-            2, getAssetImage("/player/player-sword-middle-swing.png"),
-            3, getAssetImage("/player/player-sword-finish-swing.png")
+            ),
+            MovingDirection.LEFT, Map.of(
+            1, getAssetImage("/player/attack/sword-swing-up-left.png"),
+            2, getAssetImage("/player/attack/sword-swing-center-left.png"),
+            3, getAssetImage("/player/attack/sword-swing-down-left.png")
+            ),
+            MovingDirection.UP, Map.of(
+            1, getAssetImage("/player/attack/sword-swing-up-up.png"),
+            2, getAssetImage("/player/attack/sword-swing-center-up.png"),
+            3, getAssetImage("/player/attack/sword-swing-down-up.png")
+            ),
+            MovingDirection.DOWN, Map.of(
+            1, getAssetImage("/player/attack/sword-swing-up-down.png"),
+            2, getAssetImage("/player/attack/sword-swing-center-down.png"),
+            3, getAssetImage("/player/attack/sword-swing-down-down.png")
+            )
         );
 
         this.swordSwingWhenMovingImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/player-sword-start-swing-moving.png"),
-            2, getAssetImage("/player/player-sword-middle-swing.png"),
-            3, getAssetImage("/player/player-sword-finish-swing-moving.png")
+            MovingDirection.RIGHT, Map.of(
+                1, getAssetImage("/player/swingingSword/player-sword-start-swing-arm.png"),
+                2, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-two.png")
+            ),
+            MovingDirection.LEFT, Map.of(
+                1, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-left.png"),
+                2, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-two-left.png")
+            ),
+            MovingDirection.UP, Map.of(
+                1, getAssetImage("/player/walking/player-walk-up.png"),
+                2, getAssetImage("/player/walking/player-walk-up-two.png")
+            ),
+            MovingDirection.DOWN, Map.of(
+                1, getAssetImage("/player/walking/player-walk-down.png"),
+                2, getAssetImage("/player/walking/player-walk-down-two.png")
+            )
+        );
+
+        this.swordSwingStandStillImagesAssetsMap = Map.of(
+            MovingDirection.UP, getAssetImage("/player/player-stand-still-up.png"),
+            MovingDirection.DOWN, getAssetImage("/player/player-stand-still-down.png"),
+            MovingDirection.LEFT, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-stand-still-left.png"),
+            MovingDirection.RIGHT, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-stand-still.png")
         );
     }
 
     private BufferedImage getAssetImage(String assetPath)
     {
         return Objects.requireNonNull(getScaledImageFromAssets(assetPath));
-    }
-
-    private BufferedImage getAssetImage(String assetPath, int with, int height)
-    {
-        return Objects.requireNonNull(getScaledImageFromAssets(assetPath, with, height));
     }
 
     @Override
@@ -134,7 +178,7 @@ public class Player extends Individual
         this.isSwordInPlayerInventory = inventoryModel != null && inventoryModel.getInInventory();
         this.isPlayerSwingSword = keyBoardAndMouseHandler.spaceBarePressed && this.isSwordInPlayerInventory;
 
-        this.changeAssetNumberByFrameCounter(this.swordSwingImagesAssetsMap.size(), 7);
+        this.changeAssetNumberByFrameCounter(3, 5);
 
         // player moving
         if (keyBoardAndMouseHandler.upPressed)
@@ -191,10 +235,11 @@ public class Player extends Individual
         this.playerHealth = (int) (this.playerHealth - this.damageTaken);
 
         // increase player speed when pressing F key
-        this.speed = this.keyBoardAndMouseHandler.fastKeyPressed ? 30 : 4;
+        this.speed = this.keyBoardAndMouseHandler.fastKeyPressed ? 30 : this.defaultMovementSpeed;
 
         this._setAttackDirection();
         this._playerIsDead();
+        this.updateCollisionAreaRectanglesPositions();
     }
 
     private void _setAttackDirection()
@@ -236,37 +281,41 @@ public class Player extends Individual
     public void draw(Graphics2D g2D)
     {
         BufferedImage playerAsset;
+        BufferedImage playerSwingSwordAsset;
+        BufferedImage swingSwordAsset;
 
         switch (this.movementDirection != null ? this.movementDirection : null)
         {
             case MovingDirection.UP:
                 playerAsset = this.upMovementImagesAssetsMap.get(this.assetNumber);
+                playerSwingSwordAsset = this.swordSwingWhenMovingImagesAssetsMap.get(this.movementDirection).get(this.assetNumber);
+                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
                 break;
             case MovingDirection.DOWN:
                 playerAsset = this.downMovementImagesAssetsMap.get(this.assetNumber);
+                playerSwingSwordAsset = this.swordSwingWhenMovingImagesAssetsMap.get(this.movementDirection).get(this.assetNumber);
+                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
                 break;
             case MovingDirection.LEFT:
                 playerAsset = this.leftMovementImagesAssetsMap.get(this.assetNumber);
+                playerSwingSwordAsset = this.swordSwingWhenMovingImagesAssetsMap.get(this.movementDirection).get(this.assetNumber);
+                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
                 break;
             case MovingDirection.RIGHT:
                 playerAsset = this.rightMovementImagesAssetsMap.get(this.assetNumber);
+                playerSwingSwordAsset = this.swordSwingWhenMovingImagesAssetsMap.get(this.movementDirection).get(this.assetNumber);
+                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
                 break;
             case null, default:
                 MovingDirection playerStoppedDirection = this.stoppedDirection != null ? this.stoppedDirection : this.defaultStoppedDirection;
                 playerAsset = this.standStillImagesAssetsMap.get(playerStoppedDirection);
+                playerSwingSwordAsset = this.swordSwingStandStillImagesAssetsMap.get(playerStoppedDirection);
+                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(playerStoppedDirection).get(this.dynamicAssetNumber);
                 break;
         }
 
-        if (this.isPlayerSwingSword)
-        {
-            playerAsset = this.movementDirection == null ? this.swordSwingImagesAssetsMap.get(this.dynamicAssetNumber) : this.swordSwingWhenMovingImagesAssetsMap.get(this.dynamicAssetNumber);
-        }
-
-        g2D.drawImage(playerAsset, this.playerScreenX, this.playerScreenY, null);
-        if (this.isPlayerSwingSword)
-        {
-            this._drawPlayerAttackCollisionArea(g2D);
-        }
+        g2D.drawImage(this.isPlayerSwingSword ? playerSwingSwordAsset : playerAsset, this.playerScreenX, this.playerScreenY, null);
+        this._drawPlayerAttackCollisionArea(g2D, swingSwordAsset);
     }
 
     private void _playerIsDead()
@@ -277,35 +326,12 @@ public class Player extends Individual
         }
     }
 
-    public void _drawPlayerAttackCollisionArea(Graphics2D g2D)
+    public void _drawPlayerAttackCollisionArea(Graphics2D g2D, BufferedImage swingSwordAsset)
     {
-        if (this.attackCollisionArea != null)
+        if (this.isPlayerSwingSword && this.attackCollisionArea != null)
         {
-//            Map<MovingDirection, Map<Integer, BufferedImage>> attackImagesAssetsMap = Map.of(
-//                MovingDirection.UP, Map.of(
-//                        1, getAssetImage("/player/attack/attack_shock_up.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
-//                        2, getAssetImage("/player/attack/attack_shock_up_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
-//                    ),
-//                MovingDirection.DOWN, Map.of(
-//                        1, getAssetImage("/player/attack/attack_shock_down.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
-//                        2, getAssetImage("/player/attack/attack_shock_down_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
-//                    ),
-//                MovingDirection.RIGHT, Map.of(
-//                        1, getAssetImage("/player/attack/attack_shock_right.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
-//                        2, getAssetImage("/player/attack/attack_shock_right_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
-//                    ),
-//                MovingDirection.LEFT, Map.of(
-//                        1, getAssetImage("/player/attack/attack_shock_left.png", this.attackCollisionArea.width, this.attackCollisionArea.height),
-//                        2, getAssetImage("/player/attack/attack_shock_left_two.png", this.attackCollisionArea.width, this.attackCollisionArea.height)
-//                    )
-//            );
-
-//            g2D.drawImage(attackImagesAssetsMap.get(this.movementDirection != null ? this.movementDirection : this.stoppedDirection).get(this.assetNumber), this.attackCollisionArea.x, this.attackCollisionArea.y, null);
-            g2D.drawImage( swordSwingAttackImagesAssetsMap.get(this.dynamicAssetNumber), this.attackCollisionArea.x, this.attackCollisionArea.y, null);
-           if (attackCollisionArea != null)
-           {
-               this.gamePanel.drawTestDynamicRectangle(g2D, this.attackCollisionArea.x, this.attackCollisionArea.y, this.attackCollisionArea.width, this.attackCollisionArea.height);
-           }
+            g2D.drawImage(swingSwordAsset, this.attackCollisionArea.x, this.attackCollisionArea.y, null);
+//           this.gamePanel.drawTestDynamicRectangle(g2D, this.attackCollisionArea.x, this.attackCollisionArea.y, this.attackCollisionArea.width, this.attackCollisionArea.height);
         }
     }
 

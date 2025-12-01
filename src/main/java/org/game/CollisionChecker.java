@@ -26,35 +26,23 @@ public class CollisionChecker
          this.WorldAssetsTypesSkippedOnCollisionCheckList = List.of(WorldItemTypes.DOOR);
      }
 
-    public boolean isPlayerCollidingWithIndividual(Player player, Rectangle recTwo)
-    {
-        Rectangle recOne = new Rectangle();
-
-        recOne.x = player.playerScreenX + player.collisionArea.x - 2;
-        recOne.y = player.playerScreenY + player.collisionArea.y;
-        recOne.width = player.collisionArea.width;
-        recOne.height = player.collisionArea.height;
-
-        gamePanel.testPositionX = recOne.x;
-        gamePanel.testPositionY = recOne.y;
-        gamePanel.testWith = recOne.width;
-        gamePanel.testHeight = recOne.height;
-        gamePanel.testCollisionArea = true;
-
-        return this.isEnemyUnderAttack(recOne, recTwo);
-    }
-
-    public boolean isEnemyUnderAttack(Rectangle recOne, Rectangle recTwo)
+    public boolean areRectanglesIntersecting(Rectangle recOne, Rectangle recTwo)
     {
         return recTwo != null && recOne != null &&
-                recOne.x < recTwo.x + recTwo.width &&
-                recOne.x + recOne.width > recTwo.x &&
-                recOne.y < recTwo.y + recTwo.height &&
-                recOne.y + recOne.height > recTwo.y;
+            recOne.x < recTwo.x + recTwo.width &&
+            recOne.x + recOne.width > recTwo.x &&
+            recOne.y < recTwo.y + recTwo.height &&
+            recOne.y + recOne.height > recTwo.y;
     }
 
     public void checkTile(Player player, boolean checkWorldAssetItem)
      {
+//         gamePanel.testPositionX = player.positionX + player.collisionArea.x;
+//         gamePanel.testPositionY = player.positionY + player.collisionArea.y;
+//         gamePanel.testWith = player.collisionArea.width;
+//         gamePanel.testHeight = player.collisionArea.height;
+//         gamePanel.testCollisionArea = true;
+
         int individualLeftX = player.positionX + player.collisionArea.x;
         int individualRightX = player.positionX + player.collisionArea.x + player.collisionArea.width;
         int individualTopY = player.positionY + player.collisionArea.y;
@@ -65,10 +53,9 @@ public class CollisionChecker
         int individualTopRow = individualTopY / tileSize;
         int individualBottomRow = individualBottomY / tileSize;
 
-         int[][] worldMatrix = gamePanel.gameWorld.worldMap;
-         int[][] worldItemsMatrix = gamePanel.worldItems.worldMap;
-
-         int[][] sourceWorldMatrix = checkWorldAssetItem ? worldItemsMatrix : worldMatrix;
+        int[][] worldMatrix = gamePanel.gameWorld.worldMap;
+        int[][] worldItemsMatrix = gamePanel.worldItems.worldMap;
+        int[][] sourceWorldMatrix = checkWorldAssetItem ? worldItemsMatrix : worldMatrix;
 
         switch (player.movementDirection)
         {
