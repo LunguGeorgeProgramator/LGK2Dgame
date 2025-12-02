@@ -14,6 +14,7 @@ import org.game.models.GameState;
 import org.gamesavedstats.GameSavedStats;
 import org.gametexts.GameTextProvider;
 import org.gameuserinterface.GameMenu;
+import org.individual.BossEnemy;
 import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
@@ -37,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable
     final int framePerSecond = 60;
     public final KeyBoardAndMouseHandler keyBoardAndMouseHandler;
     public final Player player;
+    final BossEnemy boosEnemy;
     final WorldEnemies worldEnemies;
     final GameWorld gameWorld;
     final WorldItems worldItems;
@@ -48,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable
     public List<Individual> individuals;
     private final GameMenu gameMenu;
     boolean resetEnemiesHealth = false;
+    boolean clearPlayerDamageText = false;
     public GameState gameState;
 
 
@@ -72,8 +75,10 @@ public class GamePanel extends JPanel implements Runnable
         this.setFocusable(true);
         this.collisionChecker = new CollisionChecker(this);
         this.player = new Player(this);
+        this.boosEnemy = new BossEnemy(this);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
         this.worldItems = new WorldItems(this, "/worldMaps/WorldMapAssets.txt");
+//        this.worldEnemies = new WorldEnemies(this, "/worldMaps/WorldMapEnemies-backup.txt");
         this.worldEnemies = new WorldEnemies(this, "/worldMaps/WorldMapEnemies.txt");
         this.individuals = new ArrayList<>();
         gameThread = new Thread(this);
@@ -129,23 +134,28 @@ public class GamePanel extends JPanel implements Runnable
 
     public void resetGame()
     {
-        resetEnemiesHealth = true;
+        this.resetEnemiesHealth = true;
         this.playerInventory.removeAllFromInventory();
         this.gameSavedStats.resurrectAllDeadEnemies();
         this.player.playerHealth = this.player.playerMaxHealth;
         this.player.positionX = 100;
         this.player.positionY = 100;
+        this.player.activateCollision = false;
+        this.player.stopPlayerMovement = false;
         Timer timer = new Timer(500, e -> {
-            resetEnemiesHealth = false;
+            this.resetEnemiesHealth = false;
         });
+        this.clearPlayerDamageText = true;
         timer.setRepeats(false);
         timer.start();
+        repaint();
     }
 
     public void update()
     {
         this.worldItems.update();
-        this.worldEnemies.update(resetEnemiesHealth);
+        this.worldEnemies.update(this.resetEnemiesHealth);
+        this.boosEnemy.update();
         this.player.update();
     }
 
@@ -157,13 +167,14 @@ public class GamePanel extends JPanel implements Runnable
         this.gameWorld.draw(g2D);
 
         this.individuals.add(this.player);
+        this.individuals.add(this.boosEnemy);
         this.worldEnemies.addEnemiesToDrawList();
         this.worldItems.addItemsToDrawList();
         // this.player.draw(g2D);
 
         // Sort Player/WorldEnemies/World items by Y position
         individuals.sort(Comparator.comparingInt(t -> t.positionY));
-        // draw Player/WorldEnemies/World in game
+        // draw Player/boosEnemy/WorldEnemies/World in game
         for (Individual individual : this.individuals)
         {
             individual.draw(g2D);
@@ -174,7 +185,7 @@ public class GamePanel extends JPanel implements Runnable
             individuals.remove(i);
         }
 
-        this.worldEnemies.drawEnemyText(g2D);
+        this.worldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
         this.worldItems.drawTextOmCollision(g2D);
         this.player.drawRedSlider(g2D);
 

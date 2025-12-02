@@ -37,6 +37,7 @@ public class Player extends Individual
     public Rectangle attackCollisionArea;
     public Rectangle worldItemCollisionArea;
     public final int defaultMovementSpeed;
+    public boolean stopPlayerMovement;
 
 
     public Player(GamePanel gamePanel)
@@ -206,11 +207,10 @@ public class Player extends Individual
             this.movementDirection = null;
         }
 
-        this.activateCollision = false;
         this.gamePanel.collisionChecker.checkTile(this, false);
         this.gamePanel.collisionChecker.checkTile(this, true);
 
-        if (!this.activateCollision)
+        if (!this.activateCollision && !this.stopPlayerMovement)
         {
             switch (this.movementDirection != null ? this.movementDirection : null)
             {
@@ -314,6 +314,7 @@ public class Player extends Individual
                 break;
         }
 
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.worldItemCollisionArea.x, this.worldItemCollisionArea.y, this.worldItemCollisionArea.width, this.worldItemCollisionArea.height);
         g2D.drawImage(this.isPlayerSwingSword ? playerSwingSwordAsset : playerAsset, this.playerScreenX, this.playerScreenY, null);
         this._drawPlayerAttackCollisionArea(g2D, swingSwordAsset);
     }

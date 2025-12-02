@@ -3,6 +3,7 @@ package org.individual;
 import org.individual.models.MovingDirection;
 
 import java.awt.Rectangle;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Map;
@@ -29,6 +30,8 @@ public abstract class Individual
     protected Map<Integer, BufferedImage> rightMovementImagesAssetsMap;
     public Rectangle collisionArea;
     public boolean activateCollision = false;
+    public double enemyHealth = 100;
+    public int enemyMaxHealth = 100;
 
     public Individual(int positionX, int positionY, int speed)
     {
@@ -81,5 +84,22 @@ public abstract class Individual
             return true;
         }
         return false;
+    }
+
+    protected void _drawEnemyLifeBar(Graphics2D g2d, int positionX, int positionY)
+    {
+        int height = 10;
+        // Draw background (gray)
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.fillRect(positionX, positionY, this.enemyMaxHealth, height);
+
+        // Draw red bar representing the current value
+        int filledWidth = (int) this.enemyHealth;
+        g2d.setColor(Color.RED);
+        g2d.fillRect(positionX, positionY, filledWidth, height);
+
+        // Optional: Draw border
+        g2d.setColor(Color.ORANGE);
+        g2d.drawRect(positionX, positionY, this.enemyMaxHealth, height);
     }
 }

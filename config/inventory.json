@@ -11,13 +11,13 @@
 }, {
   "itemName" : "RUBY",
   "itemId" : 2,
-  "count" : 0,
+  "count" : 1,
   "status" : "active",
   "itemType" : "HEALTH_RESTORATION",
   "itemWorldMatrixCol" : 46,
   "itemWorldMatrixRow" : 29,
   "itemInventoryId" : "24629",
-  "inInventory" : false
+  "inInventory" : true
 }, {
   "itemName" : "SWORD",
   "itemId" : 23,

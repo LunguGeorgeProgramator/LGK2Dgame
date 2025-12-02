@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.game.GamePanel.tileSize;
-import static org.world.GameWorld.checkIfAssetIsInsideTheBoundary;
+import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
 import static org.helpers.ToolsHelper._randomXYMultiplier;
 
 public class Enemy extends Individual
@@ -30,7 +30,6 @@ public class Enemy extends Individual
     private final String enemyCollisionText;
     private double hitDamage;
     private final int maxDistanceAllowedToMove;
-    private MovingDirection direction;
     public BufferedImage enemyAsset;
     private boolean isEnemyCollidingWithPlayer = false;
     final private Map<MovingDirection, Map<Integer, BufferedImage>> enemyAssetsMap;
@@ -47,8 +46,6 @@ public class Enemy extends Individual
     private int maxAllowedRightMovement;
     private int maxAllowedLeftMovement;
     private Integer nextMovementIndex;
-    public int enemyMaxHealth = 50;
-    public double enemyHealth = 50;
     public int enemyId;
     public String enemyName;
     public int enemyWorldMatrixCol;
@@ -56,9 +53,12 @@ public class Enemy extends Individual
     public boolean resetEnemyHealth = false;
     public Rectangle attackArea;
     public Rectangle detectionArea;
+    public Rectangle damageTakenArea;
     public final int defaultPositionX;
     public final int defaultPositionY;
     private boolean enemyReturnToDefaultPosition = false;
+    private int worldEnemyAssetPositionX;
+    private int worldEnemyAssetPositionY;
 
 
     public Enemy(
@@ -89,7 +89,7 @@ public class Enemy extends Individual
         this.player = player;
         this.enemyAssetsMap = enemyAssetsMap;
         this.enemyMovingDirectionList = enemyMovingDirectionList;
-        this.direction = !this.enemyMovingDirectionList.isEmpty() ? this.enemyMovingDirectionList.getFirst() : MovingDirection.UP;
+        this.movementDirection = !this.enemyMovingDirectionList.isEmpty() ? this.enemyMovingDirectionList.getFirst() : MovingDirection.UP;
         this.gamePanel = gamePanel;
         this.collisionChecker = this.gamePanel.collisionChecker;
         this.enemyCollisionText = this.gamePanel.gameTextProvider.getGameTextByKey(ENEMY_COLLISION_TEXT_KEY);
@@ -102,6 +102,9 @@ public class Enemy extends Individual
         this.buildEnemyCollisionArea();
         this.buildEnemyAttackArea();
         this.buildEnemyDetectionArea();
+        this.buildEnemyDamageTakenArea();
+        this.enemyMaxHealth = 50;
+        this.enemyHealth = 50;
     }
 
     private void buildEnemyCollisionArea()
@@ -111,6 +114,15 @@ public class Enemy extends Individual
         this.collisionArea.y = 0;
         this.collisionArea.height = tileSize;
         this.collisionArea.width = tileSize;
+    }
+
+    private void buildEnemyDamageTakenArea()
+    {
+        this.damageTakenArea = new Rectangle();
+        this.damageTakenArea.x = 0;
+        this.damageTakenArea.y = 0;
+        this.damageTakenArea.height = tileSize;
+        this.damageTakenArea.width = tileSize;
     }
 
     private void buildEnemyAttackArea()
@@ -152,11 +164,27 @@ public class Enemy extends Individual
     private void getNextDirectionOfMovement()
     {
         this.nextMovementIndex = this.nextMovementIndex + 1 == this.enemyMovingDirectionList.size() ? 0 : this.nextMovementIndex + 1;
-        this.direction = this.enemyMovingDirectionList.get(this.nextMovementIndex);
+        this.movementDirection = this.enemyMovingDirectionList.get(this.nextMovementIndex);
     }
 
     @Override
     public void update()
+    {
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 4))
+        {
+            this.gamePanel.collisionChecker.checkTile(this, false);
+            this.gamePanel.collisionChecker.checkTile(this, true);
+            if (!this.activateCollision)
+            {
+                this._enemyMovingActions();
+                this._enemyDamageAndHealthControl();
+            }
+            this._trackMovementTowardPlayer();
+            this._updateEnemyCollisionAreasAndScreenPositions();
+        }
+    }
+
+    private void _enemyMovingActions()
     {
         this.isAllowedToInflictDamage = this.slowDownGame();
         this.isEnemyCollidingWithPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.attackArea);
@@ -164,7 +192,7 @@ public class Enemy extends Individual
         {
             if (!this.enemyReturnToDefaultPosition)
             {
-                if (this.direction.equals(MovingDirection.DOWN) && this.maxAllowedDownMovement > this.positionY)
+                if (this.movementDirection.equals(MovingDirection.DOWN) && this.maxAllowedDownMovement > this.positionY)
                 {
                     this.positionY = this.positionY + this.speed;
                     if (this.maxAllowedDownMovement <= this.positionY)
@@ -172,7 +200,7 @@ public class Enemy extends Individual
                         this.getNextDirectionOfMovement();
                     }
                 }
-                else if (this.direction.equals(MovingDirection.UP) && this.maxAllowedUpMovement < this.positionY)
+                else if (this.movementDirection.equals(MovingDirection.UP) && this.maxAllowedUpMovement < this.positionY)
                 {
                     this.positionY = this.positionY - this.speed;
                     if (this.maxAllowedUpMovement >= this.positionY)
@@ -180,7 +208,7 @@ public class Enemy extends Individual
                         this.getNextDirectionOfMovement();
                     }
                 }
-                else if (this.direction.equals(MovingDirection.RIGHT) && this.maxAllowedRightMovement > this.positionX)
+                else if (this.movementDirection.equals(MovingDirection.RIGHT) && this.maxAllowedRightMovement > this.positionX)
                 {
                     this.positionX = this.positionX + this.speed;
                     if (this.maxAllowedRightMovement <= this.positionX)
@@ -188,7 +216,7 @@ public class Enemy extends Individual
                         this.getNextDirectionOfMovement();
                     }
                 }
-                else if (this.direction.equals(MovingDirection.LEFT) && this.maxAllowedLeftMovement < this.positionX)
+                else if (this.movementDirection.equals(MovingDirection.LEFT) && this.maxAllowedLeftMovement < this.positionX)
                 {
                     this.positionX = this.positionX - this.speed;
                     if (this.maxAllowedLeftMovement >= this.positionX)
@@ -202,7 +230,10 @@ public class Enemy extends Individual
                 }
             }
         }
-        else
+    }
+    private void _enemyDamageAndHealthControl()
+    {
+        if (this.isEnemyCollidingWithPlayer)
         {
             if (this.isAllowedToInflictDamage)
             { // only inflict damage to player if colliding
@@ -211,7 +242,7 @@ public class Enemy extends Individual
             }
         }
 
-        boolean isUnderAttack = this.collisionChecker.areRectanglesIntersecting(this.player.attackCollisionArea, this.collisionArea);
+        boolean isUnderAttack = this.collisionChecker.areRectanglesIntersecting(this.player.attackCollisionArea, this.damageTakenArea);
         if (isUnderAttack && this.isAllowedToInflictDamage)
         {
             this.enemyHealth = this.enemyHealth - PLAYER_DAMAGE_TO_ENEMY;
@@ -231,18 +262,16 @@ public class Enemy extends Individual
             String enemyWorldId = this.gamePanel.gameSavedStats.getEnemyWorldIdFormat(this);
             this.gamePanel.gameSavedStats.updateEnemyAliveStatus(enemyWorldId, false);
         }
-
-        this._trackMovementTowardPlayer();
     }
 
     private void _trackMovementTowardPlayer()
     {
         boolean trackPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.detectionArea);
-        if (trackPlayer)
+        if (!this.activateCollision && trackPlayer)
         {
             int playerPositionX = player.positionX;
             int playerPositionY = player.positionY;
-            switch (this.direction)
+            switch (this.movementDirection)
             {
                 case MovingDirection.LEFT:
                     playerPositionX = player.positionX + tileSize;
@@ -270,6 +299,11 @@ public class Enemy extends Individual
             this.positionY = this._moveTowardScreenPosition(positionY, this.defaultPositionY, this.speed);
             this.positionX = this._moveTowardScreenPosition(positionX, this.defaultPositionX, this.speed);
         }
+        if (this.activateCollision)
+        {
+            this.positionY = this._moveTowardScreenPosition(positionY, this.defaultPositionY, this.speed);
+            this.positionX = this._moveTowardScreenPosition(positionX, this.defaultPositionX, this.speed);
+        }
     }
 
     private int _moveTowardScreenPosition(int positionA, int positionB, int speed)
@@ -285,26 +319,29 @@ public class Enemy extends Individual
         return positionA;
     }
 
-    @Override
-    public void draw(Graphics2D g2D)
+    private void _updateEnemyCollisionAreasAndScreenPositions()
     {
-        int worldEnemyAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
-        int worldEnemyAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
-        this.collisionArea.x = worldEnemyAssetPositionX;
-        this.collisionArea.y = worldEnemyAssetPositionY;
+        this.worldEnemyAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
+        this.worldEnemyAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
+        this.damageTakenArea.x = this.worldEnemyAssetPositionX;
+        this.damageTakenArea.y = this.worldEnemyAssetPositionY;
         this.attackArea.x = worldEnemyAssetPositionX - (tileSize / 2);
         this.attackArea.y = worldEnemyAssetPositionY - (tileSize / 2);
         this.detectionArea.x = worldEnemyAssetPositionX - (tileSize * 2);
         this.detectionArea.y = worldEnemyAssetPositionY - (tileSize * 2);
+    }
 
+    @Override
+    public void draw(Graphics2D g2D)
+    {
         // draw enemy only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
             this._setEnemyAsset();
             if (this.enemyAsset != null && this.enemyHealth > 0)
             {
-                g2D.drawImage(this.enemyAsset, worldEnemyAssetPositionX, worldEnemyAssetPositionY, null);
-                this._drawEnemyLifeBar(g2D, worldEnemyAssetPositionX - 2, worldEnemyAssetPositionY - 20);
+                g2D.drawImage(this.enemyAsset, this.worldEnemyAssetPositionX, this.worldEnemyAssetPositionY, null);
+                this._drawEnemyLifeBar(g2D, this.worldEnemyAssetPositionX - 2, this.worldEnemyAssetPositionY - 20);
             }
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.attackArea.x, this.attackArea.y, this.attackArea.width, this.attackArea.height);
@@ -340,27 +377,10 @@ public class Enemy extends Individual
 
     private void _checkAssetsMap(String assetsMapKey)
     {
-        if (!this.allEnemyAsssetsMap.get(assetsMapKey).isEmpty() && this.allEnemyAsssetsMap.get(assetsMapKey).get(this.direction) != null)
+        if (!this.allEnemyAsssetsMap.get(assetsMapKey).isEmpty() && this.allEnemyAsssetsMap.get(assetsMapKey).get(this.movementDirection) != null)
         {
-            Map<Integer, BufferedImage> enemyAssetsMap = this.allEnemyAsssetsMap.get(assetsMapKey).get(this.direction);
+            Map<Integer, BufferedImage> enemyAssetsMap = this.allEnemyAsssetsMap.get(assetsMapKey).get(this.movementDirection);
             this.enemyAsset = enemyAssetsMap.get(this.dynamicAssetNumber) != null ? enemyAssetsMap.get(this.dynamicAssetNumber) : enemyAssetsMap.get(1);
         }
-    }
-
-    private void _drawEnemyLifeBar(Graphics2D g2d, int positionX, int positionY)
-    {
-        int height = 10;
-        // Draw background (gray)
-        g2d.setColor(Color.LIGHT_GRAY);
-        g2d.fillRect(positionX, positionY, this.enemyMaxHealth, height);
-
-        // Draw red bar representing the current value
-        int filledWidth = (int) this.enemyHealth;
-        g2d.setColor(Color.RED);
-        g2d.fillRect(positionX, positionY, filledWidth, height);
-
-        // Optional: Draw border
-        g2d.setColor(Color.ORANGE);
-        g2d.drawRect(positionX, positionY, this.enemyMaxHealth, height);
     }
 }

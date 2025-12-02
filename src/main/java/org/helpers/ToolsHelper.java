@@ -1,6 +1,8 @@
 package org.helpers;
 
 
+import org.individual.Player;
+
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -130,6 +132,15 @@ public class ToolsHelper
     {
         Random random = new Random();
         return random.nextInt(10) + 1;
+    }
+
+    static public boolean checkIfAssetIsInsideTheBoundary(int worldAssetPositionX, int worldAssetPositionY, Player player, int worldTileSize)
+    {
+        boolean isAssetBoundaryRightLimitDraw = worldAssetPositionX + worldTileSize > player.positionX - player.playerScreenX;
+        boolean isAssetBoundaryLeftLimitDraw = worldAssetPositionX - worldTileSize < player.positionX + player.playerScreenX;
+        boolean isAssetBoundaryDownLimitDraw = worldAssetPositionY + worldTileSize > player.positionY - player.playerScreenY;
+        boolean isAssetBoundaryUpLimitDraw = worldAssetPositionY - worldTileSize < player.positionY + player.playerScreenY;
+        return isAssetBoundaryUpLimitDraw && isAssetBoundaryDownLimitDraw && isAssetBoundaryLeftLimitDraw && isAssetBoundaryRightLimitDraw;
     }
 
 }

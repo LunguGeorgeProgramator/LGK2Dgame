@@ -32,7 +32,7 @@ public enum EnemyAssets
     SPIDER(7, 100, 2, invertedSquare, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
     SIDE_TO_SIDE_MOVING_SPIDER(8, 100, 1, rightLeft, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
     FASTER_SIDE_TO_SIDE_MOVING_SPIDER(9, 100, 5, leftRight, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
-    UP_DOWN_MOVING_SPIDER(10, 200, 2, downUp, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap);
+    UP_DOWN_MOVING_SPIDER(10, 200, 1, downUp, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap);
 
     final private int enemyId;
     final private int maxDistanceAllowedToMove;

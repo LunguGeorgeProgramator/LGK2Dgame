@@ -110,8 +110,12 @@ public class WorldEnemies extends GameWorld
         }
     }
 
-    public void drawEnemyText(Graphics2D g2D)
+    public void drawEnemyText(Graphics2D g2D, boolean clearPlayerDamageText)
     {
+        if (clearPlayerDamageText)
+        {
+            return;
+        }
         for(Enemy enemy : this.enemyList)
         {
             enemy.drawEnemyText(g2D);

@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 import java.util.Map;
 
 import static org.game.GamePanel.tileSize;
-import static org.world.GameWorld.checkIfAssetIsInsideTheBoundary;
+import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
 
 public class WorldItem extends Individual
 {
@@ -34,11 +34,12 @@ public class WorldItem extends Individual
     public final int positionX;
     public final int positionY;
     private final Map<Integer, WorldItemAssetsModel> itemsAssetsMap;
-    public Rectangle collisionArea;
     public final PlayerInventory playerInventory;
     private boolean hasPlayerCollidedWithItem = false;
     private String textShownOnInteractionWithItem;
     private final CollisionChecker collisionChecker;
+    private int worldItemAssetPositionX;
+    private int worldItemAssetPositionY;
 
     public WorldItem(
             GamePanel gamePanel,
@@ -84,20 +85,24 @@ public class WorldItem extends Individual
 
     public void update()
     {
-        this.hasPlayerCollidedWithItem = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.collisionArea);
-        if (this.hasPlayerCollidedWithItem)
-        {
-            String itemInventoryId = this.playerInventory.getWorldItemInventoryId(this);
-            PlayerInventoryModel playerInventoryModel = this.playerInventory.getInventoryItemByInventoryId(itemInventoryId);
-            if (playerInventoryModel != null)
-            {
-                playerInventoryModel.setCount(1);
-                playerInventoryModel.setInInventory(true);
-                this.playerInventory.updateInventoryItem(playerInventoryModel);
-            }
-        }
-        this.healingItemsCollisionBehavior();
         this.setAssetNumber();
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 4))
+        {
+            this.hasPlayerCollidedWithItem = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.collisionArea);
+            if (this.hasPlayerCollidedWithItem)
+            {
+                String itemInventoryId = this.playerInventory.getWorldItemInventoryId(this);
+                PlayerInventoryModel playerInventoryModel = this.playerInventory.getInventoryItemByInventoryId(itemInventoryId);
+                if (playerInventoryModel != null)
+                {
+                    playerInventoryModel.setCount(1);
+                    playerInventoryModel.setInInventory(true);
+                    this.playerInventory.updateInventoryItem(playerInventoryModel);
+                }
+                this.setTextShownOnCollision();
+            }
+            this.healingItemsCollisionBehavior();
+        }
     }
 
     private void setAssetNumber()
@@ -124,21 +129,25 @@ public class WorldItem extends Individual
         this.textShownOnInteractionWithItem = this.gamePanel.gameTextProvider.getGameTextByKey(gameText);
     }
 
+    private void _updateWorldItemCollisionAreasAndScreenPositions()
+    {
+        this.worldItemAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
+        this.worldItemAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
+        this.collisionArea.x = this.worldItemAssetPositionX;
+        this.collisionArea.y = this.worldItemAssetPositionY;
+    }
+
     public void draw(Graphics2D g2D)
     {
-        int worldItemAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
-        int worldItemAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
-        this.collisionArea.x = worldItemAssetPositionX;
-        this.collisionArea.y = worldItemAssetPositionY;
-
         // draw world item only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
+            this._updateWorldItemCollisionAreasAndScreenPositions();
             WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.dynamicAssetNumber);
             BufferedImage bufferedImage =  worldItemAssetsModel != null ? worldItemAssetsModel.getImageAsset() : null;
             if (bufferedImage != null)
             {
-                g2D.drawImage(bufferedImage, worldItemAssetPositionX, worldItemAssetPositionY, null);
+                g2D.drawImage(bufferedImage, this.worldItemAssetPositionX, this.worldItemAssetPositionY, null);
             }
 //            this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
         }
@@ -148,7 +157,6 @@ public class WorldItem extends Individual
     {
         if (this.hasPlayerCollidedWithItem)
         {
-            this.setTextShownOnCollision();
             this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.textShownOnInteractionWithItem);
         }
     }

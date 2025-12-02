@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import static org.helpers.ToolsHelper.getTxtFileFromResources;
 import static org.game.GamePanel.tileSize;
+import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
 
 public class GameWorld
 {
@@ -74,7 +75,7 @@ public class GameWorld
                 { // skip -1 values
                     continue;
                 }
-                if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, this.player, tileSize))
+                if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, this.player, tileSize * 2))
                 {
                     // Draw assets only if they are inside the screen (with x height) plus one tile size to remove popup effect on rendering world assets.
                     g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, null);
@@ -83,12 +84,5 @@ public class GameWorld
         }
     }
 
-    static public boolean checkIfAssetIsInsideTheBoundary(int worldAssetPositionX, int worldAssetPositionY, Player player, int worldTileSize)
-    {
-        boolean isAssetBoundaryRightLimitDraw = worldAssetPositionX + worldTileSize > player.positionX - player.playerScreenX;
-        boolean isAssetBoundaryLeftLimitDraw = worldAssetPositionX - worldTileSize < player.positionX + player.playerScreenX;
-        boolean isAssetBoundaryDownLimitDraw = worldAssetPositionY + worldTileSize > player.positionY - player.playerScreenY;
-        boolean isAssetBoundaryUpLimitDraw = worldAssetPositionY - worldTileSize < player.positionY + player.playerScreenY;
-        return isAssetBoundaryUpLimitDraw && isAssetBoundaryDownLimitDraw && isAssetBoundaryLeftLimitDraw && isAssetBoundaryRightLimitDraw;
-    }
+
 }

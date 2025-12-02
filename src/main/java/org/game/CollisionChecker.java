@@ -1,5 +1,6 @@
 package org.game;
 
+import org.individual.Individual;
 import org.individual.models.MovingDirection;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
@@ -35,52 +36,87 @@ public class CollisionChecker
             recOne.y + recOne.height > recTwo.y;
     }
 
-    public void checkTile(Player player, boolean checkWorldAssetItem)
+    public MovingDirection rectanglesIntersectingOnDirection(Rectangle recOne, Rectangle recTwo)
+    {
+        if (this.areRectanglesIntersecting(recOne, recTwo))
+        {
+            float overlapLeft   = (recOne.x + recOne.width) - recTwo.x;
+            float overlapRight  = (recTwo.x + recTwo.width) - recOne.x;
+            float overlapTop    = (recOne.y + recOne.height) - recTwo.y;
+            float overlapBottom = (recTwo.y + recTwo.height) - recOne.y;
+
+            float minOverlap = Math.min(
+                Math.min(overlapLeft, overlapRight),
+                Math.min(overlapTop, overlapBottom)
+            );
+
+            if (minOverlap == overlapLeft)
+            {
+                return MovingDirection.LEFT;
+            }
+            else if (minOverlap == overlapRight)
+            {
+                return MovingDirection.RIGHT;
+            }
+            else if (minOverlap == overlapTop)
+            {
+                return MovingDirection.UP;
+            }
+            else
+            {
+                return MovingDirection.DOWN;
+            }
+        }
+        return null;
+    }
+
+    public void checkTile(Individual individual, boolean checkWorldAssetItem)
      {
-//         gamePanel.testPositionX = player.positionX + player.collisionArea.x;
-//         gamePanel.testPositionY = player.positionY + player.collisionArea.y;
-//         gamePanel.testWith = player.collisionArea.width;
-//         gamePanel.testHeight = player.collisionArea.height;
+//         gamePanel.testPositionX = individual.collisionArea.x;
+//         gamePanel.testPositionY = individual.collisionArea.y;
+//         gamePanel.testWith = individual.collisionArea.width;
+//         gamePanel.testHeight = individual.collisionArea.height;
 //         gamePanel.testCollisionArea = true;
 
-        int individualLeftX = player.positionX + player.collisionArea.x;
-        int individualRightX = player.positionX + player.collisionArea.x + player.collisionArea.width;
-        int individualTopY = player.positionY + player.collisionArea.y;
-        int individualBottomY = player.positionY + player.collisionArea.y + player.collisionArea.height;
+         int errorMargin = (individual instanceof  Player ? 0 : 1);
+         int individualLeftX = individual.positionX + individual.collisionArea.x + errorMargin;
+         int individualRightX = individual.positionX + individual.collisionArea.x + individual.collisionArea.width - errorMargin;
+         int individualTopY = individual.positionY + individual.collisionArea.y + errorMargin;
+         int individualBottomY = individual.positionY + individual.collisionArea.y + individual.collisionArea.height - errorMargin;
 
-        int individualLeftCol = individualLeftX / tileSize;
-        int individualRightCol = individualRightX / tileSize;
-        int individualTopRow = individualTopY / tileSize;
-        int individualBottomRow = individualBottomY / tileSize;
+         int individualLeftCol = individualLeftX / tileSize;
+         int individualRightCol = individualRightX / tileSize;
+         int individualTopRow = individualTopY / tileSize;
+         int individualBottomRow = individualBottomY / tileSize;
 
-        int[][] worldMatrix = gamePanel.gameWorld.worldMap;
-        int[][] worldItemsMatrix = gamePanel.worldItems.worldMap;
-        int[][] sourceWorldMatrix = checkWorldAssetItem ? worldItemsMatrix : worldMatrix;
+         int[][] worldMatrix = gamePanel.gameWorld.worldMap;
+         int[][] worldItemsMatrix = gamePanel.worldItems.worldMap;
+         int[][] sourceWorldMatrix = checkWorldAssetItem ? worldItemsMatrix : worldMatrix;
 
-        switch (player.movementDirection)
-        {
-            case MovingDirection.UP:
-                individualTopRow = (individualTopY - player.speed) / tileSize;
-                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualTopRow, individualRightCol, individualTopRow, player, sourceWorldMatrix, checkWorldAssetItem);
+         switch (individual.movementDirection)
+         {
+             case MovingDirection.UP:
+                individualTopRow = (individualTopY - individual.speed) / tileSize;
+                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualTopRow, individualRightCol, individualTopRow, individual, sourceWorldMatrix, checkWorldAssetItem);
                 break;
-            case MovingDirection.DOWN:
-                individualBottomRow = (individualBottomY + player.speed) / tileSize;
-                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualBottomRow, individualRightCol, individualBottomRow, player, sourceWorldMatrix, checkWorldAssetItem);
+             case MovingDirection.DOWN:
+                individualBottomRow = (individualBottomY + individual.speed) / tileSize;
+                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualBottomRow, individualRightCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem);
                 break;
-            case MovingDirection.LEFT:
-                individualLeftCol = (individualLeftX - player.speed) / tileSize;
-                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualTopRow, individualLeftCol, individualBottomRow, player, sourceWorldMatrix, checkWorldAssetItem);
+             case MovingDirection.LEFT:
+                individualLeftCol = (individualLeftX - individual.speed) / tileSize;
+                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualTopRow, individualLeftCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem);
                 break;
-            case MovingDirection.RIGHT:
-                individualRightCol = (individualRightX + player.speed) / tileSize;
-                _checkIfWorldAssetsHaveCollisionOn(individualRightCol, individualTopRow, individualRightCol, individualBottomRow, player, sourceWorldMatrix, checkWorldAssetItem);
+             case MovingDirection.RIGHT:
+                individualRightCol = (individualRightX + individual.speed) / tileSize;
+                _checkIfWorldAssetsHaveCollisionOn(individualRightCol, individualTopRow, individualRightCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem);
                 break;
-            case null, default:
+             case null, default:
                 break;
-        }
+         }
      }
 
-     private void _checkIfWorldAssetsHaveCollisionOn(int assetOneCol, int assetOneRow, int assetTwoCol, int assetTwoRow, Player player, int[][] sourceWorldMatrix, boolean checkWorldAssetItem)
+     private void _checkIfWorldAssetsHaveCollisionOn(int assetOneCol, int assetOneRow, int assetTwoCol, int assetTwoRow, Individual individual, int[][] sourceWorldMatrix, boolean checkWorldAssetItem)
      {
          int worldAssetOne = _getWorldAssetIndex(assetOneCol, assetOneRow, sourceWorldMatrix);
          int worldAssetTwo = _getWorldAssetIndex(assetTwoCol, assetTwoRow, sourceWorldMatrix);
@@ -88,7 +124,7 @@ public class CollisionChecker
          {
              WorldAssets worldItemsOne = WorldAssets.getWorldAssetByIndex(worldAssetOne);
              WorldAssets worldItemsTwo = WorldAssets.getWorldAssetByIndex(worldAssetTwo);
-             player.activateCollision = worldItemsOne != null &&  worldItemsOne.getSolidStopOnCollisionWithPlayer() || worldItemsTwo != null && worldItemsTwo.getSolidStopOnCollisionWithPlayer();
+             individual.activateCollision = worldItemsOne != null && worldItemsOne.getSolidStopOnCollisionWithPlayer() || worldItemsTwo != null && worldItemsTwo.getSolidStopOnCollisionWithPlayer();
          }
          else
          {
@@ -96,30 +132,37 @@ public class CollisionChecker
              WorldItemsAssets worldItemsTwo = WorldItemsAssets.getWorldItemAssetByIndex(worldAssetTwo);
              if (worldItemsOne != null && worldItemsOne.getSolidStopOnCollisionWithPlayer() || worldItemsTwo != null && worldItemsTwo.getSolidStopOnCollisionWithPlayer())
              {
-                 this._checkWorldItemsCollision(player, Objects.requireNonNull(worldItemsOne != null ? worldItemsOne : worldItemsTwo));
+                  this._checkWorldItemsCollision(individual, Objects.requireNonNull(worldItemsOne != null ? worldItemsOne : worldItemsTwo));
              }
          }
      }
 
-    private void _checkWorldItemsCollision(Player player, WorldItemsAssets worldItemsAssets)
+    private void _checkWorldItemsCollision(Individual individual, WorldItemsAssets worldItemsAssets)
     {
         if (this.WorldAssetsTypesSkippedOnCollisionCheckList.contains(WorldItemTypes.valueOf(worldItemsAssets.getItemType())))
         {
-            PlayerInventory playerInventory = player.playerInventory;
-            // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
-            String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(worldItemsAssets.getDependencyOnAssetId());
-            PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
-            player.activateCollision = playerInventoryModel == null || !playerInventoryModel.getInInventory();
+            if (individual instanceof Player player)
+            {
+                PlayerInventory playerInventory = player.playerInventory;
+                // disable world item solid state if it has getDependsOnAssetId of one of the items present in player inventory
+                String itemAssetNameById = WorldItemsAssets.getWorldItemAssetNameById(worldItemsAssets.getDependencyOnAssetId());
+                PlayerInventoryModel playerInventoryModel = playerInventory.getInventoryItemByName(itemAssetNameById);
+                individual.activateCollision = playerInventoryModel == null || !playerInventoryModel.getInInventory();
+            }
+            else
+            {
+                individual.activateCollision = true;
+            }
         }
         else
         {
-            player.activateCollision = true;
+            individual.activateCollision = true;
         }
     }
 
      private int _getWorldAssetIndex(int assetCol, int assetRow, int[][] worldMatrix)
      {
-         if (worldMatrix.length > assetCol && assetCol > -1 && assetRow > -1 && worldMatrix.length > assetRow)
+         if (worldMatrix.length > assetCol && assetCol > -1 && assetRow > -1 && worldMatrix[assetCol].length > assetRow)
          {
              return worldMatrix[assetCol][assetRow];
          }
