@@ -4,8 +4,10 @@ import org.game.CollisionChecker;
 import org.game.GamePanel;
 import org.individual.models.MovingDirection;
 
+import javax.swing.*;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 import java.util.Map;
@@ -35,6 +37,7 @@ public class BossEnemy extends Individual
     private Map<Integer, BufferedImage> boosEnemyMovingAssets;
     private int boosEnemyAssetPositionX;
     private int boosEnemyAssetPositionY;
+    private boolean hideWinMessage = true;
 
     public BossEnemy(GamePanel gamePanel)
     {
@@ -164,6 +167,20 @@ public class BossEnemy extends Individual
         this.isBoosEnemyDead = this.enemyHealth <= 0;
     }
 
+    private void _boosDead(Graphics2D g2D)
+    {
+        Timer timer = new Timer(5000, _ -> hideWinMessage = false);
+        timer.setRepeats(false);
+        timer.start();
+        if (hideWinMessage)
+        {
+            this.gamePanel.gameTextProvider.setTextColor(Color.WHITE);
+            this.gamePanel.gameTextProvider.setTextPosition(this.player.playerScreenX - 65, this.player.playerScreenY - 20);
+            String victoryMessage = this.gamePanel.gameTextProvider.getGameTextByKey("boos-enemy-dead");
+            this.gamePanel.gameTextProvider.showTextInsideGame(g2D, victoryMessage);
+        }
+    }
+
     private void _updateBossEnemyCollisionAreasAndScreenPositions()
     {
         this.boosEnemyAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
@@ -186,6 +203,10 @@ public class BossEnemy extends Individual
 //                this.gamePanel.drawTestDynamicRectangle(g2D, this.attackArea.x, this.attackArea.y, this.attackArea.width, this.attackArea.height);
                 g2D.drawImage(this.boosAttackAssetImage, this.attackArea.x, this.attackArea.y, null);
                 this._drawEnemyLifeBar(g2D, this.boosEnemyAssetPositionX - 2, this.boosEnemyAssetPositionY - 20);
+            }
+            else
+            {
+                this._boosDead(g2D);
             }
 //            this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
         }

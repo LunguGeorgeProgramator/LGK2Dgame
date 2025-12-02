@@ -20,5 +20,6 @@
   "exit-game-btn": "Exit Game",
   "back-to-main-menu": "Back to Menu",
   "main-menu-game-title": "LGK Adventure",
-  "try-again": "Oops—you died. Let’s give that another shot!"
+  "try-again": "Oops—you died. Let’s give that another shot!",
+  "boos-enemy-dead": "You win! The boss is down!"
 }

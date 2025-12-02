@@ -65,21 +65,21 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "108716",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "9949",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "89410",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "99910",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "1010516",
-  "isAlive" : false
+  "isAlive" : true
 } ]

@@ -38,8 +38,6 @@ public class WorldItem extends Individual
     private boolean hasPlayerCollidedWithItem = false;
     private String textShownOnInteractionWithItem;
     private final CollisionChecker collisionChecker;
-    private int worldItemAssetPositionX;
-    private int worldItemAssetPositionY;
 
     public WorldItem(
             GamePanel gamePanel,
@@ -129,25 +127,20 @@ public class WorldItem extends Individual
         this.textShownOnInteractionWithItem = this.gamePanel.gameTextProvider.getGameTextByKey(gameText);
     }
 
-    private void _updateWorldItemCollisionAreasAndScreenPositions()
-    {
-        this.worldItemAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
-        this.worldItemAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
-        this.collisionArea.x = this.worldItemAssetPositionX;
-        this.collisionArea.y = this.worldItemAssetPositionY;
-    }
-
     public void draw(Graphics2D g2D)
     {
+        int worldItemAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
+        int worldItemAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
+        this.collisionArea.x = worldItemAssetPositionX;
+        this.collisionArea.y = worldItemAssetPositionY;
         // draw world item only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
-            this._updateWorldItemCollisionAreasAndScreenPositions();
             WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.dynamicAssetNumber);
-            BufferedImage bufferedImage =  worldItemAssetsModel != null ? worldItemAssetsModel.getImageAsset() : null;
+            BufferedImage bufferedImage = worldItemAssetsModel != null ? worldItemAssetsModel.getImageAsset() : null;
             if (bufferedImage != null)
             {
-                g2D.drawImage(bufferedImage, this.worldItemAssetPositionX, this.worldItemAssetPositionY, null);
+                g2D.drawImage(bufferedImage, worldItemAssetPositionX, worldItemAssetPositionY, null);
             }
 //            this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
         }

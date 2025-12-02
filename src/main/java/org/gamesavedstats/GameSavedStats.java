@@ -71,6 +71,10 @@ public class GameSavedStats
 
     public EnemyStatsModel getEnemyStatsByEnemyWorldId(String enemyWorldId)
     {
+        if (this.enemiesStatsList == null)
+        {
+            return null;
+        }
         for (EnemyStatsModel enemyStats : this.enemiesStatsList)
         {
             if (enemyStats.getEnemyWorldId().equals(enemyWorldId))

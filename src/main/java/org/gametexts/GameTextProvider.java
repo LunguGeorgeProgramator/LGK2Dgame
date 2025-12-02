@@ -65,6 +65,11 @@ public class GameTextProvider
         this.textColor = textColor;
     }
 
+    public void setTextSize(int textSize)
+    {
+        this.textSize = textSize;
+    }
+
     public void changeTextStyle(int textSize, int textStyle, String textFont, Color textColor)
     {
         this.textColor = textColor;
