@@ -1,23 +1,23 @@
 [ {
   "itemName" : "GOLD_KEY",
   "itemId" : 1,
-  "count" : 0,
+  "count" : 1,
   "status" : "active",
   "itemType" : "KEY",
   "itemWorldMatrixCol" : 26,
   "itemWorldMatrixRow" : 29,
   "itemInventoryId" : "12629",
-  "inInventory" : false
+  "inInventory" : true
 }, {
   "itemName" : "RUBY",
   "itemId" : 2,
-  "count" : 0,
+  "count" : 1,
   "status" : "active",
   "itemType" : "HEALTH_RESTORATION",
   "itemWorldMatrixCol" : 46,
   "itemWorldMatrixRow" : 29,
   "itemInventoryId" : "24629",
-  "inInventory" : false
+  "inInventory" : true
 }, {
   "itemName" : "SWORD",
   "itemId" : 23,
@@ -28,4 +28,14 @@
   "itemWorldMatrixRow" : 43,
   "itemInventoryId" : "234643",
   "inInventory" : false
+}, {
+  "itemName" : "GOLD_KEY",
+  "itemId" : 1,
+  "count" : 1,
+  "status" : "active",
+  "itemType" : "KEY",
+  "itemWorldMatrixCol" : 8,
+  "itemWorldMatrixRow" : 6,
+  "itemInventoryId" : "186",
+  "inInventory" : true
 } ]

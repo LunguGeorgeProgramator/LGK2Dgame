@@ -21,5 +21,8 @@
   "back-to-main-menu": "Back to Menu",
   "main-menu-game-title": "LGK Adventure",
   "try-again": "Oops—you died. Let’s give that another shot!",
-  "boos-enemy-dead": "You win! The boss is down!"
+  "boos-enemy-dead": "You win! The boss is down!",
+  "25304": "Cave dungeon entrance!",
+  "25309": "Water dungeon entrance!",
+  "25708": "The grass field"
 }

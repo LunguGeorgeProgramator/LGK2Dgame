@@ -16,8 +16,8 @@ import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
 public class GameWorld
 {
 
-    final GamePanel gamePanel;
-    final Player player;
+    protected final GamePanel gamePanel;
+    protected final Player player;
     public int[][] worldMap;
     int worldMapCol;
     int worldMapRow;
@@ -30,6 +30,11 @@ public class GameWorld
         List<String> txtMapLines = getTxtFileFromResources(worldMapPath);
         setWorldMapRange(txtMapLines);
         loadMapIntoMatrix(txtMapLines);
+    }
+
+    protected void drawWorldAsset(Graphics2D g2D, int worldAssetIndex, int worldAssetPositionX, int worldAssetPositionY)
+    {
+        g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, null);
     }
 
     private void setWorldMapRange(List<String> txtMapLines)
@@ -78,11 +83,9 @@ public class GameWorld
                 if (checkIfAssetIsInsideTheBoundary(worldPositionX, worldPositionY, this.player, tileSize * 2))
                 {
                     // Draw assets only if they are inside the screen (with x height) plus one tile size to remove popup effect on rendering world assets.
-                    g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, null);
+                    this.drawWorldAsset(g2D, worldAssetIndex, worldAssetPositionX, worldAssetPositionY);
                 }
             }
         }
     }
-
-
 }

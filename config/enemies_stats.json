@@ -12,10 +12,6 @@
   "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
-  "enemyWorldId" : "53111",
-  "isAlive" : true
-}, {
-  "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "43116",
   "isAlive" : true
 }, {

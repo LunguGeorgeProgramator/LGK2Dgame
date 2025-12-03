@@ -1,6 +1,8 @@
 package org.worlditems.models;
 
 
+import org.world.models.GameWorldAssets;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
@@ -8,7 +10,7 @@ import java.util.Objects;
 import static org.game.GamePanel.tileSize;
 import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
-public enum WorldItemsAssets
+public enum WorldItemsAssets implements GameWorldAssets
 {
     GOLD_KEY(1, WorldItemTypes.KEY.name(), false, 0, 0, 0,
         Map.of(
@@ -59,20 +61,20 @@ public enum WorldItemsAssets
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-end-left.png")), null))),
     TOP_WALL_END_RIGHT(13, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-end-right.png")), null))),
-    TOP_WALL_CORNER_LEFT_BOTTOM(15, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-left-bottom.png")), null))),
-    TOP_WALL_CORNER_RIGHT_BOTTOM(16, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-right-bottom.png")), null))),
+//    TOP_WALL_CORNER_LEFT_BOTTOM(15, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
+//        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-left-bottom.png")), null))),
+//    TOP_WALL_CORNER_RIGHT_BOTTOM(16, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
+//        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-right-bottom.png")), null))),
     TOP_WALL_CORNER_LEFT_TOP(17, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-left-top.png")), null))),
     TOP_WALL_CORNER_RIGHT_TOP(18, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-right-top.png")), null))),
-    TOP_WALL_CORNER_SIDE(19, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-side.png")), null))),
+//    TOP_WALL_CORNER_SIDE(19, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
+//        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-side.png")), null))),
     TOP_WALL(20, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall.png")), null))),
-    FRONT_WALL(21, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/front-wall.png")), null))),
+//    FRONT_WALL(21, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
+//        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/front-wall.png")), null))),
     WINDOW_WALL(22, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/window-wall.png")), null))),
     SWORD(23, WorldItemTypes.WEAPON.name(), false, 0, 0, 0,
@@ -91,7 +93,13 @@ public enum WorldItemsAssets
         Map.of(
             1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_open_door.png")), null),
             2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/ruin_temple_closed_door.png")), "closed-door")
-        ));
+        )),
+    CAVE_DUNGEON_ENTRY_WAY(30, WorldItemTypes.CAVE_DUNGEON_ENTRY_WAY.name(), false, 0, 0, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/cave-dungeon-entry-way.png")), null))),
+    WATER_DUNGEON_ENTRY_WAY(31, WorldItemTypes.WATER_DUNGEON_ENTRY_WAY.name(), false, 0, 0, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/water-dungeon-entry-way.png")), null))),
+    DUNGEON_EXIT_ENTRY_WAY(32, WorldItemTypes.DUNGEON_EXIT_ENTRY_WAY.name(), false, 0, 0, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/cave-dungeon-exit-way.png")), null)));
 
     private final int itemId;
     private final String itemType;
@@ -145,7 +153,7 @@ public enum WorldItemsAssets
         return this.itemType;
     }
 
-    public Boolean getSolidStopOnCollisionWithPlayer()
+    public boolean getSolidStopOnCollisionWithPlayer()
     {
         return this.solidStopOnCollisionWithPlayer;
     }

@@ -207,8 +207,8 @@ public class Player extends Individual
             this.movementDirection = null;
         }
 
-        this.gamePanel.collisionChecker.checkTile(this, false);
-        this.gamePanel.collisionChecker.checkTile(this, true);
+        this.gamePanel.collisionChecker.checkTile(this, false, this.gamePanel.worldType);
+        this.gamePanel.collisionChecker.checkTile(this, true, this.gamePanel.worldType);
 
         if (!this.activateCollision && !this.stopPlayerMovement)
         {

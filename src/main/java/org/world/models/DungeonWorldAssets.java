@@ -6,10 +6,10 @@ import java.util.Objects;
 
 import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
-public enum WorldAssets implements GameWorldAssets
+public enum DungeonWorldAssets implements GameWorldAssets
 {
     GRASS(0, getScaledImageFromAssets("/tiles/grass.png"), false),
-    WATER(1, getScaledImageFromAssets("/tiles/water-exp.png"), true),
+    WATER(1, getScaledImageFromAssets("/tiles/water-exp.png"), false),
 //    WALL(2, getScaledImageFromAssets("/tiles/front-wall.png"), true),
 //    SIDE_WALL(3, getScaledImageFromAssets("/tiles/top-wall-side.png"), true),
     TREE(4, getScaledImageFromAssets("/tiles/tree.png"), true),
@@ -57,7 +57,7 @@ public enum WorldAssets implements GameWorldAssets
     private final BufferedImage worldAssetImage;
     private final boolean solidStopOnCollisionWithPlayer;
 
-    WorldAssets(int index, BufferedImage worldAssetImage, boolean solidStopOnCollisionWithPlayer)
+    DungeonWorldAssets(int index, BufferedImage worldAssetImage, boolean solidStopOnCollisionWithPlayer)
     {
         this.index = index;
         this.worldAssetImage = worldAssetImage;
@@ -69,9 +69,9 @@ public enum WorldAssets implements GameWorldAssets
         return Objects.requireNonNull(getWorldAssetByIndex(index)).getWorldAssetImage();
     }
 
-    public static WorldAssets getWorldAssetByIndex(int index)
+    public static DungeonWorldAssets getWorldAssetByIndex(int index)
     {
-        WorldAssets worldAssets = Arrays.stream(WorldAssets.values())
+        DungeonWorldAssets worldAssets = Arrays.stream(DungeonWorldAssets.values())
             .filter(s -> s.getIndex() == index)
             .findFirst()
             .orElse(null);

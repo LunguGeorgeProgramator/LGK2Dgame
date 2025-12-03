@@ -11,5 +11,8 @@ public enum WorldItemTypes
     DOOR,
     VEGETATION,
     BUILDING,
-    WEAPON;
+    WEAPON,
+    CAVE_DUNGEON_ENTRY_WAY,
+    WATER_DUNGEON_ENTRY_WAY,
+    DUNGEON_EXIT_ENTRY_WAY;
 }

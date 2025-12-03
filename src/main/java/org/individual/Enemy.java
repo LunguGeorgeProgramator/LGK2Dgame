@@ -172,8 +172,8 @@ public class Enemy extends Individual
     {
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 4))
         {
-            this.gamePanel.collisionChecker.checkTile(this, false);
-            this.gamePanel.collisionChecker.checkTile(this, true);
+            this.gamePanel.collisionChecker.checkTile(this, false, this.gamePanel.worldType);
+            this.gamePanel.collisionChecker.checkTile(this, true, this.gamePanel.worldType);
             if (!this.activateCollision)
             {
                 this._enemyMovingActions();

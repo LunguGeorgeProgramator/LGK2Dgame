@@ -3,6 +3,7 @@ package org.world;
 import org.game.GamePanel;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
+import org.world.models.GameWorldAssets;
 import org.worlditems.WorldItem;
 import org.worlditems.models.WorldItemBuilder;
 import org.worlditems.models.WorldItemTypes;
@@ -18,8 +19,8 @@ import static org.game.GamePanel.tileSize;
 public class WorldItems extends GameWorld
 {
 
-    private final List<WorldItem> worldItemsList;
-    private final PlayerInventory playerInventory;
+    public final List<WorldItem> worldItemsList;
+    public final PlayerInventory playerInventory;
     private static final List<WorldItemTypes> itemsTypesAllowedInInventory = List.of(
         WorldItemTypes.KEY,
         WorldItemTypes.HEALTH_RESTORATION,
@@ -34,22 +35,28 @@ public class WorldItems extends GameWorld
         initializeWorldItems();
     }
 
-    private void addToWorldItemsList(WorldItemsAssets worldItemAsset, WorldItemBuilder worldItemOptions)
+    public void addItemToAssetsItemsList(WorldItemBuilder worldItemOptions, int worldAssetIndex)
     {
-        this.worldItemsList.add(new WorldItem(
-            this.gamePanel,
-            this.player,
-            this.playerInventory,
-            worldItemAsset.name(),
-            worldItemOptions != null && worldItemOptions.getItemId() != null ? worldItemOptions.getItemId() :worldItemAsset.getItemId(),
-            worldItemOptions != null && worldItemOptions.getItemWorldRowIndex() != null ? worldItemOptions.getItemWorldRowIndex() : -1,
-            worldItemOptions != null && worldItemOptions.getItemWorldColIndex() != null ? worldItemOptions.getItemWorldColIndex() : -1,
-            worldItemOptions != null && worldItemOptions.getDependencyOnAssetId() != null ? worldItemOptions.getDependencyOnAssetId() : worldItemAsset.getDependencyOnAssetId(),
-            worldItemOptions != null && worldItemOptions.getItemType() != null ? worldItemOptions.getItemType() : worldItemAsset.getItemType(),
-            worldItemOptions != null && worldItemOptions.getPositionX() != null ? worldItemOptions.getPositionX() : worldItemAsset.getDefaultPositionX(),
-            worldItemOptions != null && worldItemOptions.getPositionY() != null ? worldItemOptions.getPositionY() : worldItemAsset.getDefaultPositionY(),
-            worldItemOptions != null && worldItemOptions.getItemAssetsMap() != null ? worldItemOptions.getItemAssetsMap() : worldItemAsset.getItemAssetsMap()
-        ));
+        WorldItemsAssets worldItemsAssets = WorldItemsAssets.getWorldItemAssetByIndex(worldAssetIndex);
+        if (worldItemsAssets != null)
+        {
+            this.worldItemsList.add(
+                new WorldItem(
+                    this.gamePanel,
+                    this.player,
+                    this.playerInventory,
+                    worldItemsAssets.name(),
+                    worldItemOptions != null && worldItemOptions.getItemId() != null ? worldItemOptions.getItemId() :worldItemsAssets.getItemId(),
+                    worldItemOptions != null && worldItemOptions.getItemWorldRowIndex() != null ? worldItemOptions.getItemWorldRowIndex() : -1,
+                    worldItemOptions != null && worldItemOptions.getItemWorldColIndex() != null ? worldItemOptions.getItemWorldColIndex() : -1,
+                    worldItemOptions != null && worldItemOptions.getDependencyOnAssetId() != null ? worldItemOptions.getDependencyOnAssetId() : worldItemsAssets.getDependencyOnAssetId(),
+                    worldItemOptions != null && worldItemOptions.getItemType() != null ? worldItemOptions.getItemType() : worldItemsAssets.getItemType(),
+                    worldItemOptions != null && worldItemOptions.getPositionX() != null ? worldItemOptions.getPositionX() : worldItemsAssets.getDefaultPositionX(),
+                    worldItemOptions != null && worldItemOptions.getPositionY() != null ? worldItemOptions.getPositionY() : worldItemsAssets.getDefaultPositionY(),
+                    worldItemOptions != null && worldItemOptions.getItemAssetsMap() != null ? worldItemOptions.getItemAssetsMap() : worldItemsAssets.getItemAssetsMap()
+                )
+            );
+        }
     }
 
     private void initializeWorldItems()
@@ -66,18 +73,16 @@ public class WorldItems extends GameWorld
                 }
                 int worldPositionX = tileSize * i;
                 int worldPositionY = tileSize * j;
-                WorldItemsAssets worldItemsAssets = WorldItemsAssets.getWorldItemAssetByIndex(worldAssetIndex);
-                if (worldItemsAssets != null)
-                {
-                    this.addToWorldItemsList(worldItemsAssets,
-                        new WorldItemBuilder.Builder()
-                            .setItemWorldRowIndex(i)
-                            .setItemWorldColIndex(j)
-                            .setPositionX(worldPositionX)
-                            .setPositionY(worldPositionY)
-                            .setSolidStopOnCollisionWithPlayer(true)
-                            .build());
-                }
+
+                WorldItemBuilder worldItemOptions = new WorldItemBuilder.Builder()
+                    .setItemWorldRowIndex(i)
+                    .setItemWorldColIndex(j)
+                    .setPositionX(worldPositionX)
+                    .setPositionY(worldPositionY)
+                    .setSolidStopOnCollisionWithPlayer(true)
+                    .build();
+
+                this.addItemToAssetsItemsList(worldItemOptions, worldAssetIndex);
             }
         }
     }

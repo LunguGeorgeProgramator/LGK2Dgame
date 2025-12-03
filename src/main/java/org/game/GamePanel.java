@@ -9,7 +9,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
+import org.world.dungeons.DungeonWorld;
 import org.game.models.GameState;
 import org.gamesavedstats.GameSavedStats;
 import org.gametexts.GameTextProvider;
@@ -21,6 +23,8 @@ import org.inventory.PlayerInventory;
 import org.world.WorldEnemies;
 import org.world.GameWorld;
 import org.world.WorldItems;
+import org.world.dungeons.DungeonWorldItems;
+import org.world.models.WorldType;
 
 public class GamePanel extends JPanel implements Runnable
 {
@@ -42,6 +46,10 @@ public class GamePanel extends JPanel implements Runnable
     final WorldEnemies worldEnemies;
     final GameWorld gameWorld;
     final WorldItems worldItems;
+    final DungeonWorldItems caveDungeonWorldItems;
+    final DungeonWorldItems waterDungeonWorldItems;
+    public DungeonWorld caveDungeonWorld;
+    public DungeonWorld waterDungeonWorld;
     public final GameTextProvider gameTextProvider;
     public final CollisionChecker collisionChecker;
     private final Thread gameThread;
@@ -52,8 +60,8 @@ public class GamePanel extends JPanel implements Runnable
     boolean resetEnemiesHealth = false;
     boolean clearPlayerDamageText = false;
     public GameState gameState;
-
-
+    public WorldType worldType;
+    public Map<WorldType, Map<String, Integer>> LastWorldTypeVisited;
     public int testPositionX, testPositionY, testWith, testHeight;
     public boolean testCollisionArea = false;
 
@@ -78,11 +86,15 @@ public class GamePanel extends JPanel implements Runnable
         this.boosEnemy = new BossEnemy(this);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
         this.worldItems = new WorldItems(this, "/worldMaps/WorldMapAssets.txt");
-//        this.worldEnemies = new WorldEnemies(this, "/worldMaps/WorldMapEnemies-backup.txt");
+        this.caveDungeonWorldItems = new DungeonWorldItems(this, "/worldMaps/dungeons/cave/CaveDungeonWorldMapAssets.txt");
+        this.waterDungeonWorldItems = new DungeonWorldItems(this, "/worldMaps/dungeons/water/WaterDungeonWorldMapAssets.txt");
         this.worldEnemies = new WorldEnemies(this, "/worldMaps/WorldMapEnemies.txt");
+        this.caveDungeonWorld = new DungeonWorld(this, "/worldMaps/dungeons/cave/CaveDungeonWorldMap.txt");
+        this.waterDungeonWorld = new DungeonWorld(this, "/worldMaps/dungeons/water/WaterDungeonWorldMap.txt");
         this.individuals = new ArrayList<>();
         gameThread = new Thread(this);
         gameThread.start();
+        this.worldType = WorldType.MAIN_GAME;
     }
 
     public void setGameState(GameState gameStateValue)
@@ -146,6 +158,8 @@ public class GamePanel extends JPanel implements Runnable
             this.resetEnemiesHealth = false;
         });
         this.clearPlayerDamageText = true;
+        this.worldType = WorldType.MAIN_GAME;
+        this.LastWorldTypeVisited = Map.of();
         timer.setRepeats(false);
         timer.start();
         repaint();
@@ -153,10 +167,22 @@ public class GamePanel extends JPanel implements Runnable
 
     public void update()
     {
-        this.worldItems.update();
-        this.worldEnemies.update(this.resetEnemiesHealth);
-        this.boosEnemy.update();
-        this.player.update();
+        switch (this.worldType)
+        {
+            case WorldType.CAVE_DUNGEON:
+                this.caveDungeonWorldItems.update();
+                this.player.update();
+                break;
+            case WorldType.WATER_DUNGEON:
+                this.waterDungeonWorldItems.update();
+                this.player.update();
+                break;
+            case WorldType.MAIN_GAME:
+                this.worldItems.update();
+                this.worldEnemies.update(this.resetEnemiesHealth);
+                this.boosEnemy.update();
+                this.player.update();
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -164,29 +190,45 @@ public class GamePanel extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
 
-        this.gameWorld.draw(g2D);
-
-        this.individuals.add(this.player);
-        this.individuals.add(this.boosEnemy);
-        this.worldEnemies.addEnemiesToDrawList();
-        this.worldItems.addItemsToDrawList();
-        // this.player.draw(g2D);
+        switch (this.worldType)
+        {
+            case WorldType.CAVE_DUNGEON:
+                this.caveDungeonWorld.draw(g2D);
+                this.individuals.add(this.player);
+                this.caveDungeonWorldItems.addItemsToDrawList();
+                break;
+            case WorldType.WATER_DUNGEON:
+                this.waterDungeonWorld.draw(g2D);
+                this.individuals.add(this.player);
+                this.waterDungeonWorldItems.addItemsToDrawList();
+                break;
+            case WorldType.MAIN_GAME:
+                this.gameWorld.draw(g2D);
+                this.individuals.add(this.player);
+                this.individuals.add(this.boosEnemy);
+                this.worldEnemies.addEnemiesToDrawList();
+                this.worldItems.addItemsToDrawList();
+                break;
+        }
 
         // Sort Player/WorldEnemies/World items by Y position
         individuals.sort(Comparator.comparingInt(t -> t.positionY));
+
         // draw Player/boosEnemy/WorldEnemies/World in game
-        for (Individual individual : this.individuals)
+        for (int i = 0, size = individuals.size(); i < size; i++)
         {
-            individual.draw(g2D);
-        }
-        // clean draw list so it will not run in a loop adding again and again, making the game to freeze
-        for (int i = 0;  i < this.individuals.size(); i++)
-        {
-            individuals.remove(i);
+            individuals.get(i).draw(g2D);
         }
 
-        this.worldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
-        this.worldItems.drawTextOmCollision(g2D);
+        // clean draw list so it will not run in a loop adding again and again, making the game to freeze
+        individuals.clear();
+
+        if (this.worldType.equals(WorldType.MAIN_GAME))
+        {
+            this.worldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
+            this.worldItems.drawTextOmCollision(g2D);
+        }
+
         this.player.drawRedSlider(g2D);
 
         // TODO: debug text, remove latter add some window pop up
