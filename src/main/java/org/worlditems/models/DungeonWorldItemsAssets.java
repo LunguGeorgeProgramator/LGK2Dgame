@@ -40,14 +40,14 @@ public enum DungeonWorldItemsAssets implements GameWorldAssets
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/player-sword.png")), null))),
     WOOD_BOARD(6, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/wood-board.png")), "impenetrable-forrest"))),
-    WINDOW_WALL(7, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/window-wall.png")), null))),
     TOP_WALL_CORNER_RIGHT_TOP(8, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-right-top.png")), null))),
     TOP_WALL_CORNER_LEFT_TOP(9, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
             Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-left-top.png")), null))),
     TOP_WALL(10, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall.png")), null)));
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall.png")), null))),
+    GOLD_SWORD(11, WorldItemTypes.WEAPON.name(), false, 0, 0, 0,
+            Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/gold-sword-in-rock.png")), null)));
 
     private final int itemId;
     private final String itemType;

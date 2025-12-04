@@ -4,6 +4,7 @@ import org.game.KeyBoardAndMouseHandler;
 import org.individual.models.MovingDirection;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
+import org.worlditems.models.DungeonWorldItemsAssets;
 import org.worlditems.models.WorldItemsAssets;
 
 import java.awt.Graphics2D;
@@ -23,6 +24,9 @@ public class Player extends Individual
     private static final int PLAYER_HEALTH_BAR_HEIGHT = 10;
     private static final int PLAYER_HEALTH_BAR_POSITION_X = 0;
     private static final int PLAYER_HEALTH_BAR_POSITION_Y = 0;
+    public static final double PLAYER_DAMAGE_BLUE_STEEL_SWORD = 10.1;
+    public static final double PLAYER_DAMAGE_GOLD_STEEL_SWORD = 50.1;
+    public double playerDamageToEnemy;
     public PlayerInventory playerInventory;
     public final int playerScreenX;
     public final int playerScreenY;
@@ -31,9 +35,11 @@ public class Player extends Individual
     public double playerHealth = this.playerMaxHealth;
     public boolean isPlayerSwingSword = false;
     public boolean isSwordInPlayerInventory = false;
+    public boolean isGoldSwordInPlayerInventory = false;
     private Map<MovingDirection, BufferedImage> swordSwingStandStillImagesAssetsMap;
     private Map<MovingDirection, Map<Integer, BufferedImage>> swordSwingWhenMovingImagesAssetsMap;
     private Map<MovingDirection, Map<Integer, BufferedImage>> swordSwingAttackImagesAssetsMap;
+    private Map<MovingDirection, Map<Integer, BufferedImage>> goldSwordSwingAttackImagesAssetsMap;
     public Rectangle attackCollisionArea;
     public Rectangle worldItemCollisionArea;
     public final int defaultMovementSpeed;
@@ -116,7 +122,7 @@ public class Player extends Individual
             MovingDirection.RIGHT, getAssetImage("/player/player-stand-still-right.png")
         );
 
-        this.swordSwingAttackImagesAssetsMap =  Map.of(
+        this.swordSwingAttackImagesAssetsMap = Map.of(
             MovingDirection.RIGHT, Map.of(
             1, getAssetImage("/player/attack/sword-swing-up.png"),
             2, getAssetImage("/player/attack/sword-swing-center.png"),
@@ -136,6 +142,29 @@ public class Player extends Individual
             1, getAssetImage("/player/attack/sword-swing-up-down.png"),
             2, getAssetImage("/player/attack/sword-swing-center-down.png"),
             3, getAssetImage("/player/attack/sword-swing-down-down.png")
+            )
+        );
+
+        this.goldSwordSwingAttackImagesAssetsMap = Map.of(
+            MovingDirection.RIGHT, Map.of(
+                1, getAssetImage("/player/attack/gold-sword-swing-up.png"),
+                2, getAssetImage("/player/attack/gold-sword-swing-center.png"),
+                3, getAssetImage("/player/attack/gold-sword-swing-down.png")
+            ),
+            MovingDirection.LEFT, Map.of(
+                1, getAssetImage("/player/attack/gold-sword-swing-up-left.png"),
+                2, getAssetImage("/player/attack/gold-sword-swing-center-left.png"),
+                3, getAssetImage("/player/attack/gold-sword-swing-down-left.png")
+            ),
+            MovingDirection.UP, Map.of(
+                1, getAssetImage("/player/attack/gold-sword-swing-up-up.png"),
+                2, getAssetImage("/player/attack/gold-sword-swing-center-up.png"),
+                3, getAssetImage("/player/attack/gold-sword-swing-down-up.png")
+            ),
+            MovingDirection.DOWN, Map.of(
+                1, getAssetImage("/player/attack/gold-sword-swing-up-down.png"),
+                2, getAssetImage("/player/attack/gold-sword-swing-center-down.png"),
+                3, getAssetImage("/player/attack/gold-sword-swing-down-down.png")
             )
         );
 
@@ -171,14 +200,21 @@ public class Player extends Individual
         return Objects.requireNonNull(getScaledImageFromAssets(assetPath));
     }
 
+    private void _checkPlayerInventoryForWeapons()
+    {
+        PlayerInventoryModel inventoryModel = this.playerInventory.getInventoryItemByName(WorldItemsAssets.SWORD.name());
+        PlayerInventoryModel inventoryModelGoldSword = this.playerInventory.getInventoryItemByName(DungeonWorldItemsAssets.GOLD_SWORD.name());
+        this.isSwordInPlayerInventory = inventoryModel != null && inventoryModel.getInInventory();
+        this.isGoldSwordInPlayerInventory = inventoryModelGoldSword != null && inventoryModelGoldSword.getInInventory();
+        this.isPlayerSwingSword = keyBoardAndMouseHandler.spaceBarePressed && (this.isSwordInPlayerInventory || this.isGoldSwordInPlayerInventory);
+        this.playerDamageToEnemy = this.isGoldSwordInPlayerInventory ? PLAYER_DAMAGE_GOLD_STEEL_SWORD : PLAYER_DAMAGE_BLUE_STEEL_SWORD;
+    }
+
     @Override
     public void update()
     {
-        // player sword swing
-        PlayerInventoryModel inventoryModel = this.playerInventory.getInventoryItemByName(WorldItemsAssets.SWORD.name());
-        this.isSwordInPlayerInventory = inventoryModel != null && inventoryModel.getInInventory();
-        this.isPlayerSwingSword = keyBoardAndMouseHandler.spaceBarePressed && this.isSwordInPlayerInventory;
 
+        this._checkPlayerInventoryForWeapons();
         this.changeAssetNumberByFrameCounter(3, 5);
 
         // player moving
@@ -289,28 +325,38 @@ public class Player extends Individual
             case MovingDirection.UP:
                 playerAsset = this.upMovementImagesAssetsMap.get(this.assetNumber);
                 playerSwingSwordAsset = this.swordSwingWhenMovingImagesAssetsMap.get(this.movementDirection).get(this.assetNumber);
-                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
+                swingSwordAsset = this.isGoldSwordInPlayerInventory ?
+                    this.goldSwordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber) :
+                    this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
                 break;
             case MovingDirection.DOWN:
                 playerAsset = this.downMovementImagesAssetsMap.get(this.assetNumber);
                 playerSwingSwordAsset = this.swordSwingWhenMovingImagesAssetsMap.get(this.movementDirection).get(this.assetNumber);
-                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
+                swingSwordAsset = this.isGoldSwordInPlayerInventory ?
+                    this.goldSwordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber) :
+                    this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
                 break;
             case MovingDirection.LEFT:
                 playerAsset = this.leftMovementImagesAssetsMap.get(this.assetNumber);
                 playerSwingSwordAsset = this.swordSwingWhenMovingImagesAssetsMap.get(this.movementDirection).get(this.assetNumber);
-                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
+                swingSwordAsset = this.isGoldSwordInPlayerInventory ?
+                    this.goldSwordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber) :
+                    this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
                 break;
             case MovingDirection.RIGHT:
                 playerAsset = this.rightMovementImagesAssetsMap.get(this.assetNumber);
                 playerSwingSwordAsset = this.swordSwingWhenMovingImagesAssetsMap.get(this.movementDirection).get(this.assetNumber);
-                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
+                swingSwordAsset = this.isGoldSwordInPlayerInventory ?
+                    this.goldSwordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber) :
+                    this.swordSwingAttackImagesAssetsMap.get(this.movementDirection).get(this.dynamicAssetNumber);
                 break;
             case null, default:
                 MovingDirection playerStoppedDirection = this.stoppedDirection != null ? this.stoppedDirection : this.defaultStoppedDirection;
                 playerAsset = this.standStillImagesAssetsMap.get(playerStoppedDirection);
                 playerSwingSwordAsset = this.swordSwingStandStillImagesAssetsMap.get(playerStoppedDirection);
-                swingSwordAsset = this.swordSwingAttackImagesAssetsMap.get(playerStoppedDirection).get(this.dynamicAssetNumber);
+                swingSwordAsset = this.isGoldSwordInPlayerInventory ?
+                    this.goldSwordSwingAttackImagesAssetsMap.get(playerStoppedDirection).get(this.dynamicAssetNumber) :
+                    this.swordSwingAttackImagesAssetsMap.get(playerStoppedDirection).get(this.dynamicAssetNumber);
                 break;
         }
 

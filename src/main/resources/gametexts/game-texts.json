@@ -13,6 +13,7 @@
   "player-inventory-number-keys": "Number of keys: ",
   "player-inventory-number-rubies": "Number of rubies consumed: ",
   "player-inventory-sword": "Sword picked.",
+  "player-inventory-gold-sword": "Gold sword picked.",
   "game-controls": "Keyboard:\nI - open/close player inventory.\nSpace bar - to swing sword.\nM - open game main menu.\nW - move player up.\nS - move player down.\nA - move player left.\nD - move player right.\nF - player sprint.",
   "start-game-btn": "Star New Game",
   "continue-game-btn": "Continue Game",

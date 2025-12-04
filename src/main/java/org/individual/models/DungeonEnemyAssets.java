@@ -5,22 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static org.individual.models.EnemyAssetsConstance.ghostMosterAssetsMap;
-import static org.individual.models.EnemyAssetsConstance.ghostMosterColisionAssetsMap;
-import static org.individual.models.EnemyAssetsConstance.ghostMosterUnderAttackAssetsMap;
-import static org.individual.models.EnemyAssetsConstance.colorMosterAssetsMap;
-import static org.individual.models.EnemyAssetsConstance.spiderMosterAssetsMap;
-import static org.individual.models.EnemyAssetsConstance.spiderMosterColisionAssetsMap;
-import static org.individual.models.EnemyAssetsConstance.spiderMosterUnderAttackAssetsMap;
-import static org.individual.models.EnemyAssetsConstance.upDown;
-import static org.individual.models.EnemyAssetsConstance.downUp;
-import static org.individual.models.EnemyAssetsConstance.leftRight;
-import static org.individual.models.EnemyAssetsConstance.rightLeft;
-import static org.individual.models.EnemyAssetsConstance.square;
-import static org.individual.models.EnemyAssetsConstance.invertedSquare;
-import static org.individual.models.EnemyAssetsConstance.snakeMovement;
+import static org.individual.models.EnemyAssetsConstance.*;
 
-public enum EnemyAssets implements EnemyAsset
+public enum DungeonEnemyAssets implements EnemyAsset
 {
 
     GHOST_MONSTER(1, 100, 8, leftRight, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
@@ -32,7 +19,8 @@ public enum EnemyAssets implements EnemyAsset
     SPIDER(7, 100, 2, invertedSquare, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
     SIDE_TO_SIDE_MOVING_SPIDER(8, 100, 1, rightLeft, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
     FASTER_SIDE_TO_SIDE_MOVING_SPIDER(9, 100, 5, leftRight, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
-    UP_DOWN_MOVING_SPIDER(10, 200, 1, downUp, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap);
+    UP_DOWN_MOVING_SPIDER(10, 200, 1, downUp, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
+    GHOST_MONSTER_SHORT_DISTANCE(11, 50, 1, rightLeft, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap);
 
     final private int enemyId;
     final private int maxDistanceAllowedToMove;
@@ -42,7 +30,7 @@ public enum EnemyAssets implements EnemyAsset
     final private Map<MovingDirection, Map<Integer, BufferedImage>> enemyColisionAssetsMap;
     final private Map<MovingDirection, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap;
 
-    EnemyAssets(
+    DungeonEnemyAssets(
         int enemyId,
         int maxDistanceAllowedToMove,
         int speed,
@@ -96,9 +84,9 @@ public enum EnemyAssets implements EnemyAsset
         return this.enemyMovingDirectionList;
     }
 
-    public static EnemyAssets getEnemyAssetByIndex(int index)
+    public static DungeonEnemyAssets getEnemyAssetByIndex(int index)
     {
-        EnemyAssets enemyAssets = Arrays.stream(EnemyAssets.values())
+        DungeonEnemyAssets enemyAssets = Arrays.stream(DungeonEnemyAssets.values())
             .filter(s -> s.getEnemyId() == index)
             .findFirst()
             .orElse(null);

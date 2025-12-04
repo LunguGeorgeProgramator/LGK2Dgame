@@ -21,7 +21,6 @@ public class Enemy extends Individual
     private static final String ENEMY_COLLISION_TEXT_KEY = "enemy-collision";
 //    private static final Double ENEMY_DAMAGE_TO_PLAYER = 10.1;
     private static final Double ENEMY_DAMAGE_TO_PLAYER = 1.1;
-    private static final Double PLAYER_DAMAGE_TO_ENEMY = 10.1;
     private static final int MAX_ASSETS_INDEX = 2;
     private static final int NUMBER_OF_FRAMES_LIMIT = 10;
     private static final String ENEMY_ASSETS_MAP_KEY_NAME = "enemyAssetsMap";
@@ -59,6 +58,7 @@ public class Enemy extends Individual
     private boolean enemyReturnToDefaultPosition = false;
     private int worldEnemyAssetPositionX;
     private int worldEnemyAssetPositionY;
+    public String enemyWorldPrefix;
 
 
     public Enemy(
@@ -245,7 +245,7 @@ public class Enemy extends Individual
         boolean isUnderAttack = this.collisionChecker.areRectanglesIntersecting(this.player.attackCollisionArea, this.damageTakenArea);
         if (isUnderAttack && this.isAllowedToInflictDamage)
         {
-            this.enemyHealth = this.enemyHealth - PLAYER_DAMAGE_TO_ENEMY;
+            this.enemyHealth = this.enemyHealth - this.player.playerDamageToEnemy;;
         }
 
         this.changeAssetNumberByFrameCounter(MAX_ASSETS_INDEX, NUMBER_OF_FRAMES_LIMIT);

@@ -16,7 +16,6 @@ import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.game.GamePanel.tileSize;
 import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
@@ -43,6 +42,7 @@ public class WorldItem extends Individual
     private Rectangle dungeonsEntryCollisionArea;
     private int worldItemAssetPositionX;
     private int worldItemAssetPositionY;
+    private boolean hideDungeonEntryWay;
 
     public WorldItem(
             GamePanel gamePanel,
@@ -95,10 +95,22 @@ public class WorldItem extends Individual
         this.dungeonsEntryCollisionArea.width = (tileSize / 2) / 2;
     }
 
+    private boolean hideDungeonEntryWayUntilBossEnemyIsDead()
+    {
+        if (itemAssetType.equals(WorldItemTypes.CAVE_DUNGEON_ENTRY_WAY.name()))
+        {
+//          String worldMapId = String.format("%s%s%s", this.itemAssetId, this.itemWorldMatrixRowIndex, this.itemWorldMatrixColIndex);
+//          return worldMapId.equals("309612") && !this.gamePanel.boosEnemy.isBoosEnemyDead; // remove id world after I finish building the dungeon, only one way to enter, in the future
+            return !this.gamePanel.boosEnemy.isBoosEnemyDead;
+        }
+        return false;
+    }
+
     public void update()
     {
+        this.hideDungeonEntryWay = this.hideDungeonEntryWayUntilBossEnemyIsDead();
         this.setAssetNumber();
-        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 4))
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 4) && !this.hideDungeonEntryWay)
         {
             this.hasPlayerCollidedWithItem = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.collisionArea);
             if (this.hasPlayerCollidedWithItem)
@@ -141,7 +153,7 @@ public class WorldItem extends Individual
         {
             Map<WorldType, Map<String, Integer>> last = this.gamePanel.LastWorldTypeVisited;
             Map<String, Integer> coordinates = (last == null || last.isEmpty()) ? null : last.values().iterator().next();
-            this.player.positionX = coordinates != null ? coordinates.getOrDefault("x", 100) : 100;
+            this.player.positionX = coordinates != null ? coordinates.getOrDefault("x", 100) - tileSize * 2 : 100;
             this.player.positionY = coordinates != null ? coordinates.getOrDefault("y", 100) + tileSize * 2 : 100;
             this.gamePanel.worldType = worldType;
             this.gamePanel.LastWorldTypeVisited = worldType.equals(WorldType.MAIN_GAME) ? Map.of() : Map.of(
@@ -185,7 +197,7 @@ public class WorldItem extends Individual
         this.collisionArea.x = this.worldItemAssetPositionX;
         this.collisionArea.y = this.worldItemAssetPositionY;
         // draw world item only if is inside the screen view
-        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 2))
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 2) && !this.hideDungeonEntryWay)
         {
             WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.dynamicAssetNumber);
             BufferedImage bufferedImage = worldItemAssetsModel != null ? worldItemAssetsModel.getImageAsset() : null;

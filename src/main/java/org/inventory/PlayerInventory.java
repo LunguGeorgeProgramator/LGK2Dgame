@@ -33,6 +33,7 @@ public class PlayerInventory
     private final static String INVENTORY_NR_KEYS = "player-inventory-number-keys";
     private final static String INVENTORY_NR_RUBIES = "player-inventory-number-rubies";
     private final static String INVENTORY_SWORD = "player-inventory-sword";
+    private final static String INVENTORY_GOLD_SWORD = "player-inventory-gold-sword";
 
     public PlayerInventory(GamePanel gamePanel)
     {
@@ -187,6 +188,7 @@ public class PlayerInventory
         int numberKeys = 0;
         int numberOfRubies = 0;
         boolean hasSword = false;
+        boolean hasGoldSword = false;
 
         Color inventoryBackGroundColor = new Color(43, 76, 75, 214);
         g2D.setColor(inventoryBackGroundColor);
@@ -205,6 +207,9 @@ public class PlayerInventory
             {
                 case "SWORD":
                     hasSword = playerInventoryModel.getInInventory();
+                    break;
+                case "GOLD_SWORD":
+                    hasGoldSword = playerInventoryModel.getInInventory();
                     break;
                 case "RUBY":
                     if (playerInventoryModel.getInInventory())
@@ -225,7 +230,8 @@ public class PlayerInventory
             this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_TITLE), "",
             this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_NR_KEYS) + numberKeys,
             this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_NR_RUBIES) + numberOfRubies,
-            hasSword ? this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_SWORD) : ""
+            hasSword ? this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_SWORD) : "",
+            hasGoldSword ? this.gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_GOLD_SWORD) : ""
         };
 
         for (int i = 0; i < lines.length; i++) {

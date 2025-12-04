@@ -23,6 +23,7 @@ import org.inventory.PlayerInventory;
 import org.world.WorldEnemies;
 import org.world.GameWorld;
 import org.world.WorldItems;
+import org.world.dungeons.DungeonWorldEnemies;
 import org.world.dungeons.DungeonWorldItems;
 import org.world.models.WorldType;
 
@@ -42,8 +43,10 @@ public class GamePanel extends JPanel implements Runnable
     final int framePerSecond = 60;
     public final KeyBoardAndMouseHandler keyBoardAndMouseHandler;
     public final Player player;
-    final BossEnemy boosEnemy;
+    public final BossEnemy boosEnemy;
     final WorldEnemies worldEnemies;
+    final DungeonWorldEnemies caveDungeonWorldEnemies;
+    final DungeonWorldEnemies waterDungeonWorldEnemies;
     final GameWorld gameWorld;
     final WorldItems worldItems;
     final DungeonWorldItems caveDungeonWorldItems;
@@ -68,6 +71,7 @@ public class GamePanel extends JPanel implements Runnable
 
     public GamePanel()
     {
+        this.worldType = WorldType.MAIN_GAME;
         this.gameState = GameState.RESUME_GAME;
         this.gameSavedStats = new GameSavedStats();
         this.playerInventory = new PlayerInventory(this);
@@ -89,12 +93,13 @@ public class GamePanel extends JPanel implements Runnable
         this.caveDungeonWorldItems = new DungeonWorldItems(this, "/worldMaps/dungeons/cave/CaveDungeonWorldMapAssets.txt");
         this.waterDungeonWorldItems = new DungeonWorldItems(this, "/worldMaps/dungeons/water/WaterDungeonWorldMapAssets.txt");
         this.worldEnemies = new WorldEnemies(this, "/worldMaps/WorldMapEnemies.txt");
+        this.caveDungeonWorldEnemies = new DungeonWorldEnemies(this, "/worldMaps/dungeons/cave/CaveDungeonWorldMapEnemies.txt");
+        this.waterDungeonWorldEnemies = new DungeonWorldEnemies(this, "/worldMaps/dungeons/water/WaterDungeonWorldMapEnemies.txt");
         this.caveDungeonWorld = new DungeonWorld(this, "/worldMaps/dungeons/cave/CaveDungeonWorldMap.txt");
         this.waterDungeonWorld = new DungeonWorld(this, "/worldMaps/dungeons/water/WaterDungeonWorldMap.txt");
         this.individuals = new ArrayList<>();
         gameThread = new Thread(this);
         gameThread.start();
-        this.worldType = WorldType.MAIN_GAME;
     }
 
     public void setGameState(GameState gameStateValue)
@@ -171,10 +176,12 @@ public class GamePanel extends JPanel implements Runnable
         {
             case WorldType.CAVE_DUNGEON:
                 this.caveDungeonWorldItems.update();
+                this.caveDungeonWorldEnemies.update(this.resetEnemiesHealth);
                 this.player.update();
                 break;
             case WorldType.WATER_DUNGEON:
                 this.waterDungeonWorldItems.update();
+                this.waterDungeonWorldEnemies.update(this.resetEnemiesHealth);
                 this.player.update();
                 break;
             case WorldType.MAIN_GAME:
@@ -195,11 +202,13 @@ public class GamePanel extends JPanel implements Runnable
             case WorldType.CAVE_DUNGEON:
                 this.caveDungeonWorld.draw(g2D);
                 this.individuals.add(this.player);
+                this.caveDungeonWorldEnemies.addEnemiesToDrawList();
                 this.caveDungeonWorldItems.addItemsToDrawList();
                 break;
             case WorldType.WATER_DUNGEON:
                 this.waterDungeonWorld.draw(g2D);
                 this.individuals.add(this.player);
+                this.waterDungeonWorldEnemies.addEnemiesToDrawList();
                 this.waterDungeonWorldItems.addItemsToDrawList();
                 break;
             case WorldType.MAIN_GAME:
@@ -223,10 +232,20 @@ public class GamePanel extends JPanel implements Runnable
         // clean draw list so it will not run in a loop adding again and again, making the game to freeze
         individuals.clear();
 
-        if (this.worldType.equals(WorldType.MAIN_GAME))
+        switch (this.worldType)
         {
-            this.worldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
-            this.worldItems.drawTextOmCollision(g2D);
+            case WorldType.CAVE_DUNGEON:
+                this.caveDungeonWorldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
+                this.caveDungeonWorldItems.drawTextOmCollision(g2D);
+                break;
+            case WorldType.WATER_DUNGEON:
+                this.waterDungeonWorldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
+                this.waterDungeonWorldItems.drawTextOmCollision(g2D);
+                break;
+            case WorldType.MAIN_GAME:
+                this.worldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
+                this.worldItems.drawTextOmCollision(g2D);
+                break;
         }
 
         this.player.drawRedSlider(g2D);

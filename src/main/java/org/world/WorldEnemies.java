@@ -4,27 +4,43 @@ import org.game.GamePanel;
 import org.gamesavedstats.GameSavedStats;
 import org.gamesavedstats.models.EnemyStatsModel;
 import org.individual.Enemy;
+import org.individual.models.EnemyAsset;
 import org.individual.models.EnemyAssets;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.file.Paths;
 
 import static org.game.GamePanel.tileSize;
 
 public class WorldEnemies extends GameWorld
 {
-    EnemyAssets[] enemyAssets;
+    EnemyAsset[] enemyAssets;
     List<Enemy> enemyList;
     private final GameSavedStats gameSavedStats;
+    private final String mapName;
 
     public WorldEnemies(GamePanel gamePanel, String worldEnemiesMapPath)
     {
         super(gamePanel, worldEnemiesMapPath);
         this.gameSavedStats = gamePanel.gameSavedStats;
-        this.enemyAssets = EnemyAssets.values();
+        this.enemyAssets = this._getEnemyAssets();
         this.enemyList = new ArrayList<>();
+        String fileName = Paths.get(worldEnemiesMapPath).getFileName().toString();
+        int dotIndex = fileName.lastIndexOf('.');
+        this.mapName = (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);
         initializeEnemyObjects();
+    }
+
+    protected EnemyAsset[] _getEnemyAssets()
+    {
+        return EnemyAssets.values();
+    }
+
+    protected EnemyAsset _getEnemyAssetByIndex(int worldEnemyIndex)
+    {
+        return EnemyAssets.getEnemyAssetByIndex(worldEnemyIndex);
     }
 
     private void initializeEnemyObjects()
@@ -39,7 +55,7 @@ public class WorldEnemies extends GameWorld
                 {
                     continue;
                 }
-                EnemyAssets enemyAsset = EnemyAssets.getEnemyAssetByIndex(worldEnemyIndex);
+                EnemyAsset enemyAsset = this._getEnemyAssetByIndex(worldEnemyIndex);
                 if (enemyAsset == null)
                 {
                     continue;
@@ -90,7 +106,7 @@ public class WorldEnemies extends GameWorld
     public EnemyStatsModel getEnemyStatsModel(Enemy enemy, String enemyWorldId)
     {
         EnemyStatsModel enemyStatsModel = new EnemyStatsModel();
-        enemyStatsModel.setMapName("WorldMapEnemies");
+        enemyStatsModel.setMapName(this.mapName);
         enemyStatsModel.setEnemyWorldId(enemyWorldId);
         enemyStatsModel.setAlive(true);
         return enemyStatsModel;

@@ -29,9 +29,8 @@ public class BossEnemy extends Individual
     private final int maxMovementRight;
     private final int boosTileSize;
     private static final Double BOSS_ENEMY_DAMAGE_TO_PLAYER = 10.1;
-    private static final Double PLAYER_DAMAGE_TO_BOSS_ENEMY = 10.1;
     private boolean isAllowedToInflictDamage = false;
-    private boolean isBoosEnemyDead = false;
+    public boolean isBoosEnemyDead = false;
     private Rectangle attackArea;
     private Map<Integer, BufferedImage> boosEnemyCollisionAssets;
     private Map<Integer, BufferedImage> boosEnemyMovingAssets;
@@ -102,7 +101,7 @@ public class BossEnemy extends Individual
         this.changeAssetNumberByFrameCounter();
         this.changeAssetNumberByFrameCounter(4, 60);
 
-        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * this.boosTileSize * 4))
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * this.boosTileSize * 4) && !this.isBoosEnemyDead)
         {
             this._boosEnemyMovementAction();
             this._bossEnemyCollidingWithPlayer();
@@ -156,7 +155,7 @@ public class BossEnemy extends Individual
         boolean isUnderAttack = this.collisionChecker.areRectanglesIntersecting(this.player.attackCollisionArea, this.collisionArea);
         if (isUnderAttack && this.isAllowedToInflictDamage)
         {
-            this.enemyHealth = this.enemyHealth - PLAYER_DAMAGE_TO_BOSS_ENEMY;
+            this.enemyHealth = this.enemyHealth - this.player.playerDamageToEnemy;
             this.activateCollision = true;
         }
         boolean isAttackingPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.attackArea);
@@ -165,14 +164,19 @@ public class BossEnemy extends Individual
             this.player.playerHealth = this.player.playerHealth - BOSS_ENEMY_DAMAGE_TO_PLAYER;
         }
         this.isBoosEnemyDead = this.enemyHealth <= 0;
+        if (this.isBoosEnemyDead)
+        {
+            this.activateCollision = false;
+            this.player.stopPlayerMovement = false;
+        }
     }
 
     private void _boosDead(Graphics2D g2D)
     {
-        Timer timer = new Timer(5000, _ -> hideWinMessage = false);
+        Timer timer = new Timer(5000, _ -> this.hideWinMessage = false);
         timer.setRepeats(false);
         timer.start();
-        if (hideWinMessage)
+        if (this.hideWinMessage)
         {
             this.gamePanel.gameTextProvider.setTextColor(Color.WHITE);
             this.gamePanel.gameTextProvider.setTextPosition(this.player.playerScreenX - 65, this.player.playerScreenY - 20);
@@ -196,7 +200,7 @@ public class BossEnemy extends Individual
     {
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * this.boosTileSize))
         {
-            if (this.boosAssetImage != null && this.enemyHealth > 0)
+            if (this.boosAssetImage != null && !this.isBoosEnemyDead)
             {
                 BufferedImage boosEnemyAssetToDraw = this.activateCollision ? this.boosEnemyCollisionAssets.get(this.assetNumber) : this.boosEnemyMovingAssets.get(this.assetNumber);
                 g2D.drawImage(boosEnemyAssetToDraw, this.boosEnemyAssetPositionX, this.boosEnemyAssetPositionY, null);
