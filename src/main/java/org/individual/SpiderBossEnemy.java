@@ -2,6 +2,7 @@ package org.individual;
 
 import org.game.CollisionChecker;
 import org.game.GamePanel;
+import org.gamesavedstats.GameSavedStats;
 import org.individual.models.MovingDirection;
 
 import javax.swing.*;
@@ -16,7 +17,7 @@ import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 import static org.game.GamePanel.tileSize;
 import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
 
-public class BossEnemy extends Individual
+public class SpiderBossEnemy extends Individual
 {
 
     BufferedImage boosAssetImage;
@@ -37,8 +38,10 @@ public class BossEnemy extends Individual
     private int boosEnemyAssetPositionX;
     private int boosEnemyAssetPositionY;
     private boolean hideWinMessage = true;
+    private String spiderBossMapName = "WorldMap";
+    private int spiderBossWorldId = 1;
 
-    public BossEnemy(GamePanel gamePanel)
+    public SpiderBossEnemy(GamePanel gamePanel)
     {
         super(tileSize * 90, tileSize * 13, 4);
         this.maxMovement = tileSize * 9;
@@ -49,26 +52,26 @@ public class BossEnemy extends Individual
         this.collisionChecker = this.gamePanel.collisionChecker;
         this.movementDirection = MovingDirection.RIGHT;
         this.boosTileSize = 4;
-        _buildBossEnemyAssets();
-        _buildBossEnemyCollisionArea();
-        _buildBossEnemyAttackArea();
+        this._buildBossEnemyAssets();
+        this._buildBossEnemyCollisionArea();
+        this._buildBossEnemyAttackArea();
         this.enemyHealth = 190;
         this.enemyMaxHealth = 190;
     }
 
     private void _buildBossEnemyAssets()
     {
-        this.boosAssetImage = Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/boos-enemy.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize));
-        this.boosAttackAssetImage = Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/boos-enemy-attack.png", tileSize, tileSize * 2));
+        this.boosAssetImage = Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize));
+        this.boosAttackAssetImage = Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-attack.png", tileSize, tileSize * 2));
 
         this.boosEnemyCollisionAssets = Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/boos-enemy.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize)),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/boos-enemy-bites.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize))
+            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize)),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-bites.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize))
         );
 
         this.boosEnemyMovingAssets = Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/boos-enemy-moving-two.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize)),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/boos-enemy-moving.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize))
+            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-moving-two.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize)),
+            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-moving.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize))
         );
     }
 
@@ -93,16 +96,17 @@ public class BossEnemy extends Individual
     @Override
     public void update()
     {
-        if (this.isBoosEnemyDead)
-        {
-            return;
-        }
-
+        this.isBoosEnemyDead = this.isIndividualDead(this.gamePanel.gameSavedStats, this.spiderBossWorldId, spiderBossMapName);
         this.changeAssetNumberByFrameCounter();
         this.changeAssetNumberByFrameCounter(4, 60);
-
-        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * this.boosTileSize * 4) && !this.isBoosEnemyDead)
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * this.boosTileSize * this.boosTileSize) && !this.isBoosEnemyDead)
         {
+            this.isBoosEnemyDead = this.enemyHealth <= 0;
+            if (this.isBoosEnemyDead)
+            {
+                String spiderWorldId = this.gamePanel.gameSavedStats.getIndividualWorldIdFormat(this, this.spiderBossWorldId);
+                this.gamePanel.gameSavedStats.updateEnemyAliveStatus(spiderWorldId, false);
+            }
             this._boosEnemyMovementAction();
             this._bossEnemyCollidingWithPlayer();
             this._updateBossEnemyCollisionAreasAndScreenPositions();
@@ -163,7 +167,6 @@ public class BossEnemy extends Individual
         {
             this.player.playerHealth = this.player.playerHealth - BOSS_ENEMY_DAMAGE_TO_PLAYER;
         }
-        this.isBoosEnemyDead = this.enemyHealth <= 0;
         if (this.isBoosEnemyDead)
         {
             this.activateCollision = false;
@@ -204,7 +207,6 @@ public class BossEnemy extends Individual
             {
                 BufferedImage boosEnemyAssetToDraw = this.activateCollision ? this.boosEnemyCollisionAssets.get(this.assetNumber) : this.boosEnemyMovingAssets.get(this.assetNumber);
                 g2D.drawImage(boosEnemyAssetToDraw, this.boosEnemyAssetPositionX, this.boosEnemyAssetPositionY, null);
-//                this.gamePanel.drawTestDynamicRectangle(g2D, this.attackArea.x, this.attackArea.y, this.attackArea.width, this.attackArea.height);
                 g2D.drawImage(this.boosAttackAssetImage, this.attackArea.x, this.attackArea.y, null);
                 this._drawEnemyLifeBar(g2D, this.boosEnemyAssetPositionX - 2, this.boosEnemyAssetPositionY - 20);
             }

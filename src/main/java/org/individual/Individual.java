@@ -1,15 +1,21 @@
 package org.individual;
 
+import org.gamesavedstats.GameSavedStats;
+import org.gamesavedstats.models.EnemyStatsModel;
 import org.individual.models.MovingDirection;
 
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Map;
+
+import static org.game.GamePanel.tileSize;
 
 public abstract class Individual
 {
+    private static String INDIVIDUAL_WORLD_ID_FORMAT = "%d%d%d";
     public int positionX;
     public int positionY;
     public int initialPositionX;
@@ -32,6 +38,15 @@ public abstract class Individual
     public boolean activateCollision = false;
     public double enemyHealth = 100;
     public int enemyMaxHealth = 100;
+    protected MovingDirection trackingMovingDirection;
+    protected int maxAllowedDownMovement;
+    protected int maxAllowedUpMovement;
+    protected int maxAllowedRightMovement;
+    protected int maxAllowedLeftMovement;
+    protected int maxDistanceAllowedToMove;
+    protected Integer nextMovementIndex;
+    protected List<MovingDirection> individualMovingDirectionList;
+    protected boolean returnToDefaultPosition = false;
 
     public Individual(int positionX, int positionY, int speed)
     {
@@ -40,6 +55,7 @@ public abstract class Individual
         this.positionX = positionX;
         this.positionY = positionY;
         this.speed = speed;
+        this._resetMaxMovementDirection();
     }
 
     // force all children classes to have this methods
@@ -101,5 +117,140 @@ public abstract class Individual
         // Optional: Draw border
         g2d.setColor(Color.ORANGE);
         g2d.drawRect(positionX, positionY, this.enemyMaxHealth, height);
+    }
+
+    public boolean isIndividualDead(GameSavedStats gameSavedStats, int individualId, String mapName)
+    {
+        String individualWorldId = gameSavedStats.getIndividualWorldIdFormat(this, individualId);
+        EnemyStatsModel enemyStatsModel = gameSavedStats.getEnemyStatsByEnemyWorldId(individualWorldId);
+        if (enemyStatsModel == null)
+        {
+            EnemyStatsModel newEnemyStatsModel = new EnemyStatsModel();
+            newEnemyStatsModel.setMapName(mapName);
+            newEnemyStatsModel.setEnemyWorldId(individualWorldId);
+            newEnemyStatsModel.setAlive(true);
+            enemyStatsModel = newEnemyStatsModel;
+            gameSavedStats.addToEnemyStats(enemyStatsModel);
+        }
+        return !enemyStatsModel.getIsAlive();
+    }
+
+    protected int[] _findPlayerPosition(Player player)
+    {
+        int playerPositionX = player.positionX;
+        int playerPositionY = player.positionY;
+        switch (this.movementDirection)
+        {
+            case MovingDirection.LEFT:
+                playerPositionX = player.positionX + tileSize;
+                break;
+            case MovingDirection.RIGHT:
+                playerPositionX = player.positionX - tileSize;
+                break;
+            case MovingDirection.UP:
+                playerPositionY = player.positionY - tileSize;
+                break;
+            case MovingDirection.DOWN:
+                playerPositionY = player.positionY + tileSize;
+                break;
+        }
+        return new int[]{ playerPositionX, playerPositionY };
+    }
+
+    protected void _trackMovementTowardPlayer(Player player,  boolean trackPlayer)
+    {
+        if (!this.activateCollision && trackPlayer)
+        {
+            int [] playerPositionXY = this._findPlayerPosition(player);
+            int playerPositionX = playerPositionXY[0];
+            int playerPositionY = playerPositionXY[1];
+            this.positionY = this._moveTowardScreenPosition(positionY, playerPositionY, this.speed);
+            this.positionX = this._moveTowardScreenPosition(positionX, playerPositionX, this.speed);
+            this.returnToDefaultPosition = true;
+        }
+        if (this.returnToDefaultPosition && !trackPlayer)
+        {
+            if (this.initialPositionX == this.positionX && this.initialPositionY == this.positionY)
+            {
+                this.returnToDefaultPosition = false;
+            }
+            this.positionY = this._moveTowardScreenPosition(positionY, this.initialPositionY, this.speed);
+            this.positionX = this._moveTowardScreenPosition(positionX, this.initialPositionX, this.speed);
+        }
+        if (this.activateCollision)
+        {
+            this.positionY = this._moveTowardScreenPosition(positionY, this.initialPositionY, this.speed);
+            this.positionX = this._moveTowardScreenPosition(positionX, this.initialPositionX, this.speed);
+        }
+    }
+
+    protected int _moveTowardScreenPosition(int positionA, int positionB, int speed)
+    {
+        if (positionA < positionB)
+        {
+            positionA += speed;
+        }
+        else if (positionA > positionB)
+        {
+            positionA -= speed;
+        }
+        return positionA;
+    }
+
+    protected void autoMoveIndividual()
+    {
+        if (this.movementDirection != null)
+        {
+            if (this.movementDirection.equals(MovingDirection.DOWN) && this.maxAllowedDownMovement > this.positionY)
+            {
+                this.positionY = this.positionY + this.speed;
+                if (this.maxAllowedDownMovement <= this.positionY)
+                {
+                    this.getNextDirectionOfMovement();
+                }
+            }
+            else if (this.movementDirection.equals(MovingDirection.UP) && this.maxAllowedUpMovement < this.positionY)
+            {
+                this.positionY = this.positionY - this.speed;
+                if (this.maxAllowedUpMovement >= this.positionY)
+                {
+                    this.getNextDirectionOfMovement();
+                }
+            }
+            else if (this.movementDirection.equals(MovingDirection.RIGHT) && this.maxAllowedRightMovement > this.positionX)
+            {
+                this.positionX = this.positionX + this.speed;
+                if (this.maxAllowedRightMovement <= this.positionX)
+                {
+                    this.getNextDirectionOfMovement();
+                }
+            }
+            else if (this.movementDirection.equals(MovingDirection.LEFT) && this.maxAllowedLeftMovement < this.positionX)
+            {
+                this.positionX = this.positionX - this.speed;
+                if (this.maxAllowedLeftMovement >= this.positionX)
+                {
+                    this.getNextDirectionOfMovement();
+                }
+            }
+            else
+            {
+                this._resetMaxMovementDirection();
+            }
+        }
+    }
+
+    private void getNextDirectionOfMovement()
+    {
+        this.nextMovementIndex = this.nextMovementIndex + 1 == this.individualMovingDirectionList.size() ? 0 : this.nextMovementIndex + 1;
+        this.movementDirection = !this.individualMovingDirectionList.isEmpty() ? this.individualMovingDirectionList.get(this.nextMovementIndex) : MovingDirection.STATIONARY;
+    }
+
+    protected void _resetMaxMovementDirection()
+    {
+        this.maxAllowedDownMovement = this.positionY + this.maxDistanceAllowedToMove;
+        this.maxAllowedUpMovement = this.positionY - this.maxDistanceAllowedToMove;
+        this.maxAllowedRightMovement = this.positionX + this.maxDistanceAllowedToMove;
+        this.maxAllowedLeftMovement = this.positionX - this.maxDistanceAllowedToMove;
     }
 }

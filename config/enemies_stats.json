@@ -4,10 +4,6 @@
   "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
-  "enemyWorldId" : "4106",
-  "isAlive" : true
-}, {
-  "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "43020",
   "isAlive" : true
 }, {
@@ -79,7 +75,7 @@
   "enemyWorldId" : "1010516",
   "isAlive" : true
 }, {
-  "mapName" : "WaterDungeonWorldMapEnemies",
-  "enemyWorldId" : "1145",
+  "mapName" : "WorldMap",
+  "enemyWorldId" : "14320624",
   "isAlive" : true
 } ]

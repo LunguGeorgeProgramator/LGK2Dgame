@@ -45,6 +45,12 @@ public class EnemyAssetsConstance
         ),
         MovingDirection.RIGHT, Map.of(
             1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-right.png"))
+        ),
+        MovingDirection.UP, Map.of(
+            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-left.png"))
+        ),
+        MovingDirection.DOWN, Map.of(
+            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-right.png"))
         )
     );
     public static Map<MovingDirection, Map<Integer, BufferedImage>> ghostMosterColisionAssetsMap = Map.of(

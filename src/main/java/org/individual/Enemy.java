@@ -28,7 +28,6 @@ public class Enemy extends Individual
     private static final String ENEMY_UNDER_ATTACK_ASSETS_MAP_KEY_NAME = "enemyUnderAttackAssetsMap";
     private final String enemyCollisionText;
     private double hitDamage;
-    private final int maxDistanceAllowedToMove;
     public BufferedImage enemyAsset;
     private boolean isEnemyCollidingWithPlayer = false;
     final private Map<MovingDirection, Map<Integer, BufferedImage>> enemyAssetsMap;
@@ -39,12 +38,6 @@ public class Enemy extends Individual
     private final Map<MovingDirection, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap;
     private final Map<MovingDirection, Map<Integer, BufferedImage>> enemyColisionAssetsMap;
     private Map<String, Map<MovingDirection, Map<Integer, BufferedImage>>> allEnemyAsssetsMap;
-    private final List<MovingDirection> enemyMovingDirectionList;
-    private int maxAllowedDownMovement;
-    private int maxAllowedUpMovement;
-    private int maxAllowedRightMovement;
-    private int maxAllowedLeftMovement;
-    private Integer nextMovementIndex;
     public int enemyId;
     public String enemyName;
     public int enemyWorldMatrixCol;
@@ -53,9 +46,6 @@ public class Enemy extends Individual
     public Rectangle attackArea;
     public Rectangle detectionArea;
     public Rectangle damageTakenArea;
-    public final int defaultPositionX;
-    public final int defaultPositionY;
-    private boolean enemyReturnToDefaultPosition = false;
     private int worldEnemyAssetPositionX;
     private int worldEnemyAssetPositionY;
     public String enemyWorldPrefix;
@@ -79,25 +69,22 @@ public class Enemy extends Individual
     )
     {
         super(defaultPositionX, defaultPositionY, speed);
-        this.defaultPositionX = defaultPositionX;
-        this.defaultPositionY = defaultPositionY;
         this.enemyId = enemyId;
         this.enemyName = enemyName;
         this.enemyWorldMatrixCol = enemyWorldMatrixCol;
         this.enemyWorldMatrixRow = enemyWorldMatrixRow;
-        this.maxDistanceAllowedToMove = maxDistanceAllowedToMove;
         this.player = player;
         this.enemyAssetsMap = enemyAssetsMap;
-        this.enemyMovingDirectionList = enemyMovingDirectionList;
-        this.movementDirection = !this.enemyMovingDirectionList.isEmpty() ? this.enemyMovingDirectionList.getFirst() : MovingDirection.UP;
         this.gamePanel = gamePanel;
         this.collisionChecker = this.gamePanel.collisionChecker;
         this.enemyCollisionText = this.gamePanel.gameTextProvider.getGameTextByKey(ENEMY_COLLISION_TEXT_KEY);
         this.hitDamage = 0;
         this.enemyUnderAttackAssetsMap = enemyUnderAttackAssetsMap;
         this.enemyColisionAssetsMap = enemyColisionAssetsMap;
-        this.nextMovementIndex = !this.enemyMovingDirectionList.isEmpty() ? 0 : null;
-        _resetMaxMovementDirection();
+        this.maxDistanceAllowedToMove = maxDistanceAllowedToMove;
+        this.individualMovingDirectionList = enemyMovingDirectionList;
+        this.movementDirection = !this.individualMovingDirectionList.isEmpty() ? this.individualMovingDirectionList.getFirst() : MovingDirection.UP;
+        this.nextMovementIndex = !this.individualMovingDirectionList.isEmpty() ? 0 : null;
         this.setAssetImages();
         this.buildEnemyCollisionArea();
         this.buildEnemyAttackArea();
@@ -143,14 +130,6 @@ public class Enemy extends Individual
         this.detectionArea.width = tileSize * 5;
     }
 
-    private void _resetMaxMovementDirection()
-    {
-        this.maxAllowedDownMovement = this.positionY + this.maxDistanceAllowedToMove;
-        this.maxAllowedUpMovement = this.positionY - this.maxDistanceAllowedToMove;
-        this.maxAllowedRightMovement = this.positionX + this.maxDistanceAllowedToMove;
-        this.maxAllowedLeftMovement = this.positionX - this.maxDistanceAllowedToMove;
-    }
-
     public void setAssetImages()
     {
         this.enemyAsset = null;
@@ -159,12 +138,6 @@ public class Enemy extends Individual
             ENEMY_COLLISION_ASSETS_MAP_KEY_NAME, (this.enemyColisionAssetsMap != null && !this.enemyColisionAssetsMap.isEmpty() ?  this.enemyColisionAssetsMap : Map.of()),
             ENEMY_UNDER_ATTACK_ASSETS_MAP_KEY_NAME, (this.enemyUnderAttackAssetsMap != null && !this.enemyUnderAttackAssetsMap.isEmpty() ? this.enemyUnderAttackAssetsMap : Map.of())
         );
-    }
-
-    private void getNextDirectionOfMovement()
-    {
-        this.nextMovementIndex = this.nextMovementIndex + 1 == this.enemyMovingDirectionList.size() ? 0 : this.nextMovementIndex + 1;
-        this.movementDirection = this.enemyMovingDirectionList.get(this.nextMovementIndex);
     }
 
     @Override
@@ -179,7 +152,8 @@ public class Enemy extends Individual
                 this._enemyMovingActions();
                 this._enemyDamageAndHealthControl();
             }
-            this._trackMovementTowardPlayer();
+            boolean trackPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.detectionArea);
+            this._trackMovementTowardPlayer(this.player, trackPlayer);
             this._updateEnemyCollisionAreasAndScreenPositions();
         }
     }
@@ -190,44 +164,9 @@ public class Enemy extends Individual
         this.isEnemyCollidingWithPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.attackArea);
         if (!this.isEnemyCollidingWithPlayer)
         {
-            if (!this.enemyReturnToDefaultPosition)
+            if (!this.returnToDefaultPosition)
             {
-                if (this.movementDirection.equals(MovingDirection.DOWN) && this.maxAllowedDownMovement > this.positionY)
-                {
-                    this.positionY = this.positionY + this.speed;
-                    if (this.maxAllowedDownMovement <= this.positionY)
-                    {
-                        this.getNextDirectionOfMovement();
-                    }
-                }
-                else if (this.movementDirection.equals(MovingDirection.UP) && this.maxAllowedUpMovement < this.positionY)
-                {
-                    this.positionY = this.positionY - this.speed;
-                    if (this.maxAllowedUpMovement >= this.positionY)
-                    {
-                        this.getNextDirectionOfMovement();
-                    }
-                }
-                else if (this.movementDirection.equals(MovingDirection.RIGHT) && this.maxAllowedRightMovement > this.positionX)
-                {
-                    this.positionX = this.positionX + this.speed;
-                    if (this.maxAllowedRightMovement <= this.positionX)
-                    {
-                        this.getNextDirectionOfMovement();
-                    }
-                }
-                else if (this.movementDirection.equals(MovingDirection.LEFT) && this.maxAllowedLeftMovement < this.positionX)
-                {
-                    this.positionX = this.positionX - this.speed;
-                    if (this.maxAllowedLeftMovement >= this.positionX)
-                    {
-                        this.getNextDirectionOfMovement();
-                    }
-                }
-                else
-                {
-                    this._resetMaxMovementDirection();
-                }
+                this.autoMoveIndividual();
             }
         }
     }
@@ -262,61 +201,6 @@ public class Enemy extends Individual
             String enemyWorldId = this.gamePanel.gameSavedStats.getEnemyWorldIdFormat(this);
             this.gamePanel.gameSavedStats.updateEnemyAliveStatus(enemyWorldId, false);
         }
-    }
-
-    private void _trackMovementTowardPlayer()
-    {
-        boolean trackPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.detectionArea);
-        if (!this.activateCollision && trackPlayer)
-        {
-            int playerPositionX = player.positionX;
-            int playerPositionY = player.positionY;
-            switch (this.movementDirection)
-            {
-                case MovingDirection.LEFT:
-                    playerPositionX = player.positionX + tileSize;
-                    break;
-                case MovingDirection.RIGHT:
-                    playerPositionX = player.positionX - tileSize;
-                    break;
-                case MovingDirection.UP:
-                    playerPositionY = player.positionY - tileSize;
-                    break;
-                case MovingDirection.DOWN:
-                    playerPositionY = player.positionY + tileSize;
-                    break;
-            }
-            this.positionY = this._moveTowardScreenPosition(positionY, playerPositionY, this.speed);
-            this.positionX = this._moveTowardScreenPosition(positionX, playerPositionX, this.speed);
-            this.enemyReturnToDefaultPosition = true;
-        }
-        if (this.enemyReturnToDefaultPosition && !trackPlayer)
-        {
-            if (this.defaultPositionX == this.positionX && this.defaultPositionY == this.positionY)
-            {
-                this.enemyReturnToDefaultPosition = false;
-            }
-            this.positionY = this._moveTowardScreenPosition(positionY, this.defaultPositionY, this.speed);
-            this.positionX = this._moveTowardScreenPosition(positionX, this.defaultPositionX, this.speed);
-        }
-        if (this.activateCollision)
-        {
-            this.positionY = this._moveTowardScreenPosition(positionY, this.defaultPositionY, this.speed);
-            this.positionX = this._moveTowardScreenPosition(positionX, this.defaultPositionX, this.speed);
-        }
-    }
-
-    private int _moveTowardScreenPosition(int positionA, int positionB, int speed)
-    {
-        if (positionA < positionB)
-        {
-            positionA += speed;
-        }
-        else if (positionA > positionB)
-        {
-            positionA -= speed;
-        }
-        return positionA;
     }
 
     private void _updateEnemyCollisionAreasAndScreenPositions()

@@ -94,12 +94,10 @@ public class WorldEnemies extends GameWorld
                 EnemyStatsModel enemyStatsToAdd = getEnemyStatsModel(enemy, enemyWorldId);
                 this.gameSavedStats.addToEnemyStats(enemyStatsToAdd);
             }
-            else if (!enemyStatsModel.getIsAlive())
+            else if (enemyStatsModel.getIsAlive())
             {
-                // do not check collision or other logic for this item, this is hidden from player inside the inventory
-                continue;
+                enemy.update();
             }
-            enemy.update();
         }
     }
 

@@ -11,12 +11,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.individual.SpiderBossEnemy;
+import org.individual.GrimBoosEnemy;
 import org.world.dungeons.DungeonWorld;
 import org.game.models.GameState;
 import org.gamesavedstats.GameSavedStats;
 import org.gametexts.GameTextProvider;
 import org.gameuserinterface.GameMenu;
-import org.individual.BossEnemy;
 import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
@@ -33,17 +34,18 @@ public class GamePanel extends JPanel implements Runnable
     static final int scale = 3;
 
     static public final int tileSize = originalTileSize * scale; // 48 x 48 pixel
-    static public final int maxScreenColumns = 16;
-//    static public final int maxScreenColumns = 25;
-    static public final int maxScreenRows = 12;
-//    static public final int maxScreenRows = 14;
+//    static public final int maxScreenColumns = 16;
+    static public final int maxScreenColumns = 25;
+//    static public final int maxScreenRows = 12;
+    static public final int maxScreenRows = 14;
     static public final int screenWith = tileSize * maxScreenColumns; // 768 pixels
     static public final int screenHeight = tileSize * maxScreenRows; // 576 pixels
 
     final int framePerSecond = 60;
     public final KeyBoardAndMouseHandler keyBoardAndMouseHandler;
     public final Player player;
-    public final BossEnemy boosEnemy;
+    public final SpiderBossEnemy spiderBossEnemy;
+    public final GrimBoosEnemy grimBoosEnemy;
     final WorldEnemies worldEnemies;
     final DungeonWorldEnemies caveDungeonWorldEnemies;
     final DungeonWorldEnemies waterDungeonWorldEnemies;
@@ -87,7 +89,8 @@ public class GamePanel extends JPanel implements Runnable
         this.setFocusable(true);
         this.collisionChecker = new CollisionChecker(this);
         this.player = new Player(this);
-        this.boosEnemy = new BossEnemy(this);
+        this.spiderBossEnemy = new SpiderBossEnemy(this);
+        this.grimBoosEnemy = new GrimBoosEnemy(this);
         this.gameWorld = new GameWorld(this, "/worldMaps/WorldMap.txt");
         this.worldItems = new WorldItems(this, "/worldMaps/WorldMapAssets.txt");
         this.caveDungeonWorldItems = new DungeonWorldItems(this, "/worldMaps/dungeons/cave/CaveDungeonWorldMapAssets.txt");
@@ -161,10 +164,14 @@ public class GamePanel extends JPanel implements Runnable
         this.player.stopPlayerMovement = false;
         Timer timer = new Timer(500, e -> {
             this.resetEnemiesHealth = false;
+            this.spiderBossEnemy.isBoosEnemyDead = false;
+            this.grimBoosEnemy.isBoosEnemyDead = false;
         });
         this.clearPlayerDamageText = true;
         this.worldType = WorldType.MAIN_GAME;
         this.LastWorldTypeVisited = Map.of();
+        this.spiderBossEnemy.isBoosEnemyDead = false;
+        this.grimBoosEnemy.isBoosEnemyDead = false;
         timer.setRepeats(false);
         timer.start();
         repaint();
@@ -177,6 +184,7 @@ public class GamePanel extends JPanel implements Runnable
             case WorldType.CAVE_DUNGEON:
                 this.caveDungeonWorldItems.update();
                 this.caveDungeonWorldEnemies.update(this.resetEnemiesHealth);
+                this.grimBoosEnemy.update();
                 this.player.update();
                 break;
             case WorldType.WATER_DUNGEON:
@@ -187,7 +195,7 @@ public class GamePanel extends JPanel implements Runnable
             case WorldType.MAIN_GAME:
                 this.worldItems.update();
                 this.worldEnemies.update(this.resetEnemiesHealth);
-                this.boosEnemy.update();
+                this.spiderBossEnemy.update();
                 this.player.update();
         }
     }
@@ -202,6 +210,7 @@ public class GamePanel extends JPanel implements Runnable
             case WorldType.CAVE_DUNGEON:
                 this.caveDungeonWorld.draw(g2D);
                 this.individuals.add(this.player);
+                this.individuals.add(this.grimBoosEnemy);
                 this.caveDungeonWorldEnemies.addEnemiesToDrawList();
                 this.caveDungeonWorldItems.addItemsToDrawList();
                 break;
@@ -214,7 +223,7 @@ public class GamePanel extends JPanel implements Runnable
             case WorldType.MAIN_GAME:
                 this.gameWorld.draw(g2D);
                 this.individuals.add(this.player);
-                this.individuals.add(this.boosEnemy);
+                this.individuals.add(this.spiderBossEnemy);
                 this.worldEnemies.addEnemiesToDrawList();
                 this.worldItems.addItemsToDrawList();
                 break;

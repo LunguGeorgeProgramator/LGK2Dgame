@@ -10,17 +10,18 @@ import static org.individual.models.EnemyAssetsConstance.*;
 public enum DungeonEnemyAssets implements EnemyAsset
 {
 
-    GHOST_MONSTER(1, 100, 8, leftRight, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
+    GHOST_MONSTER(1, 100, 2, invertedSquare, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
     COLOR_MONSTER(2, 250, 2, square, colorMosterAssetsMap, Map.of(), Map.of()),
     COLOR_MONSTER_SIDE_MOVING(3, 350, 2, square, colorMosterAssetsMap, Map.of(), Map.of()),
-    SLOW_GHOST_MONSTER(4, 150, 4, rightLeft, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
+    SLOW_GHOST_MONSTER(4, 200, 1, downUp, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
     MOVING_RIGHT_COLOR_MONSTER_SIDE_MOVING(5, 250, 2, upDown, colorMosterAssetsMap, Map.of(), Map.of()),
     MOVING_UP_COLOR_MONSTER(6, 50, 2, snakeMovement, colorMosterAssetsMap, Map.of(), Map.of()),
     SPIDER(7, 100, 2, invertedSquare, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
     SIDE_TO_SIDE_MOVING_SPIDER(8, 100, 1, rightLeft, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
     FASTER_SIDE_TO_SIDE_MOVING_SPIDER(9, 100, 5, leftRight, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
     UP_DOWN_MOVING_SPIDER(10, 200, 1, downUp, spiderMosterAssetsMap, spiderMosterColisionAssetsMap, spiderMosterUnderAttackAssetsMap),
-    GHOST_MONSTER_SHORT_DISTANCE(11, 50, 1, rightLeft, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap);
+    GHOST_MONSTER_SHORT_DISTANCE(11, 50, 1, rightLeft, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap),
+    SID_TO_SIDE_GHOST_MONSTER(12, 100, 1, rightLeft, ghostMosterAssetsMap, ghostMosterColisionAssetsMap, ghostMosterUnderAttackAssetsMap);
 
     final private int enemyId;
     final private int maxDistanceAllowedToMove;

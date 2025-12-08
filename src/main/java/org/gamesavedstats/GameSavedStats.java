@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.gamesavedstats.models.EnemyStatsModel;
 import org.individual.Enemy;
+import org.individual.Individual;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class GameSavedStats
     private final ObjectMapper mapper;
     private final File enemyStatsJsonFile;
     private List<EnemyStatsModel> enemiesStatsList;
-    private static String ENEMY_WORLD_ID_FORMAT = "%d%d%d";
+    private static String WORLD_ID_FORMAT = "%d%d%d";
     private static final String ENEMY_STATS_RESOURCE_PATH = "config/enemies_stats.json";
     private static final String ENEMY_STATS_RESOURCE_PATH_NPT_FOUND_ERROR_MESSAGE = "enemies_stats.json not found please check resource.";
 
@@ -30,7 +31,12 @@ public class GameSavedStats
 
     public String getEnemyWorldIdFormat(Enemy enemy)
     {
-        return String.format(ENEMY_WORLD_ID_FORMAT, enemy.enemyId, enemy.enemyWorldMatrixCol, enemy.enemyWorldMatrixRow);
+        return String.format(WORLD_ID_FORMAT, enemy.enemyId, enemy.enemyWorldMatrixCol, enemy.enemyWorldMatrixRow);
+    }
+
+    public String getIndividualWorldIdFormat(Individual individual, int individualId)
+    {
+        return String.format(WORLD_ID_FORMAT, individualId, individual.initialPositionX, individual.initialPositionY);
     }
 
     public List<EnemyStatsModel> openEnemyStats()

@@ -8,7 +8,8 @@ public enum MovingDirection
     LEFT("left"),
     RIGHT("right"),
     UP("up"),
-    DOWN("down");
+    DOWN("down"),
+    STATIONARY("STATIONARY");
 
     private final String directionString;
 
