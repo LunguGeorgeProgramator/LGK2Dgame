@@ -29,6 +29,7 @@ public class NonPlayerCharacter extends Individual
     private final static String INVENTORY_NR_KEYS = "vendor-inventory-keys";
     private final static String INVENTORY_NR_RUBIES = "vendor-inventory-rubies";
     private final static String INVENTORY_SWORD = "vendor-inventory-sword";
+    private final static String INVENTORY_ACTION_MESSAGE = "usage-of-keys-on-open-windows";
     private final static String INVENTORY_CLOSE_MESSAGE = "close-key-message";
     final private GamePanel gamePanel;
     final private Player player;
@@ -266,6 +267,7 @@ public class NonPlayerCharacter extends Individual
             gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_NR_KEYS),
             gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_NR_RUBIES),
             gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_SWORD),
+            gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_ACTION_MESSAGE),
             gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_CLOSE_MESSAGE)
         };
 

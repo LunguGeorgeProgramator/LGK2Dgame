@@ -5,11 +5,11 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "43020",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "43116",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "103555",
@@ -25,31 +25,31 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "23713",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "34016",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "4418",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "64419",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "34812",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "34815",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "2499",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "15644",

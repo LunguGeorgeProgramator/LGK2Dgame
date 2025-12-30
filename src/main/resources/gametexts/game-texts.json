@@ -30,5 +30,6 @@
   "vendor-inventory-keys": "Buy gold keys.",
   "vendor-inventory-rubies": "Consume red rubies.",
   "vendor-inventory-sword": "Buy blue sword.",
+  "usage-of-keys-on-open-windows": "Use ↑ / ↓ to select, Enter to interact.",
   "close-key-message": "Press C to close the window."
 }
