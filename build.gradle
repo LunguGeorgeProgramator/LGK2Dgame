@@ -27,6 +27,9 @@ test {
 tasks.register('run', JavaExec) {
     mainClass = 'org.game.Main'
     classpath = sourceSets.main.runtimeClasspath
+
+    // 2 GB heap
+    jvmArgs '-Xms512m', '-Xmx1g'
 }
 
 /* --------------------------
@@ -53,6 +56,12 @@ launch4j {
 
     bundledJrePath = ''
     jreMinVersion = '24'
+
+    // JVM memory settings
+    jvmOptions = [
+            '-Xms512m',
+            '-Xmx1g'
+    ]
 }
 
 /* ----------------------------------------------------

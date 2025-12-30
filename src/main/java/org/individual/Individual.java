@@ -148,10 +148,10 @@ public abstract class Individual
                 playerPositionX = player.positionX - tileSize;
                 break;
             case MovingDirection.UP:
-                playerPositionY = player.positionY - tileSize;
+                playerPositionY = player.positionY + tileSize;
                 break;
             case MovingDirection.DOWN:
-                playerPositionY = player.positionY + tileSize;
+                playerPositionY = player.positionY - tileSize;
                 break;
         }
         return new int[]{ playerPositionX, playerPositionY };

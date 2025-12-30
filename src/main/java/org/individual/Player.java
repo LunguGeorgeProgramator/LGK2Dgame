@@ -42,40 +42,43 @@ public class Player extends Individual
     private Map<MovingDirection, Map<Integer, BufferedImage>> goldSwordSwingAttackImagesAssetsMap;
     public Rectangle attackCollisionArea;
     public Rectangle worldItemCollisionArea;
+    public Rectangle playerDamageTakenArea;
     public final int defaultMovementSpeed;
     public boolean stopPlayerMovement;
 
 
     public Player(GamePanel gamePanel)
     {
-        super(tileSize * 2, tileSize * 2, 6); // set player position x, y and speed
-        this.defaultMovementSpeed = 6;
+        super(tileSize * 2, tileSize * 2, 4); // set player position x, y and speed
+        this.defaultMovementSpeed = 4;
         this.gamePanel = gamePanel;
         this.keyBoardAndMouseHandler = this.gamePanel.keyBoardAndMouseHandler;
         this.playerScreenX = (GamePanel.screenWith /2) - (tileSize/2);
         this.playerScreenY = (GamePanel.screenHeight /2) - (tileSize/2);
         this.playerInventory = this.gamePanel.playerInventory;
         this.buildPlayerCollisionArea();
-        this.buildPlayerWorldItemCollisionArea();
         this.getAssetImages();
     }
 
     private void buildPlayerCollisionArea()
     { // make the collision area small that the player rectangle so upper corners will not hit solid world assets
         this.collisionArea = new Rectangle();
-        this.collisionArea.x = (((tileSize / 2) / 2) / 2) / 2;
-        this.collisionArea.y = tileSize / 2 - (((tileSize / 2) / 2) / 2) / 2 + 1;
+        this.collisionArea.x = 0;
+        this.collisionArea.y = tileSize / 2;
         this.collisionArea.height = tileSize / 2;
         this.collisionArea.width = tileSize - (((tileSize / 2) / 2) / 2);
-    }
 
-    private void buildPlayerWorldItemCollisionArea()
-    {
         this.worldItemCollisionArea = new Rectangle();
         this.worldItemCollisionArea.x = 0;
         this.worldItemCollisionArea.y =  0;
         this.worldItemCollisionArea.height = tileSize + ((tileSize / 2) / 2);
         this.worldItemCollisionArea.width = tileSize + ((tileSize / 2) / 2);
+
+        this.playerDamageTakenArea = new Rectangle();
+        this.playerDamageTakenArea.x = 0;
+        this.playerDamageTakenArea.y = 0;
+        this.playerDamageTakenArea.height = tileSize / 2 + (tileSize / 2);
+        this.playerDamageTakenArea.width = tileSize + ((tileSize / 2) / 2);
     }
 
     private void clearAttackCollisionArea()
@@ -91,6 +94,9 @@ public class Player extends Individual
     {
         this.worldItemCollisionArea.x = this.playerScreenX - (((tileSize / 2) / 2) / 2);
         this.worldItemCollisionArea.y =  this.playerScreenY - (((tileSize / 2) / 2) / 2);
+
+        this.playerDamageTakenArea.x = this.playerScreenX - (((tileSize / 2) / 2) / 2);
+        this.playerDamageTakenArea.y =  this.playerScreenY + ((tileSize / 2) / 2);
     }
 
     public void getAssetImages()
@@ -243,8 +249,9 @@ public class Player extends Individual
             this.movementDirection = null;
         }
 
-        this.gamePanel.collisionChecker.checkTile(this, false, this.gamePanel.worldType);
-        this.gamePanel.collisionChecker.checkTile(this, true, this.gamePanel.worldType);
+        boolean collisionOne = this.gamePanel.collisionChecker.checkTileCollision(this, false, this.gamePanel.worldType);
+        boolean collisionTwo = this.gamePanel.collisionChecker.checkTileCollision(this, true, this.gamePanel.worldType);
+        this.activateCollision = collisionOne || collisionTwo;
 
         if (!this.activateCollision && !this.stopPlayerMovement)
         {
@@ -360,7 +367,9 @@ public class Player extends Individual
                 break;
         }
 
-//        this.gamePanel.drawTestDynamicRectangle(g2D, this.worldItemCollisionArea.x, this.worldItemCollisionArea.y, this.worldItemCollisionArea.width, this.worldItemCollisionArea.height);
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.playerDamageTakenArea.x, this.playerDamageTakenArea.y, this.playerDamageTakenArea.width, this.playerDamageTakenArea.height);
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.playerScreenX, this.playerScreenY, tileSize, tileSize);
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.playerScreenX, this.playerScreenY, tileSize, tileSize);
         g2D.drawImage(this.isPlayerSwingSword ? playerSwingSwordAsset : playerAsset, this.playerScreenX, this.playerScreenY, null);
         this._drawPlayerAttackCollisionArea(g2D, swingSwordAsset);
     }

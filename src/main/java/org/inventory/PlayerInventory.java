@@ -72,17 +72,25 @@ public class PlayerInventory
         return String.format(INVENTORY_ID_FORMAT, worldItem.itemAssetId, worldItem.itemWorldMatrixColIndex, worldItem.itemWorldMatrixRowIndex);
     }
 
+    public String getWorldItemInventoryIdByStaticValue(int itemAssetId, int itemWorldMatrixColIndex, int itemWorldMatrixRowIndex)
+    {
+        return String.format(INVENTORY_ID_FORMAT, itemAssetId, itemWorldMatrixColIndex, itemWorldMatrixRowIndex);
+    }
+
     private void updateModelDependingOnActionRequested(PlayerInventoryModel itemToUseAsValue, PlayerInventoryModel itemToUpdate, String updateAction)
     {
         switch (updateAction)
         {
             case "addToValue":
                 itemToUpdate.addToCount(itemToUseAsValue.getCount());
+                break;
             case "toRemoveValue":
                 itemToUpdate.removeFromCount(itemToUseAsValue.getCount());
+                break;
             case null:
             default:
                 itemToUpdate.setCount(itemToUseAsValue.getCount());
+                break;
         }
     }
 
@@ -103,7 +111,7 @@ public class PlayerInventory
 
     public List<PlayerInventoryModel> updateInventoryItem(PlayerInventoryModel playerInventoryItem, String updateAction)
     {
-        List<PlayerInventoryModel> items = this.playerInventoryList;
+        List<PlayerInventoryModel> items = openInventory();
         for (PlayerInventoryModel playerInventoryModel : items)
         {
             if (playerInventoryModel.getItemInventoryId().equals(playerInventoryItem.getItemInventoryId()))
@@ -214,13 +222,13 @@ public class PlayerInventory
                 case "RUBY":
                     if (playerInventoryModel.getInInventory())
                     {
-                        numberOfRubies++;
+                        numberOfRubies = playerInventoryModel.getCount();
                     }
                     break;
                 case "GOLD_KEY":
                     if (playerInventoryModel.getInInventory())
                     {
-                        numberKeys++;
+                        numberKeys = playerInventoryModel.getCount();
                     }
                     break;
             }

@@ -25,5 +25,10 @@
   "boos-enemy-dead": "You win! The boss is down!",
   "25304": "Cave dungeon entrance!",
   "25309": "Water dungeon entrance!",
-  "25708": "The grass field"
+  "25708": "The grass field",
+  "vendor-inventory-title": "Shop stock!",
+  "vendor-inventory-keys": "Buy gold keys.",
+  "vendor-inventory-rubies": "Consume red rubies.",
+  "vendor-inventory-sword": "Buy blue sword.",
+  "close-key-message": "Press C to close the window."
 }

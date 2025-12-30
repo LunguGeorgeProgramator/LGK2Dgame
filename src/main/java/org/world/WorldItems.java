@@ -1,9 +1,9 @@
 package org.world;
 
 import org.game.GamePanel;
+import org.individual.Individual;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
-import org.world.models.GameWorldAssets;
 import org.worlditems.WorldItem;
 import org.worlditems.models.WorldItemBuilder;
 import org.worlditems.models.WorldItemTypes;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.game.GamePanel.tileSize;
+import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
 
 
 public class WorldItems extends GameWorld
@@ -124,23 +125,27 @@ public class WorldItems extends GameWorld
         return playerInventoryModelAdd;
     }
 
-    public void addItemsToDrawList()
+    public List<Individual> addItemsToDrawList(List<Individual> individuals)
     {
         for (WorldItem worldItem : this.worldItemsList)
         {
-            if (itemsTypesAllowedInInventory.contains(WorldItemTypes.valueOf(worldItem.itemAssetType)))
+            if (checkIfAssetIsInsideTheBoundary(worldItem.positionX, worldItem.positionY, this.player, tileSize * 2))
             {
-                String itemInventoryId = this.playerInventory.getWorldItemInventoryId(worldItem);
-                PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByInventoryId(itemInventoryId);
-                if (inventoryItem != null && inventoryItem.getInInventory())
+                if (itemsTypesAllowedInInventory.contains(WorldItemTypes.valueOf(worldItem.itemAssetType)))
                 {
-                    // if item is already in inventory do not draw on game map
-                    continue;
-                }
+                    String itemInventoryId = this.playerInventory.getWorldItemInventoryId(worldItem);
+                    PlayerInventoryModel inventoryItem = this.playerInventory.getInventoryItemByInventoryId(itemInventoryId);
+                    if (inventoryItem != null && inventoryItem.getInInventory())
+                    {
+                        // if item is already in inventory do not draw on game map
+                        continue;
+                    }
 
+                }
+                individuals.add(worldItem);
             }
-            this.gamePanel.individuals.add(worldItem);
         }
+        return individuals;
     }
 
     public void drawTextOmCollision(Graphics2D g2D)

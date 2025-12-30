@@ -99,7 +99,29 @@ public enum WorldItemsAssets implements GameWorldAssets
     WATER_DUNGEON_ENTRY_WAY(31, WorldItemTypes.WATER_DUNGEON_ENTRY_WAY.name(), false, 0, 0, 0,
         Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/water-dungeon-entry-way.png")), null))),
     DUNGEON_EXIT_ENTRY_WAY(32, WorldItemTypes.DUNGEON_EXIT_ENTRY_WAY.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/cave-dungeon-exit-way.png")), null)));
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/cave-dungeon-exit-way.png")), null))),
+    BIG_DOOR_WOOD_RIGHT(33, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
+        Map.of(
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/big-door-open-right.png")), null),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/big-door-closed-right.png")), "closed-big-door")
+        )),
+    BIG_DOOR_WOOD_LEFT(34, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
+        Map.of(
+            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/big-door-open-left.png")), null),
+            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/big-door-closed-left.png")), "closed-big-door")
+        )),
+    BIG_DOOR_STONE_RIGHT(35, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
+        Map.of(
+        1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/temple-door-open-right.png")), null),
+        2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/temple-door-closed-right.png")), "closed-big-door")
+        )),
+    BIG_DOOR_STONE_LEFT(36, WorldItemTypes.DOOR.name(), true, tileSize * 20, tileSize * 4, WorldItemsAssets.GOLD_KEY.getItemId(),
+        Map.of(
+        1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/temple-door-open-left.png")), null),
+        2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/runinedtemple/temple-door-closed-left.png")), "closed-big-door")
+        )),
+    BARREL(37, WorldItemTypes.FURNITURE.name(), true, tileSize * 20, tileSize * 4, 0,
+        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/barrel.png")), null)));
 
     private final int itemId;
     private final String itemType;

@@ -48,7 +48,6 @@ public class Enemy extends Individual
     public Rectangle damageTakenArea;
     private int worldEnemyAssetPositionX;
     private int worldEnemyAssetPositionY;
-    public String enemyWorldPrefix;
 
 
     public Enemy(
@@ -87,9 +86,6 @@ public class Enemy extends Individual
         this.nextMovementIndex = !this.individualMovingDirectionList.isEmpty() ? 0 : null;
         this.setAssetImages();
         this.buildEnemyCollisionArea();
-        this.buildEnemyAttackArea();
-        this.buildEnemyDetectionArea();
-        this.buildEnemyDamageTakenArea();
         this.enemyMaxHealth = 50;
         this.enemyHealth = 50;
     }
@@ -101,28 +97,19 @@ public class Enemy extends Individual
         this.collisionArea.y = 0;
         this.collisionArea.height = tileSize;
         this.collisionArea.width = tileSize;
-    }
 
-    private void buildEnemyDamageTakenArea()
-    {
         this.damageTakenArea = new Rectangle();
         this.damageTakenArea.x = 0;
         this.damageTakenArea.y = 0;
         this.damageTakenArea.height = tileSize;
         this.damageTakenArea.width = tileSize;
-    }
 
-    private void buildEnemyAttackArea()
-    {
         this.attackArea = new Rectangle();
         this.attackArea.x = 0;
         this.attackArea.y = 0;
         this.attackArea.height = tileSize * 2;
         this.attackArea.width = tileSize * 2;
-    }
 
-    private void buildEnemyDetectionArea()
-    {
         this.detectionArea = new Rectangle();
         this.detectionArea.x = 0;
         this.detectionArea.y = 0;
@@ -145,8 +132,9 @@ public class Enemy extends Individual
     {
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 4))
         {
-            this.gamePanel.collisionChecker.checkTile(this, false, this.gamePanel.worldType);
-            this.gamePanel.collisionChecker.checkTile(this, true, this.gamePanel.worldType);
+            boolean collisionOne = this.gamePanel.collisionChecker.checkTileCollision(this, false, this.gamePanel.worldType);
+            boolean collisionTwo = this.gamePanel.collisionChecker.checkTileCollision(this, true, this.gamePanel.worldType);
+            this.activateCollision = collisionOne || collisionTwo;
             if (!this.activateCollision)
             {
                 this._enemyMovingActions();
@@ -161,7 +149,7 @@ public class Enemy extends Individual
     private void _enemyMovingActions()
     {
         this.isAllowedToInflictDamage = this.slowDownGame();
-        this.isEnemyCollidingWithPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.worldItemCollisionArea, this.attackArea);
+        this.isEnemyCollidingWithPlayer = this.collisionChecker.areRectanglesIntersecting(this.player.playerDamageTakenArea, this.attackArea);
         if (!this.isEnemyCollidingWithPlayer)
         {
             if (!this.returnToDefaultPosition)

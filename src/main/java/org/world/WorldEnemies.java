@@ -4,6 +4,7 @@ import org.game.GamePanel;
 import org.gamesavedstats.GameSavedStats;
 import org.gamesavedstats.models.EnemyStatsModel;
 import org.individual.Enemy;
+import org.individual.Individual;
 import org.individual.models.EnemyAsset;
 import org.individual.models.EnemyAssets;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.nio.file.Paths;
 
 import static org.game.GamePanel.tileSize;
+import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
 
 public class WorldEnemies extends GameWorld
 {
@@ -110,18 +112,23 @@ public class WorldEnemies extends GameWorld
         return enemyStatsModel;
     }
 
-    public void addEnemiesToDrawList()
+    public List<Individual> addEnemiesToDrawList(List<Individual> individuals)
     {
+
         for(Enemy enemy : this.enemyList)
         {
-            String enemyWorldId = this.gameSavedStats.getEnemyWorldIdFormat(enemy);
-            EnemyStatsModel enemyStatsModel = this.gameSavedStats.getEnemyStatsByEnemyWorldId(enemyWorldId);
-            if (enemyStatsModel != null && !enemyStatsModel.getIsAlive())
+            if (checkIfAssetIsInsideTheBoundary(enemy.positionX, enemy.positionY, this.player, tileSize * 2))
             {
-                continue;
+                String enemyWorldId = this.gameSavedStats.getEnemyWorldIdFormat(enemy);
+                EnemyStatsModel enemyStatsModel = this.gameSavedStats.getEnemyStatsByEnemyWorldId(enemyWorldId);
+                if (enemyStatsModel != null && !enemyStatsModel.getIsAlive())
+                {
+                    continue;
+                }
+                individuals.add(enemy);
             }
-            this.gamePanel.individuals.add(enemy);
         }
+        return individuals;
     }
 
     public void drawEnemyText(Graphics2D g2D, boolean clearPlayerDamageText)

@@ -93,7 +93,7 @@ public class GameSavedStats
 
     public List<EnemyStatsModel> updateEnemyAliveStatus(String enemyWorldId, boolean isAlive)
     {
-        List<EnemyStatsModel> items = this.enemiesStatsList;
+        List<EnemyStatsModel> items = this.openEnemyStats();
         for (EnemyStatsModel enemyStatsModel : items)
         {
             if (enemyStatsModel.getEnemyWorldId().equals(enemyWorldId))

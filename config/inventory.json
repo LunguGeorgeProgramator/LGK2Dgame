@@ -28,4 +28,34 @@
   "itemWorldMatrixRow" : 43,
   "itemInventoryId" : "234643",
   "inInventory" : false
+}, {
+  "itemName" : "SWORD",
+  "itemId" : 23,
+  "count" : 2,
+  "status" : "active",
+  "itemType" : "WEAPON",
+  "itemWorldMatrixCol" : -1,
+  "itemWorldMatrixRow" : -1,
+  "itemInventoryId" : "23-1-1",
+  "inInventory" : true
+}, {
+  "itemName" : "RUBY",
+  "itemId" : 2,
+  "count" : 2,
+  "status" : "active",
+  "itemType" : "HEALTH_RESTORATION",
+  "itemWorldMatrixCol" : -1,
+  "itemWorldMatrixRow" : -1,
+  "itemInventoryId" : "2-1-1",
+  "inInventory" : true
+}, {
+  "itemName" : "GOLD_KEY",
+  "itemId" : 1,
+  "count" : 3,
+  "status" : "active",
+  "itemType" : "KEY",
+  "itemWorldMatrixCol" : -1,
+  "itemWorldMatrixRow" : -1,
+  "itemInventoryId" : "1-1-1",
+  "inInventory" : true
 } ]

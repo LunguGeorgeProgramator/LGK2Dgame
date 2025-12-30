@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 public class KeyBoardAndMouseHandler implements KeyListener, MouseListener, MouseMotionListener
 {
     public boolean upPressed;
+    public boolean closePressed;
     public boolean downPressed;
     public boolean leftPressed;
     public boolean rightPressed;
@@ -66,7 +67,8 @@ public class KeyBoardAndMouseHandler implements KeyListener, MouseListener, Mous
                 break;
             case KeyEvent.VK_I:
                 playerInventoryKeyPressed = keyPressedValue;
-                if (keyPressedValue)
+//                if (keyPressedValue)
+                if (keyPressedValue && !gamePanel.isGameState(GameState.OPEN_VENDOR_INVENTORY))
                 {
                     gamePanel.setGameState(GameState.OPEN_PLAYER_INVENTORY);
                 }
@@ -85,6 +87,9 @@ public class KeyBoardAndMouseHandler implements KeyListener, MouseListener, Mous
                 break;
             case KeyEvent.VK_DOWN:
                 downKeyPressed = keyPressedValue;
+                break;
+            case KeyEvent.VK_C:
+                closePressed = keyPressedValue;
                 break;
         }
     }

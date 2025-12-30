@@ -2,6 +2,7 @@ package org.worlditems;
 
 import org.game.CollisionChecker;
 import org.game.GamePanel;
+import org.game.models.GameState;
 import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
@@ -126,7 +127,6 @@ public class WorldItem extends Individual
                     playerInventoryModel.setInInventory(true);
                     this.playerInventory.updateInventoryItem(playerInventoryModel);
                 }
-                this.setTextShownOnCollision();
                 this._playerInteractionWithDungeonEntries();
             }
             this.healingItemsCollisionBehavior();
@@ -215,6 +215,7 @@ public class WorldItem extends Individual
 
     public void drawWordItemCollisionText(Graphics2D g2D)
     {
+        this.setTextShownOnCollision();
         if (this.hasPlayerCollidedWithItem)
         {
             this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.textShownOnInteractionWithItem);

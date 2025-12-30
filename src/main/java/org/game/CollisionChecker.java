@@ -74,18 +74,18 @@ public class CollisionChecker
         return null;
     }
 
-    public void checkTile(Individual individual, boolean checkWorldAssetItem, WorldType worldType)
+    public boolean checkTileCollision(Individual individual, boolean checkWorldAssetItem, WorldType worldType)
     {
 //         gamePanel.testPositionX = individual.collisionArea.x;
 //         gamePanel.testPositionY = individual.collisionArea.y;
 //         gamePanel.testWith = individual.collisionArea.width;
 //         gamePanel.testHeight = individual.collisionArea.height;
 //         gamePanel.testCollisionArea = true;
-
-        int errorMargin = (individual instanceof Player ? 0 : 1);
+        boolean isColliding = false;
+        int errorMargin = 1;
         int individualLeftX = individual.positionX + individual.collisionArea.x + errorMargin;
-        int individualRightX = individual.positionX + individual.collisionArea.x + individual.collisionArea.width - errorMargin;
-        int individualTopY = individual.positionY + individual.collisionArea.y + errorMargin;
+        int individualRightX = individual.positionX + individual.collisionArea.x + individual.collisionArea.width;
+        int individualTopY = individual.positionY + individual.collisionArea.y;
         int individualBottomY = individual.positionY + individual.collisionArea.y + individual.collisionArea.height - errorMargin;
 
         int individualLeftCol = individualLeftX / tileSize;
@@ -96,16 +96,18 @@ public class CollisionChecker
         int[][] worldMatrix = gamePanel.gameWorld.worldMap;
         int[][] worldItemsMatrix = gamePanel.worldItems.worldMap;
         int[][] caveDungeonWorldMatrix = gamePanel.caveDungeonWorld.worldMap;
+        int[][] caveDungeonWorldItemsMatrix = gamePanel.caveDungeonWorldItems.worldMap;
         int[][] waterDungeonWorldMatrix = gamePanel.waterDungeonWorld.worldMap;
+        int[][] waterDungeonWorldItemsMatrix = gamePanel.waterDungeonWorldItems.worldMap;
         int[][] sourceWorldMatrix;
 
         switch (worldType)
         {
             case WorldType.CAVE_DUNGEON:
-                sourceWorldMatrix = caveDungeonWorldMatrix;
+                sourceWorldMatrix = checkWorldAssetItem ? caveDungeonWorldItemsMatrix : caveDungeonWorldMatrix;
                 break;
             case WorldType.WATER_DUNGEON:
-                sourceWorldMatrix = waterDungeonWorldMatrix;
+                sourceWorldMatrix = checkWorldAssetItem ? waterDungeonWorldItemsMatrix : waterDungeonWorldMatrix;
                 break;
             case null, default:
                 sourceWorldMatrix = checkWorldAssetItem ? worldItemsMatrix : worldMatrix;
@@ -115,23 +117,24 @@ public class CollisionChecker
         {
             case MovingDirection.UP:
                 individualTopRow = (individualTopY - individual.speed) / tileSize;
-                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualTopRow, individualRightCol, individualTopRow, individual, sourceWorldMatrix, checkWorldAssetItem, worldType);
+                isColliding = _checkIfWorldAssetsHaveCollision(individualLeftCol, individualTopRow, individualRightCol, individualTopRow, individual, sourceWorldMatrix, checkWorldAssetItem, worldType);
                 break;
             case MovingDirection.DOWN:
                 individualBottomRow = (individualBottomY + individual.speed) / tileSize;
-                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualBottomRow, individualRightCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem, worldType);
+                isColliding = _checkIfWorldAssetsHaveCollision(individualLeftCol, individualBottomRow, individualRightCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem, worldType);
                 break;
             case MovingDirection.LEFT:
                 individualLeftCol = (individualLeftX - individual.speed) / tileSize;
-                _checkIfWorldAssetsHaveCollisionOn(individualLeftCol, individualTopRow, individualLeftCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem, worldType);
+                isColliding = _checkIfWorldAssetsHaveCollision(individualLeftCol, individualTopRow, individualLeftCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem, worldType);
                 break;
             case MovingDirection.RIGHT:
                 individualRightCol = (individualRightX + individual.speed) / tileSize;
-                _checkIfWorldAssetsHaveCollisionOn(individualRightCol, individualTopRow, individualRightCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem, worldType);
+                isColliding = _checkIfWorldAssetsHaveCollision(individualRightCol, individualTopRow, individualRightCol, individualBottomRow, individual, sourceWorldMatrix, checkWorldAssetItem, worldType);
                 break;
             case null, default:
                 break;
         }
+        return isColliding;
     }
 
     private GameWorldAssets _getWorldItem(WorldType worldType, int worldItemId, boolean checkWorldAssetItem)
@@ -150,8 +153,9 @@ public class CollisionChecker
         return worldItem;
     }
 
-    private void _checkIfWorldAssetsHaveCollisionOn(int assetOneCol, int assetOneRow, int assetTwoCol, int assetTwoRow, Individual individual, int[][] sourceWorldMatrix, boolean checkWorldAssetItem, WorldType worldType)
+    private boolean _checkIfWorldAssetsHaveCollision(int assetOneCol, int assetOneRow, int assetTwoCol, int assetTwoRow, Individual individual, int[][] sourceWorldMatrix, boolean checkWorldAssetItem, WorldType worldType)
     {
+        boolean isColliding = false;
         int worldAssetOne = _getWorldAssetIndex(assetOneCol, assetOneRow, sourceWorldMatrix);
         int worldAssetTwo = _getWorldAssetIndex(assetTwoCol, assetTwoRow, sourceWorldMatrix);
         GameWorldAssets worldItemsOne = this._getWorldItem(worldType, worldAssetOne, checkWorldAssetItem);
@@ -160,12 +164,13 @@ public class CollisionChecker
                 worldItemsTwo != null && worldItemsTwo.getSolidStopOnCollisionWithPlayer();
         if (!checkWorldAssetItem)
         {
-            individual.activateCollision = activateCollision;
+            isColliding = activateCollision;
         }
         else if (activateCollision)
         {
-            individual.activateCollision = this._checkWorldItemsCollision(individual, Objects.requireNonNull(worldItemsOne != null ? worldItemsOne : worldItemsTwo));
+            isColliding = this._checkWorldItemsCollision(individual, Objects.requireNonNull(worldItemsOne != null ? worldItemsOne : worldItemsTwo));
         }
+        return isColliding;
     }
 
     private boolean _checkWorldItemsCollision(Individual individual, GameWorldAssets worldItemsAssets)

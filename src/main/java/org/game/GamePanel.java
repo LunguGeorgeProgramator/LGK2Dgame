@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.individual.SpiderBossEnemy;
 import org.individual.GrimBoosEnemy;
+import org.world.NonPlayerCharacters;
 import org.world.dungeons.DungeonWorld;
 import org.game.models.GameState;
 import org.gamesavedstats.GameSavedStats;
@@ -41,12 +42,13 @@ public class GamePanel extends JPanel implements Runnable
     static public final int screenWith = tileSize * maxScreenColumns; // 768 pixels
     static public final int screenHeight = tileSize * maxScreenRows; // 576 pixels
 
-    final int framePerSecond = 60;
+    final int framePerSecond = 90;
     public final KeyBoardAndMouseHandler keyBoardAndMouseHandler;
     public final Player player;
     public final SpiderBossEnemy spiderBossEnemy;
     public final GrimBoosEnemy grimBoosEnemy;
     final WorldEnemies worldEnemies;
+    final NonPlayerCharacters worldNpc;
     final DungeonWorldEnemies caveDungeonWorldEnemies;
     final DungeonWorldEnemies waterDungeonWorldEnemies;
     final GameWorld gameWorld;
@@ -60,7 +62,6 @@ public class GamePanel extends JPanel implements Runnable
     private final Thread gameThread;
     public final PlayerInventory playerInventory;
     public final GameSavedStats gameSavedStats;
-    public List<Individual> individuals;
     private final GameMenu gameMenu;
     boolean resetEnemiesHealth = false;
     boolean clearPlayerDamageText = false;
@@ -100,7 +101,7 @@ public class GamePanel extends JPanel implements Runnable
         this.waterDungeonWorldEnemies = new DungeonWorldEnemies(this, "/worldMaps/dungeons/water/WaterDungeonWorldMapEnemies.txt");
         this.caveDungeonWorld = new DungeonWorld(this, "/worldMaps/dungeons/cave/CaveDungeonWorldMap.txt");
         this.waterDungeonWorld = new DungeonWorld(this, "/worldMaps/dungeons/water/WaterDungeonWorldMap.txt");
-        this.individuals = new ArrayList<>();
+        this.worldNpc = new NonPlayerCharacters(this, "/worldMaps/WorldMapNpc.txt");
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -197,6 +198,7 @@ public class GamePanel extends JPanel implements Runnable
                 this.worldEnemies.update(this.resetEnemiesHealth);
                 this.spiderBossEnemy.update();
                 this.player.update();
+                this.worldNpc.update();
         }
     }
 
@@ -205,27 +207,30 @@ public class GamePanel extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
 
+        // clean draw list so it will not run in a loop adding again and again, making the game to freeze
+        List<Individual> individuals = new ArrayList<>();
         switch (this.worldType)
         {
             case WorldType.CAVE_DUNGEON:
                 this.caveDungeonWorld.draw(g2D);
-                this.individuals.add(this.player);
-                this.individuals.add(this.grimBoosEnemy);
-                this.caveDungeonWorldEnemies.addEnemiesToDrawList();
-                this.caveDungeonWorldItems.addItemsToDrawList();
+                individuals.add(this.player);
+                individuals.add(this.grimBoosEnemy);
+                individuals = this.caveDungeonWorldEnemies.addEnemiesToDrawList(individuals);
+                individuals = this.caveDungeonWorldItems.addItemsToDrawList(individuals);
                 break;
             case WorldType.WATER_DUNGEON:
                 this.waterDungeonWorld.draw(g2D);
-                this.individuals.add(this.player);
-                this.waterDungeonWorldEnemies.addEnemiesToDrawList();
-                this.waterDungeonWorldItems.addItemsToDrawList();
+                individuals.add(this.player);
+                individuals = this.waterDungeonWorldEnemies.addEnemiesToDrawList(individuals);
+                individuals = this.waterDungeonWorldItems.addItemsToDrawList(individuals);
                 break;
             case WorldType.MAIN_GAME:
                 this.gameWorld.draw(g2D);
-                this.individuals.add(this.player);
-                this.individuals.add(this.spiderBossEnemy);
-                this.worldEnemies.addEnemiesToDrawList();
-                this.worldItems.addItemsToDrawList();
+                individuals.add(this.player);
+                individuals = this.worldNpc.addEnemiesToDrawList(individuals);
+                individuals = this.worldEnemies.addEnemiesToDrawList(individuals);
+                individuals.add(this.spiderBossEnemy);
+                individuals = this.worldItems.addItemsToDrawList(individuals);
                 break;
         }
 
@@ -233,13 +238,10 @@ public class GamePanel extends JPanel implements Runnable
         individuals.sort(Comparator.comparingInt(t -> t.positionY));
 
         // draw Player/boosEnemy/WorldEnemies/World in game
-        for (int i = 0, size = individuals.size(); i < size; i++)
+        for (Individual individual : individuals)
         {
-            individuals.get(i).draw(g2D);
+            individual.draw(g2D);
         }
-
-        // clean draw list so it will not run in a loop adding again and again, making the game to freeze
-        individuals.clear();
 
         switch (this.worldType)
         {
@@ -279,6 +281,10 @@ public class GamePanel extends JPanel implements Runnable
         {
             this.gameMenu.drawGameMenu(g2D);
         }
+
+//        Runtime rt = Runtime.getRuntime();
+//        long used = rt.totalMemory() - rt.freeMemory();
+//        System.out.println("Used MB: " + used / 1024 / 1024);
 
         g2D.dispose(); // free up memory, destroy after draw
     }
