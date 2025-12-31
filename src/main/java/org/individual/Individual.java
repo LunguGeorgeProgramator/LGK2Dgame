@@ -61,6 +61,7 @@ public abstract class Individual
     // force all children classes to have this methods
     public abstract void update();
     public abstract void draw(Graphics2D g2D);
+    public abstract void drawLastInsideGamePanel(Graphics2D g2D);
 
     // Override in child classes if logic needs changing
     protected void changeAssetNumberByFrameCounter()

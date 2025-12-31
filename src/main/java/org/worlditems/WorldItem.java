@@ -213,6 +213,12 @@ public class WorldItem extends Individual
         }
     }
 
+    @Override
+    public void drawLastInsideGamePanel(Graphics2D g2D)
+    {
+        this.drawWordItemCollisionText(g2D);
+    }
+
     public void drawWordItemCollisionText(Graphics2D g2D)
     {
         this.setTextShownOnCollision();

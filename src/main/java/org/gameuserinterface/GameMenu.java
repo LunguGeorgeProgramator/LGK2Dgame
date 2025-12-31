@@ -44,7 +44,9 @@ public class GameMenu extends JPanel
     private PagesType loadPanelPage;
     private final String backBtnText;
     private final String gameControlsText;
+    private final String gameControlsShopsText;
     private final String mainMenuGameTitleText;
+    private final String helpInstructionText;
 
     public GameMenu(GamePanel gamePanel, KeyBoardAndMouseHandler keyBoardAndMouseHandler)
     {
@@ -57,7 +59,9 @@ public class GameMenu extends JPanel
         this.menuItems.add(this.gamePanel.gameTextProvider.getGameTextByKey("exit-game-btn"));
         this.backBtnText = this.gamePanel.gameTextProvider.getGameTextByKey("back-to-main-menu");
         this.gameControlsText = this.gamePanel.gameTextProvider.getGameTextByKey("game-controls");
+        this.gameControlsShopsText = this.gamePanel.gameTextProvider.getGameTextByKey("game-controls-shops");
         this.mainMenuGameTitleText = this.gamePanel.gameTextProvider.getGameTextByKey("main-menu-game-title");
+        this.helpInstructionText = this.gamePanel.gameTextProvider.getGameTextByKey("usage-of-keys-on-open-windows");
     }
 
     public void drawGameMenu(Graphics2D g2D)
@@ -109,6 +113,9 @@ public class GameMenu extends JPanel
 
             g2D.drawString(menuItems.get(i), textX, textY);
         }
+
+        g2D.setColor(new Color(0, 255, 100));
+        g2D.drawString(this.helpInstructionText, screenWith / 2 - tileSize * 4, screenHeight - tileSize * 3);
     }
 
     private void drawControlsMappingPage(Graphics2D g2D)
@@ -135,6 +142,8 @@ public class GameMenu extends JPanel
         this.gamePanel.gameTextProvider.setTextColor(Color.WHITE);
         this.gamePanel.gameTextProvider.setTextPosition(screenWith / 2 - tileSize * 3, screenHeight / 2 - tileSize * 2);
         this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.gameControlsText);
+        this.gamePanel.gameTextProvider.setTextPosition(screenWith / 2 - tileSize * 3, screenHeight / 2 - tileSize * 4);
+        this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.gameControlsShopsText);
 
         controlsPageKeyBoardAndMouseListener();
     }

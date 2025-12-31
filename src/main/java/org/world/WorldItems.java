@@ -148,12 +148,4 @@ public class WorldItems extends GameWorld
         return individuals;
     }
 
-    public void drawTextOmCollision(Graphics2D g2D)
-    {
-        for (WorldItem worldItem : this.worldItemsList)
-        {
-            worldItem.drawWordItemCollisionText(g2D);
-        }
-    }
-
 }

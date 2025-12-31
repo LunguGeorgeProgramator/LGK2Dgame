@@ -240,4 +240,9 @@ public class GrimBoosEnemy  extends Individual
             }
         }
     }
+
+    @Override
+    public void drawLastInsideGamePanel(Graphics2D g2D) {
+
+    }
 }

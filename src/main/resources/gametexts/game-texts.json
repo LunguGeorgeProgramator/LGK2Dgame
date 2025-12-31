@@ -15,6 +15,7 @@
   "player-inventory-sword": "Sword picked.",
   "player-inventory-gold-sword": "Gold sword picked.",
   "game-controls": "Keyboard:\nI - open/close player inventory.\nSpace bar - to swing sword.\nM - open game main menu.\nW - move player up.\nS - move player down.\nA - move player left.\nD - move player right.\nF - player sprint.",
+  "game-controls-shops": "Vendor shop controls:\nUse ↑ / ↓ to select, Enter to interact.\nPress C to close the window.",
   "start-game-btn": "Star New Game",
   "continue-game-btn": "Continue Game",
   "controls-page-btn": "Controls Mapping",
@@ -31,5 +32,6 @@
   "vendor-inventory-rubies": "Consume red rubies.",
   "vendor-inventory-sword": "Buy blue sword.",
   "usage-of-keys-on-open-windows": "Use ↑ / ↓ to select, Enter to interact.",
-  "close-key-message": "Press C to close the window."
+  "close-key-message": "Press C to close the window.",
+  "close-window-button-text": "Close"
 }

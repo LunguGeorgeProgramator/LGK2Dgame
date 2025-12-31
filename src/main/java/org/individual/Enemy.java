@@ -221,6 +221,15 @@ public class Enemy extends Individual
         }
     }
 
+    @Override
+    public void drawLastInsideGamePanel(Graphics2D g2D)
+    {
+        if (!this.gamePanel.clearPlayerDamageText)
+        {
+            this.drawEnemyText(g2D);
+        }
+    }
+
     public void drawEnemyText(Graphics2D g2D)
     {
         if (this.isEnemyCollidingWithPlayer && this.isAllowedToInflictDamage)

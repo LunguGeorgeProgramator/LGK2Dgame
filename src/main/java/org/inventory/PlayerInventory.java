@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.game.GamePanel;
 import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.WorldItem;
+import org.worlditems.models.WorldItemTypes;
 
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -119,6 +120,7 @@ public class PlayerInventory
                 playerInventoryModel.setStatus(playerInventoryItem.getStatus());
                 updateModelDependingOnActionRequested(playerInventoryItem, playerInventoryModel, updateAction);
                 playerInventoryModel.setItemType(playerInventoryItem.getItemType());
+                playerInventoryModel.setInInventory(playerInventoryItem.getInInventory());
                 break;
             }
         }

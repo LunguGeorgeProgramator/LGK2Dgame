@@ -63,10 +63,10 @@ public class Player extends Individual
     private void buildPlayerCollisionArea()
     { // make the collision area small that the player rectangle so upper corners will not hit solid world assets
         this.collisionArea = new Rectangle();
-        this.collisionArea.x = 0;
+        this.collisionArea.x = (((tileSize / 2) / 2) / 2) / 2 + 2;
         this.collisionArea.y = tileSize / 2;
         this.collisionArea.height = tileSize / 2;
-        this.collisionArea.width = tileSize - (((tileSize / 2) / 2) / 2);
+        this.collisionArea.width = tileSize - (((tileSize / 2) / 2));
 
         this.worldItemCollisionArea = new Rectangle();
         this.worldItemCollisionArea.x = 0;
@@ -368,10 +368,15 @@ public class Player extends Individual
         }
 
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.playerDamageTakenArea.x, this.playerDamageTakenArea.y, this.playerDamageTakenArea.width, this.playerDamageTakenArea.height);
-//        this.gamePanel.drawTestDynamicRectangle(g2D, this.playerScreenX, this.playerScreenY, tileSize, tileSize);
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.playerScreenX, this.playerScreenY, this.collisionArea.width, this.collisionArea.height);
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.playerScreenX, this.playerScreenY, tileSize, tileSize);
         g2D.drawImage(this.isPlayerSwingSword ? playerSwingSwordAsset : playerAsset, this.playerScreenX, this.playerScreenY, null);
         this._drawPlayerAttackCollisionArea(g2D, swingSwordAsset);
+    }
+
+    @Override
+    public void drawLastInsideGamePanel(Graphics2D g2D) {
+
     }
 
     private void _playerIsDead()

@@ -218,4 +218,9 @@ public class SpiderBossEnemy extends Individual
         }
     }
 
+    @Override
+    public void drawLastInsideGamePanel(Graphics2D g2D) {
+
+    }
+
 }

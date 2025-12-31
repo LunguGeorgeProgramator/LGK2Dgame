@@ -13,8 +13,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +29,7 @@ public class NonPlayerCharacter extends Individual
     private final static String INVENTORY_NR_KEYS = "vendor-inventory-keys";
     private final static String INVENTORY_NR_RUBIES = "vendor-inventory-rubies";
     private final static String INVENTORY_SWORD = "vendor-inventory-sword";
-    private final static String INVENTORY_ACTION_MESSAGE = "usage-of-keys-on-open-windows";
-    private final static String INVENTORY_CLOSE_MESSAGE = "close-key-message";
+    private final static String CLOSE_WINDOW_BUTTON_TEXT = "close-window-button-text";
     final private GamePanel gamePanel;
     final private Player player;
     final private PlayerInventory playerInventory;
@@ -47,15 +46,17 @@ public class NonPlayerCharacter extends Individual
     private boolean closeVendorWindow = false;
 
     private int selectedIndex = 0;
-    private final int[] selectableLines = { 2, 3, 4 };
+    private final int[] selectableLines = { 2, 3, 4, 5 };
     private int keyDownPressCount = 0;
     private int keyUpPressCount = 0;
     private int keyEnterPressCount = 0;
-    final private Map<Integer, WorldItemsAssets> playerInventoryItemsMap = Map.of(
-        0, WorldItemsAssets.GOLD_KEY,
-        1, WorldItemsAssets.RUBY,
-        2, WorldItemsAssets.SWORD
-    );
+    private final Map<Integer, WorldItemsAssets> playerInventoryItemsMap = new HashMap<>();
+    {
+        playerInventoryItemsMap.put(0, WorldItemsAssets.GOLD_KEY);
+        playerInventoryItemsMap.put(1, WorldItemsAssets.RUBY);
+        playerInventoryItemsMap.put(2, WorldItemsAssets.SWORD);
+        playerInventoryItemsMap.put(3, null);
+    }
 
 
     public NonPlayerCharacter(
@@ -132,6 +133,19 @@ public class NonPlayerCharacter extends Individual
                 g2D.drawImage(this.npcAsset, this.worldNpcAssetPositionX, this.worldNpcAssetPositionY, null);
             }
 
+
+
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.attackArea.x, this.attackArea.y, this.attackArea.width, this.attackArea.height);
+//        this.gamePanel.drawTestDynamicRectangle(g2D, this.detectionArea.x, this.detectionArea.y, this.detectionArea.width, this.detectionArea.height);
+        }
+    }
+
+    @Override
+    public void drawLastInsideGamePanel(Graphics2D g2D)
+    {
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 4))
+        {
             if (this.npcType.equals(NonPlayerCharacterType.VENDOR) && this.activateCollision && !this.closeVendorWindow && this.gamePanel.isGameState(GameState.OPEN_VENDOR_INVENTORY))
             {
                 this.drawVendorInventoryWindow(g2D);
@@ -165,10 +179,18 @@ public class NonPlayerCharacter extends Individual
                     if (this.keyEnterPressCount == 0)
                     {
                         WorldItemsAssets worldItemsAssets = this.playerInventoryItemsMap.get(this.selectedIndex);
-                        this._addToPlayerInventory(worldItemsAssets);
-                        if (worldItemsAssets.name().equals(WorldItemsAssets.RUBY.name()))
+                        if (worldItemsAssets == null)
                         {
-                            this.player.playerHealth = this.player.playerMaxHealth;
+                            this.gamePanel.setGameState(GameState.RESUME_GAME);
+                            this.closeVendorWindow = true;
+                        }
+                        else
+                        {
+                            this._addToPlayerInventory(worldItemsAssets);
+                            if (worldItemsAssets.name().equals(WorldItemsAssets.RUBY.name()))
+                            {
+                                this.player.playerHealth = this.player.playerMaxHealth;
+                            }
                         }
                     }
                     this.keyEnterPressCount++;
@@ -178,11 +200,8 @@ public class NonPlayerCharacter extends Individual
                     this.keyEnterPressCount = 0;
                 }
             }
-
-//        this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
-//        this.gamePanel.drawTestDynamicRectangle(g2D, this.attackArea.x, this.attackArea.y, this.attackArea.width, this.attackArea.height);
-//        this.gamePanel.drawTestDynamicRectangle(g2D, this.detectionArea.x, this.detectionArea.y, this.detectionArea.width, this.detectionArea.height);
         }
+
     }
 
     private void moveSelectionUp()
@@ -267,8 +286,7 @@ public class NonPlayerCharacter extends Individual
             gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_NR_KEYS),
             gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_NR_RUBIES),
             gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_SWORD),
-            gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_ACTION_MESSAGE),
-            gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_CLOSE_MESSAGE)
+            gamePanel.gameTextProvider.getGameTextByKey(CLOSE_WINDOW_BUTTON_TEXT)
         };
 
         for (int i = 0; i < lines.length; i++)

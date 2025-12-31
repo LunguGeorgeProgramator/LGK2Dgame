@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable
     public final GameSavedStats gameSavedStats;
     private final GameMenu gameMenu;
     boolean resetEnemiesHealth = false;
-    boolean clearPlayerDamageText = false;
+    public boolean clearPlayerDamageText = false;
     public GameState gameState;
     public WorldType worldType;
     public Map<WorldType, Map<String, Integer>> LastWorldTypeVisited;
@@ -243,20 +243,9 @@ public class GamePanel extends JPanel implements Runnable
             individual.draw(g2D);
         }
 
-        switch (this.worldType)
+        for (Individual individual : individuals)
         {
-            case WorldType.CAVE_DUNGEON:
-                this.caveDungeonWorldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
-                this.caveDungeonWorldItems.drawTextOmCollision(g2D);
-                break;
-            case WorldType.WATER_DUNGEON:
-                this.waterDungeonWorldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
-                this.waterDungeonWorldItems.drawTextOmCollision(g2D);
-                break;
-            case WorldType.MAIN_GAME:
-                this.worldEnemies.drawEnemyText(g2D, this.clearPlayerDamageText);
-                this.worldItems.drawTextOmCollision(g2D);
-                break;
+            individual.drawLastInsideGamePanel(g2D);
         }
 
         this.player.drawRedSlider(g2D);
