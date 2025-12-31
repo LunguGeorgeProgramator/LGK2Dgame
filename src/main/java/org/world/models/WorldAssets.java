@@ -54,7 +54,10 @@ public enum WorldAssets implements GameWorldAssets
     TOP_WALL(48, getScaledImageFromAssets("/tiles/top-wall.png"), true),
     VENDOR_DESK_LEFT(49, getScaledImageFromAssets("/tiles/furniture/vendor-desk-left-part.png"), true),
     VENDOR_DESK_RIGHT(50, getScaledImageFromAssets("/tiles/furniture/vendor-desk-right-part.png"), true),
-    WOOD_FLOOR(51, getScaledImageFromAssets("/tiles/wood-floor.png"), false);
+    WOOD_FLOOR(51, getScaledImageFromAssets("/tiles/wood-floor.png"), false),
+    WOOD_WALL(52, getScaledImageFromAssets("/tiles/wood-wall.png"), true),
+    WOOD_WALL_CORNER_LEFT(53, getScaledImageFromAssets("/tiles/wood-wall-end-left.png"), true),
+    WOOD_WALL_CORNER_RIGHT(54, getScaledImageFromAssets("/tiles/wood-wall-end-right.png"), true);
 
     private final int index;
     private final BufferedImage worldAssetImage;

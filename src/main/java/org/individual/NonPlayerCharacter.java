@@ -3,6 +3,7 @@ package org.individual;
 import org.game.CollisionChecker;
 import org.game.GamePanel;
 import org.game.models.GameState;
+import org.helpers.KeyPressHelper;
 import org.individual.models.MovingDirection;
 import org.individual.models.NonPlayerCharacterType;
 import org.inventory.PlayerInventory;
@@ -10,6 +11,7 @@ import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.models.WorldItemsAssets;
 
 import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Font;
@@ -42,14 +44,14 @@ public class NonPlayerCharacter extends Individual
     private int worldNpcAssetPositionX;
     private int worldNpcAssetPositionY;
     private Rectangle collisionArea;
-    private CollisionChecker collisionChecker;
+    private final CollisionChecker collisionChecker;
     private boolean closeVendorWindow = false;
 
     private int selectedIndex = 0;
     private final int[] selectableLines = { 2, 3, 4, 5 };
-    private int keyDownPressCount = 0;
-    private int keyUpPressCount = 0;
-    private int keyEnterPressCount = 0;
+    private final KeyPressHelper keyDownPressHelper;
+    private final KeyPressHelper keyUpPressHelper;
+    private final KeyPressHelper keyEnterPressHelper;
     private final Map<Integer, WorldItemsAssets> playerInventoryItemsMap = new HashMap<>();
     {
         playerInventoryItemsMap.put(0, WorldItemsAssets.GOLD_KEY);
@@ -57,7 +59,6 @@ public class NonPlayerCharacter extends Individual
         playerInventoryItemsMap.put(2, WorldItemsAssets.SWORD);
         playerInventoryItemsMap.put(3, null);
     }
-
 
     public NonPlayerCharacter(
         GamePanel gamePanel,
@@ -82,6 +83,9 @@ public class NonPlayerCharacter extends Individual
         this.npcMovingDirectionList = npcMovingDirectionList;
         this.npcAssetsMap = npcAssetsMap;
         this._buildCollisionArea();
+        this.keyDownPressHelper = new KeyPressHelper();
+        this.keyUpPressHelper = new KeyPressHelper();
+        this.keyEnterPressHelper = new KeyPressHelper();
     }
 
     private void _buildCollisionArea()
@@ -133,8 +137,6 @@ public class NonPlayerCharacter extends Individual
                 g2D.drawImage(this.npcAsset, this.worldNpcAssetPositionX, this.worldNpcAssetPositionY, null);
             }
 
-
-
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.attackArea.x, this.attackArea.y, this.attackArea.width, this.attackArea.height);
 //        this.gamePanel.drawTestDynamicRectangle(g2D, this.detectionArea.x, this.detectionArea.y, this.detectionArea.width, this.detectionArea.height);
@@ -154,50 +156,32 @@ public class NonPlayerCharacter extends Individual
                     this.gamePanel.setGameState(GameState.RESUME_GAME);
                     this.closeVendorWindow = true;
                 }
-                if (this.gamePanel.keyBoardAndMouseHandler.upKeyPressed)
+                if (this.keyUpPressHelper.isFirstPress(this.gamePanel.keyBoardAndMouseHandler.upKeyPressed))
                 {
                     this.moveSelectionUp();
-                    this.keyUpPressCount++;
-                }
-                else
-                {
-                    this.keyUpPressCount = 0;
                 }
 
-                if (this.gamePanel.keyBoardAndMouseHandler.downKeyPressed)
+                if (this.keyDownPressHelper.isFirstPress(this.gamePanel.keyBoardAndMouseHandler.downKeyPressed))
                 {
                     this.moveSelectionDown();
-                    this.keyDownPressCount++;
-                }
-                else
-                {
-                    this.keyDownPressCount = 0;
                 }
 
-                if (this.gamePanel.keyBoardAndMouseHandler.enterKeyPressed)
+                if (this.keyEnterPressHelper.isFirstPress(this.gamePanel.keyBoardAndMouseHandler.enterKeyPressed))
                 {
-                    if (this.keyEnterPressCount == 0)
+                    WorldItemsAssets worldItemsAssets = this.playerInventoryItemsMap.get(this.selectedIndex);
+                    if (worldItemsAssets == null)
                     {
-                        WorldItemsAssets worldItemsAssets = this.playerInventoryItemsMap.get(this.selectedIndex);
-                        if (worldItemsAssets == null)
+                        this.gamePanel.setGameState(GameState.RESUME_GAME);
+                        this.closeVendorWindow = true;
+                    }
+                    else
+                    {
+                        this._addToPlayerInventory(worldItemsAssets);
+                        if (worldItemsAssets.name().equals(WorldItemsAssets.RUBY.name()))
                         {
-                            this.gamePanel.setGameState(GameState.RESUME_GAME);
-                            this.closeVendorWindow = true;
-                        }
-                        else
-                        {
-                            this._addToPlayerInventory(worldItemsAssets);
-                            if (worldItemsAssets.name().equals(WorldItemsAssets.RUBY.name()))
-                            {
-                                this.player.playerHealth = this.player.playerMaxHealth;
-                            }
+                            this.player.playerHealth = this.player.playerMaxHealth;
                         }
                     }
-                    this.keyEnterPressCount++;
-                }
-                else
-                {
-                    this.keyEnterPressCount = 0;
                 }
             }
         }
@@ -206,25 +190,19 @@ public class NonPlayerCharacter extends Individual
 
     private void moveSelectionUp()
     {
-        if (this.keyUpPressCount == 0)
+        selectedIndex--;
+        if (selectedIndex < 0)
         {
-            selectedIndex--;
-            if (selectedIndex < 0)
-            {
-                selectedIndex = selectableLines.length - 1;
-            }
+            selectedIndex = selectableLines.length - 1;
         }
     }
 
     private void moveSelectionDown()
     {
-        if (this.keyDownPressCount == 0)
+        selectedIndex++;
+        if (selectedIndex >= selectableLines.length)
         {
-            selectedIndex++;
-            if (selectedIndex >= selectableLines.length)
-            {
-                selectedIndex = 0;
-            }
+            selectedIndex = 0;
         }
     }
 
@@ -265,7 +243,7 @@ public class NonPlayerCharacter extends Individual
     {
         int positionX = screenWith / 2 + tileSize;
         int positionY = screenHeight / 2 - tileSize;
-        int height = tileSize * 4;
+        int height = tileSize * 3;
         int width = tileSize * 5;
         int lineSpacing = 20;
         int arc = 20;
@@ -276,10 +254,10 @@ public class NonPlayerCharacter extends Individual
 
         // Border
         g2D.setColor(new Color(7, 74, 7));
-//        g2D.setStroke(new BasicStroke(2));
+        g2D.setStroke(new BasicStroke(1));
         g2D.drawRoundRect(positionX, positionY, width, height, arc, arc);
 
-        g2D.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 10));
+        g2D.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 12));
 
         String[] lines = {
             gamePanel.gameTextProvider.getGameTextByKey(INVENTORY_TITLE), "",

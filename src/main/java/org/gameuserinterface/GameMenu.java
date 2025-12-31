@@ -4,6 +4,7 @@ import org.game.GamePanel;
 import org.game.KeyBoardAndMouseHandler;
 import org.game.models.GameState;
 import org.gameuserinterface.models.PagesType;
+import org.helpers.KeyPressHelper;
 
 import javax.swing.JPanel;
 import java.awt.Graphics2D;
@@ -37,10 +38,10 @@ public class GameMenu extends JPanel
     private static final int titleTextFoundSize = 25;
     private final GamePanel gamePanel;
     private final KeyBoardAndMouseHandler keyBoardAndMouseHandler;
-    private static int upKeyPressedIndex = 0;
-    private static int downKeyPressedIndex = 0;
-    private static int enterKeyPressedIndex = 0;
-    private static int mouseClickedIndex = 0;
+    private final KeyPressHelper upKeyPressedHelper;
+    private final KeyPressHelper downKeyPressedHelper;
+    private final KeyPressHelper enterKeyPressedHelper;
+    private final KeyPressHelper mouseClickedHelper;
     private PagesType loadPanelPage;
     private final String backBtnText;
     private final String gameControlsText;
@@ -52,6 +53,10 @@ public class GameMenu extends JPanel
     {
         this.keyBoardAndMouseHandler = keyBoardAndMouseHandler;
         this.gamePanel = gamePanel;
+        this.upKeyPressedHelper = new KeyPressHelper();
+        this.downKeyPressedHelper = new KeyPressHelper();
+        this.enterKeyPressedHelper = new KeyPressHelper();
+        this.mouseClickedHelper = new KeyPressHelper();
         this.loadPanelPage = PagesType.MAINE_MENU;
         this.menuItems.add(this.gamePanel.gameTextProvider.getGameTextByKey("continue-game-btn"));
         this.menuItems.add(this.gamePanel.gameTextProvider.getGameTextByKey("start-game-btn"));
@@ -76,8 +81,8 @@ public class GameMenu extends JPanel
         else if (this.loadPanelPage.equals(PagesType.CONTROLS_MAPPING))
         {
             drawControlsMappingPage(g2D);
+            controlsPageKeyBoardAndMouseListener();
         }
-
     }
 
     private void drawMainMenuPage(Graphics2D g2D)
@@ -144,84 +149,34 @@ public class GameMenu extends JPanel
         this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.gameControlsText);
         this.gamePanel.gameTextProvider.setTextPosition(screenWith / 2 - tileSize * 3, screenHeight / 2 - tileSize * 4);
         this.gamePanel.gameTextProvider.showTextInsideGame(g2D, this.gameControlsShopsText);
-
-        controlsPageKeyBoardAndMouseListener();
     }
 
     private void controlsPageKeyBoardAndMouseListener()
     {
-        if (this.keyBoardAndMouseHandler.enterKeyPressed)
+        if (this.enterKeyPressedHelper.isFirstPress(this.keyBoardAndMouseHandler.enterKeyPressed)
+            || this.mouseClickedHelper.isFirstPress(this.gamePanel.keyBoardAndMouseHandler.mouseClicked))
         {
-            if (enterKeyPressedIndex == 0)
-            {
-                this.loadPanelPage = PagesType.MAINE_MENU;
-                repaint();
-            }
-            enterKeyPressedIndex++;
-        }
-        if (!this.keyBoardAndMouseHandler.enterKeyPressed)
-        {
-            enterKeyPressedIndex = 0;
-        }
-        if (this.gamePanel.keyBoardAndMouseHandler.mouseClicked)
-        {
-            if (mouseClickedIndex == 0)
-            {
-                this.loadPanelPage = PagesType.MAINE_MENU;
-                repaint();
-            }
-            mouseClickedIndex++;
-        }
-        if (!this.gamePanel.keyBoardAndMouseHandler.mouseClicked)
-        {
-            mouseClickedIndex = 0;
+            this.loadPanelPage = PagesType.MAINE_MENU;
+            repaint();
         }
     }
 
     private void mainMenuKeyBoardAndMouseListener()
     {
 
-        if (this.keyBoardAndMouseHandler.enterKeyPressed)
+        if (this.enterKeyPressedHelper.isFirstPress(this.keyBoardAndMouseHandler.enterKeyPressed))
         {
-            if (enterKeyPressedIndex == 0)
-            {
-                buttonAction();
-            }
-            enterKeyPressedIndex++;
+            buttonAction();
         }
-        else if (this.keyBoardAndMouseHandler.upKeyPressed)
+        else if (this.upKeyPressedHelper.isFirstPress(this.keyBoardAndMouseHandler.upKeyPressed))
         {
-            if (upKeyPressedIndex == 0)
-            {
-                this.selectedIndex = this.selectedIndex >= startNewGameIndex ? this.selectedIndex - 1 : this.selectedIndex;
-                repaint();
-            }
-            upKeyPressedIndex++;
+            this.selectedIndex = this.selectedIndex >= startNewGameIndex ? this.selectedIndex - 1 : this.selectedIndex;
+            repaint();
         }
-        else if (this.keyBoardAndMouseHandler.downKeyPressed)
+        else if (this.downKeyPressedHelper.isFirstPress(this.keyBoardAndMouseHandler.downKeyPressed))
         {
-            if (downKeyPressedIndex == 0)
-            {
-                this.selectedIndex = this.selectedIndex < exitGameIndex ? this.selectedIndex + 1 : this.selectedIndex;
-                repaint();
-            }
-            downKeyPressedIndex++;
-        }
-
-        // This workaround works, but it's not optimal. Since the game loop runs continuously,
-        // a single key press is registered multiple times. To prevent repeated triggers, an
-        // increment counter is used and the logic runs only when the counter is 0.
-        if (!this.keyBoardAndMouseHandler.upKeyPressed)
-        {
-            upKeyPressedIndex = 0;
-        }
-        if (!this.keyBoardAndMouseHandler.downKeyPressed)
-        {
-            downKeyPressedIndex = 0;
-        }
-        if (!this.keyBoardAndMouseHandler.enterKeyPressed)
-        {
-            enterKeyPressedIndex = 0;
+            this.selectedIndex = this.selectedIndex < exitGameIndex ? this.selectedIndex + 1 : this.selectedIndex;
+            repaint();
         }
 
         int mouseX = this.keyBoardAndMouseHandler.mousePositionX;
@@ -239,17 +194,9 @@ public class GameMenu extends JPanel
             }
         }
 
-        if (this.gamePanel.keyBoardAndMouseHandler.mouseClicked)
+        if (this.mouseClickedHelper.isFirstPress(this.gamePanel.keyBoardAndMouseHandler.mouseClicked))
         {
-            if (mouseClickedIndex == 0)
-            {
-                buttonAction();
-            }
-            mouseClickedIndex++;
-        }
-        if (!this.gamePanel.keyBoardAndMouseHandler.mouseClicked)
-        {
-            mouseClickedIndex = 0;
+            buttonAction();
         }
     }
 
