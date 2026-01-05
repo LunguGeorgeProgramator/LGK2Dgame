@@ -50,6 +50,7 @@ For non-Windows users, please use the following JAR commands:
 For convenience, I've also included a pre-built `.exe`
 
 ⚠️ If you prefer not to run the included `.exe` , feel free to build it yourself using the commands above.
-It requires the Java 24 JRE folder. Use the link below to download the Windows version, add it to the project folder, and rename it to jre.
+
+If you want to use the EXE file, it requires the Java 24 JRE folder. Use the link below to download the Windows version, add it to the project folder, and rename it to jre.
 
 https://adoptium.net/temurin/releases?version=24&os=any&arch=any&mode=filter
