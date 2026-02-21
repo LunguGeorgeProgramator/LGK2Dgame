@@ -21,7 +21,7 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "93647",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "23713",
@@ -41,7 +41,7 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "34812",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "34815",
@@ -49,7 +49,7 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "2499",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "15644",

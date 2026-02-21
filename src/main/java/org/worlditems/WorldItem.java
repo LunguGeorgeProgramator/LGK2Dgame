@@ -2,9 +2,7 @@ package org.worlditems;
 
 import org.game.CollisionChecker;
 import org.game.GamePanel;
-import org.game.models.GameState;
 import org.imageAssets.models.ImageModel;
-import org.imageAssets.models.WorldItemsImagesAssets;
 import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
@@ -113,8 +111,17 @@ public class WorldItem extends Individual
         return false;
     }
 
+    private void updateWorldItemXYPosition()
+    {
+        this.worldItemAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
+        this.worldItemAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
+        this.collisionArea.x = this.worldItemAssetPositionX;
+        this.collisionArea.y = this.worldItemAssetPositionY;
+    }
+
     public void update()
     {
+        this.updateWorldItemXYPosition();
         this.hideWorldItem = this.hideItemsUntilBossEnemyIsDead();
         this.setAssetNumber();
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 4) && !this.hideWorldItem)
@@ -198,10 +205,7 @@ public class WorldItem extends Individual
 
     public void draw(Graphics2D g2D)
     {
-        this.worldItemAssetPositionX = this.positionX - this.player.positionX + this.player.playerScreenX;
-        this.worldItemAssetPositionY = this.positionY - this.player.positionY + this.player.playerScreenY;
-        this.collisionArea.x = this.worldItemAssetPositionX;
-        this.collisionArea.y = this.worldItemAssetPositionY;
+        this.updateWorldItemXYPosition();
         // draw world item only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 2) && !this.hideWorldItem)
         {
@@ -214,7 +218,7 @@ public class WorldItem extends Individual
             }
             if (bufferedImage != null)
             {
-                g2D.drawImage(bufferedImage, this.worldItemAssetPositionX, this.worldItemAssetPositionY, null);
+                g2D.drawImage(bufferedImage, this.collisionArea.x, this.collisionArea.y, null);
             }
 //            this.gamePanel.drawTestDynamicRectangle(g2D, this.dungeonsEntryCollisionArea.x, this.dungeonsEntryCollisionArea.y, this.dungeonsEntryCollisionArea.width, this.dungeonsEntryCollisionArea.height);
 //            this.gamePanel.drawTestDynamicRectangle(g2D, this.collisionArea.x, this.collisionArea.y, this.collisionArea.width, this.collisionArea.height);
