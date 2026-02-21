@@ -6,14 +6,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import org.imageAssets.ImageLoader;
-import org.imageAssets.models.WorldImagesAssets;
 import org.individual.SpiderBossEnemy;
 import org.individual.GrimBoosEnemy;
 import org.world.NonPlayerCharacters;

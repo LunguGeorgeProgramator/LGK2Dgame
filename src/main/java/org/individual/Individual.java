@@ -15,7 +15,6 @@ import static org.game.GamePanel.tileSize;
 
 public abstract class Individual
 {
-    private static String INDIVIDUAL_WORLD_ID_FORMAT = "%d%d%d";
     public int positionX;
     public int positionY;
     public int initialPositionX;

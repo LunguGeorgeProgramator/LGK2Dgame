@@ -1,6 +1,7 @@
 package org.world;
 
 import org.game.GamePanel;
+import org.imageAssets.models.ImageModel;
 import org.imageAssets.models.WorldImagesAssets;
 import org.individual.Player;
 import org.world.models.WorldAssets;
@@ -24,7 +25,7 @@ public class GameWorld
     public int[][] worldMap;
     int worldMapCol;
     int worldMapRow;
-    Map<WorldImagesAssets, BufferedImage> worldImagesAssetsBufferedImageMap;
+    Map<ImageModel, BufferedImage> worldImagesAssetsBufferedImageMap;
 
 
     public GameWorld(GamePanel gamePanel, String worldMapPath)

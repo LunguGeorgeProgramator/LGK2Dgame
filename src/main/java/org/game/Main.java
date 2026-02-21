@@ -1,7 +1,6 @@
 package org.game;
 
 import javax.swing.JFrame;
-import org.game.GamePanel;
 
 public class Main {
     public static void main(String[] args) {

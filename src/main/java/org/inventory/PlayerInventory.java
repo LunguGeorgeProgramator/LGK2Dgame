@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.game.GamePanel;
 import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.WorldItem;
-import org.worlditems.models.WorldItemTypes;
 
 import java.awt.Graphics2D;
 import java.awt.Color;

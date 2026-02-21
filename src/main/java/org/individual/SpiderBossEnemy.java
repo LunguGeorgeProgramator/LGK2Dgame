@@ -2,7 +2,6 @@ package org.individual;
 
 import org.game.CollisionChecker;
 import org.game.GamePanel;
-import org.gamesavedstats.GameSavedStats;
 import org.individual.models.MovingDirection;
 
 import javax.swing.*;

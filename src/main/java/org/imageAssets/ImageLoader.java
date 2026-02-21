@@ -1,7 +1,11 @@
 package org.imageAssets;
 
 import org.helpers.ToolsHelper;
-import org.imageAssets.models.*;
+import org.imageAssets.models.ImageModel;
+import org.imageAssets.models.WorldImagesAssets;
+import org.imageAssets.models.WorldItemsImagesAssets;
+import org.imageAssets.models.DungeonWorldItemsImagesAssets;
+import org.imageAssets.models.EnemyImagesAssets;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -17,7 +21,7 @@ import static org.game.GamePanel.tileSize;
 public class ImageLoader
 {
 
-    private final Map<WorldImagesAssets, BufferedImage> worldAssetsImages = new HashMap<>();
+    private final Map<ImageModel, BufferedImage> worldAssetsImages = new HashMap<>();
     private final Map<ImageModel, BufferedImage> worldItemsAssetsImages = new HashMap<>();
     private final Map<ImageModel, BufferedImage> dungeonWorldItemsImages = new HashMap<>();
     private final Map<ImageModel, BufferedImage> enemyAssetsImages = new HashMap<>();
@@ -42,7 +46,7 @@ public class ImageLoader
         }
     }
 
-    public Map<WorldImagesAssets, BufferedImage> getWorldAssetsImages()
+    public Map<ImageModel, BufferedImage> getWorldAssetsImages()
     {
         return this.worldAssetsImages;
     }
