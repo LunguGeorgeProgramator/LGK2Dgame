@@ -1,5 +1,8 @@
 package org.individual.models;
 
+import org.imageAssets.models.EnemyImagesAssets;
+import org.imageAssets.models.ImageModel;
+
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
@@ -25,102 +28,102 @@ public class EnemyAssetsConstance
             MovingDirection.UP
     );
 
-    public static Map<MovingDirection, Map<Integer, BufferedImage>> colorMosterAssetsMap = Map.of(
+    public static Map<MovingDirection, Map<Integer, ImageModel>> colorMosterAssetsMap = Map.of(
         MovingDirection.DOWN, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/colormonster/color-monster-front.png"))
+            1, EnemyImagesAssets.COLOR_MONSTER_FRONT
         ),
         MovingDirection.UP, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/colormonster/color-monster-back.png"))
+            1, EnemyImagesAssets.COLOR_MONSTER_BACK
         ),
         MovingDirection.LEFT, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/colormonster/color-monster-left.png"))
+            1, EnemyImagesAssets.COLOR_MONSTER_LEFT
         ),
         MovingDirection.RIGHT, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/colormonster/color-monster-right.png"))
+            1, EnemyImagesAssets.COLOR_MONSTER_RIGHT
         )
     );
-    public static Map<MovingDirection, Map<Integer, BufferedImage>> ghostMosterAssetsMap = Map.of(
+    public static Map<MovingDirection, Map<Integer, ImageModel>> ghostMosterAssetsMap = Map.of(
         MovingDirection.LEFT, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-left.png"))
+            1, EnemyImagesAssets.GHOST_MONSTER_LEFT
         ),
         MovingDirection.RIGHT, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-right.png"))
+            1, EnemyImagesAssets.GHOST_MONSTER_RIGHT
         ),
         MovingDirection.UP, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-left.png"))
+            1, EnemyImagesAssets.GHOST_MONSTER_UP
         ),
         MovingDirection.DOWN, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-fly-right.png"))
+            1, EnemyImagesAssets.GHOST_MONSTER_DOWN
         )
     );
-    public static Map<MovingDirection, Map<Integer, BufferedImage>> ghostMosterColisionAssetsMap = Map.of(
+    public static Map<MovingDirection, Map<Integer, ImageModel>> ghostMosterColisionAssetsMap = Map.of(
         MovingDirection.RIGHT, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-right.png"))
+        1, EnemyImagesAssets.GHOST_MONSTER_PANIC_RIGHT
         ),
         MovingDirection.LEFT, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-left.png"))
+        1, EnemyImagesAssets.GHOST_MONSTER_PANIC_LEFT
         )
     );
-    public static Map<MovingDirection, Map<Integer, BufferedImage>> ghostMosterUnderAttackAssetsMap = Map.of(
+    public static Map<MovingDirection, Map<Integer, ImageModel>> ghostMosterUnderAttackAssetsMap = Map.of(
         MovingDirection.RIGHT, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-right.png")),
-        2, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-right-under-attack.png"))
+        1, EnemyImagesAssets.GHOST_MONSTER_PANIC_UNDER_ATTACK_RIGHT_ONE,
+        2, EnemyImagesAssets.GHOST_MONSTER_PANIC_UNDER_ATTACK_RIGHT_TWO
         ),
         MovingDirection.LEFT, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-left.png")),
-        2, Objects.requireNonNull(getScaledImageFromAssets("/enemy/ghost/ghost-panic-left-under-attack.png"))
+        1, EnemyImagesAssets.GHOST_MONSTER_PANIC_UNDER_ATTACK_LEFT_ONE,
+        2, EnemyImagesAssets.GHOST_MONSTER_PANIC_UNDER_ATTACK_LEFT_TWO
         )
     );
-    public static Map<MovingDirection, Map<Integer, BufferedImage>> spiderMosterAssetsMap = Map.of(
+    public static Map<MovingDirection, Map<Integer, ImageModel>> spiderMosterAssetsMap = Map.of(
         MovingDirection.DOWN, Map.of(
-        1 , Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-front-view-moving-one.png")),
-        2 , Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-front-view-moving-two.png"))
+        1 , EnemyImagesAssets.SPIDER_FRONT_MOVE_ONE,
+        2 , EnemyImagesAssets.SPIDER_FRONT_MOVE_TWO
         ),
         MovingDirection.UP, Map.of (
-        1 , Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-back-view-moving-one.png")),
-        2 , Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-back-view-moving-two.png"))
+        1 , EnemyImagesAssets.SPIDER_BACK_MOVE_ONE,
+        2 , EnemyImagesAssets.SPIDER_BACK_MOVE_TWO
         ),
         MovingDirection.LEFT, Map.of(
-        1 , Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-left-view-moving-one.png")),
-        2 , Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-left-view-moving-two.png"))
+        1 , EnemyImagesAssets.SPIDER_LEFT_MOVE_ONE,
+        2 , EnemyImagesAssets.SPIDER_LEFT_MOVE_TWO
         ),
         MovingDirection.RIGHT, Map.of(
-        1 , Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-right-view-moving-one.png")),
-        2 , Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-right-view-moving-two.png"))
+        1 , EnemyImagesAssets.SPIDER_RIGHT_MOVE_ONE,
+        2 , EnemyImagesAssets.SPIDER_RIGHT_MOVE_TWO
         )
     );
 
-    public static Map<MovingDirection, Map<Integer, BufferedImage>> spiderMosterColisionAssetsMap = Map.of(
+    public static Map<MovingDirection, Map<Integer, ImageModel>> spiderMosterColisionAssetsMap = Map.of(
         MovingDirection.UP, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-back-view.png"))
+        1, EnemyImagesAssets.SPIDER_BACK_VIEW
         ),
         MovingDirection.DOWN, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-front-view.png"))
+        1, EnemyImagesAssets.SPIDER_FRONT_VIEW
         ),
         MovingDirection.RIGHT, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-right-view.png"))
+        1, EnemyImagesAssets.SPIDER_RIGHT_VIEW
         ),
         MovingDirection.LEFT, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-left-view.png"))
+        1, EnemyImagesAssets.SPIDER_LEFT_VIEW
         )
     );
 
-    public static Map<MovingDirection, Map<Integer, BufferedImage>> spiderMosterUnderAttackAssetsMap = Map.of(
+    public static Map<MovingDirection, Map<Integer, ImageModel>> spiderMosterUnderAttackAssetsMap = Map.of(
         MovingDirection.UP, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-back-view.png")),
-        2, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-back-view-under-attack.png"))
+        1, EnemyImagesAssets.SPIDER_BACK_VIEW,
+        2, EnemyImagesAssets.SPIDER_BACK_VIEW_UNDER_ATTACK
         ),
         MovingDirection.DOWN, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-front-view.png")),
-        2, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-front-view-under-attack.png"))
+        1, EnemyImagesAssets.SPIDER_FRONT_VIEW,
+        2, EnemyImagesAssets.SPIDER_FRONT_VIEW_UNDER_ATTACK
         ),
         MovingDirection.RIGHT, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-right-view.png")),
-        2, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-right-view-under-attack.png"))
+        1, EnemyImagesAssets.SPIDER_RIGHT_VIEW,
+        2, EnemyImagesAssets.SPIDER_RIGHT_VIEW_UNDER_ATTACK
         ),
         MovingDirection.LEFT, Map.of(
-        1, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-left-view.png")),
-        2, Objects.requireNonNull(getScaledImageFromAssets("/enemy/spider/spider-left-view-under-attack.png"))
+        1, EnemyImagesAssets.SPIDER_LEFT_VIEW,
+        2, EnemyImagesAssets.SPIDER_LEFT_VIEW_UNDER_ATTACK
         )
     );
 }

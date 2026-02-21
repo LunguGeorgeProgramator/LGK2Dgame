@@ -63,7 +63,7 @@ public class WorldItem extends Individual
         super(worldItemPositionX, worldItemPositionY, gamePanel.player.speed);
         boolean isDungeonType = loadWorldItemType.equals(LoadWorldItemType.DUNGEON_WORLD);
         this.worldItemsImagesAssetsBufferedImageMap =
-                isDungeonType ? gamePanel.imageLoader.getDungeonWorldItemsImagesAssetsBufferedImageHashMap()
+                isDungeonType ? gamePanel.imageLoader.getDungeonWorldItemsImages()
                 : gamePanel.imageLoader.getWorldItemsAssetsImages();
         this.itemAssetId = itemAssetId;
         this.itemWorldMatrixRowIndex = itemWorldMatrixRowIndex;

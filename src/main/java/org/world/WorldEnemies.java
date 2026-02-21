@@ -7,6 +7,7 @@ import org.individual.Enemy;
 import org.individual.Individual;
 import org.individual.models.EnemyAsset;
 import org.individual.models.EnemyAssets;
+import org.worlditems.models.LoadWorldItemType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,8 @@ public class WorldEnemies extends GameWorld
                     this.gamePanel.player,
                     enemyAsset.getEnemyAssetsMap(),
                     enemyAsset.getEnemyColisionAssetsMap(),
-                    enemyAsset.getEnamyUnderAttackAssetsMap()
+                    enemyAsset.getEnamyUnderAttackAssetsMap(),
+                    LoadWorldItemType.MAIN_WORLD
                 ));
             }
         }

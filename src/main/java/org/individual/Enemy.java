@@ -2,7 +2,9 @@ package org.individual;
 
 import org.game.CollisionChecker;
 import org.game.GamePanel;
+import org.imageAssets.models.ImageModel;
 import org.individual.models.MovingDirection;
+import org.worlditems.models.LoadWorldItemType;
 
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -30,14 +32,15 @@ public class Enemy extends Individual
     private double hitDamage;
     public BufferedImage enemyAsset;
     private boolean isEnemyCollidingWithPlayer = false;
-    final private Map<MovingDirection, Map<Integer, BufferedImage>> enemyAssetsMap;
+    private final Map<MovingDirection, Map<Integer, ImageModel>> enemyAssetsMap;
     private final Player player;
     private final CollisionChecker collisionChecker;
     private final GamePanel gamePanel;
     private boolean isAllowedToInflictDamage = false;
-    private final Map<MovingDirection, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap;
-    private final Map<MovingDirection, Map<Integer, BufferedImage>> enemyColisionAssetsMap;
-    private Map<String, Map<MovingDirection, Map<Integer, BufferedImage>>> allEnemyAsssetsMap;
+    private final Map<MovingDirection, Map<Integer, ImageModel>> enemyUnderAttackAssetsMap;
+    private final Map<MovingDirection, Map<Integer, ImageModel>> enemyColisionAssetsMap;
+    private Map<String, Map<MovingDirection, Map<Integer, ImageModel>>> allEnemyAsssetsMap;
+    private final Map<ImageModel, BufferedImage> enemyImagesAssets;
     public int enemyId;
     public String enemyName;
     public int enemyWorldMatrixCol;
@@ -48,6 +51,7 @@ public class Enemy extends Individual
     public Rectangle damageTakenArea;
     private int worldEnemyAssetPositionX;
     private int worldEnemyAssetPositionY;
+    private LoadWorldItemType loadWorldItemType;
 
 
     public Enemy(
@@ -62,12 +66,14 @@ public class Enemy extends Individual
         List<MovingDirection> enemyMovingDirectionList,
         int speed,
         Player player,
-        Map<MovingDirection, Map<Integer, BufferedImage>> enemyAssetsMap,
-        Map<MovingDirection, Map<Integer, BufferedImage>> enemyColisionAssetsMap,
-        Map<MovingDirection, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap
+        Map<MovingDirection, Map<Integer, ImageModel>> enemyAssetsMap,
+        Map<MovingDirection, Map<Integer, ImageModel>> enemyColisionAssetsMap,
+        Map<MovingDirection, Map<Integer, ImageModel>> enemyUnderAttackAssetsMap,
+        LoadWorldItemType loadWorldItemType
     )
     {
         super(defaultPositionX, defaultPositionY, speed);
+        this.enemyImagesAssets = gamePanel.imageLoader.getEnemyAssetsImages();
         this.enemyId = enemyId;
         this.enemyName = enemyName;
         this.enemyWorldMatrixCol = enemyWorldMatrixCol;
@@ -260,8 +266,9 @@ public class Enemy extends Individual
     {
         if (!this.allEnemyAsssetsMap.get(assetsMapKey).isEmpty() && this.allEnemyAsssetsMap.get(assetsMapKey).get(this.movementDirection) != null)
         {
-            Map<Integer, BufferedImage> enemyAssetsMap = this.allEnemyAsssetsMap.get(assetsMapKey).get(this.movementDirection);
-            this.enemyAsset = enemyAssetsMap.get(this.dynamicAssetNumber) != null ? enemyAssetsMap.get(this.dynamicAssetNumber) : enemyAssetsMap.get(1);
+            Map<Integer, ImageModel> enemyAssetsMap = this.allEnemyAsssetsMap.get(assetsMapKey).get(this.movementDirection);
+            ImageModel enemyImageModel = enemyAssetsMap.get(this.dynamicAssetNumber) != null ? enemyAssetsMap.get(this.dynamicAssetNumber) : enemyAssetsMap.get(1);
+            this.enemyAsset = this.enemyImagesAssets.get(enemyImageModel);
         }
     }
 }

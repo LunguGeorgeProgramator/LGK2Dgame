@@ -1,10 +1,7 @@
 package org.imageAssets;
 
 import org.helpers.ToolsHelper;
-import org.imageAssets.models.DungeonWorldItemsImagesAssets;
-import org.imageAssets.models.ImageModel;
-import org.imageAssets.models.WorldImagesAssets;
-import org.imageAssets.models.WorldItemsImagesAssets;
+import org.imageAssets.models.*;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -22,7 +19,8 @@ public class ImageLoader
 
     private final Map<WorldImagesAssets, BufferedImage> worldAssetsImages = new HashMap<>();
     private final Map<ImageModel, BufferedImage> worldItemsAssetsImages = new HashMap<>();
-    private final Map<ImageModel, BufferedImage> dungeonWorldItemsImagesAssetsBufferedImageHashMap = new HashMap<>();
+    private final Map<ImageModel, BufferedImage> dungeonWorldItemsImages = new HashMap<>();
+    private final Map<ImageModel, BufferedImage> enemyAssetsImages = new HashMap<>();
 
     public ImageLoader()
     {
@@ -36,7 +34,11 @@ public class ImageLoader
         }
         for(DungeonWorldItemsImagesAssets dungeonWorldItemsImagesAssets : DungeonWorldItemsImagesAssets.values())
         {
-            this.dungeonWorldItemsImagesAssetsBufferedImageHashMap.put(dungeonWorldItemsImagesAssets, getScaledImageFromAssets(dungeonWorldItemsImagesAssets.getPath()));
+            this.dungeonWorldItemsImages.put(dungeonWorldItemsImagesAssets, getScaledImageFromAssets(dungeonWorldItemsImagesAssets.getPath()));
+        }
+        for(EnemyImagesAssets enemyImagesAssets : EnemyImagesAssets.values())
+        {
+            this.enemyAssetsImages.put(enemyImagesAssets, getScaledImageFromAssets(enemyImagesAssets.getPath()));
         }
     }
 
@@ -50,9 +52,14 @@ public class ImageLoader
         return this.worldItemsAssetsImages;
     }
 
-    public Map<ImageModel, BufferedImage> getDungeonWorldItemsImagesAssetsBufferedImageHashMap()
+    public Map<ImageModel, BufferedImage> getDungeonWorldItemsImages()
     {
-        return this.dungeonWorldItemsImagesAssetsBufferedImageHashMap;
+        return this.dungeonWorldItemsImages;
+    }
+
+    public Map<ImageModel, BufferedImage> getEnemyAssetsImages()
+    {
+        return this.enemyAssetsImages;
     }
 
     public BufferedImage getScaledImageFromAssets(String imagePath)

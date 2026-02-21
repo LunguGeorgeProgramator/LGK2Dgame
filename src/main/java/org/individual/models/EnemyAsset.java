@@ -1,5 +1,7 @@
 package org.individual.models;
 
+import org.imageAssets.models.ImageModel;
+
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +19,9 @@ public interface EnemyAsset
 
     List<MovingDirection> getEnemyMovingDirectionList();
 
-    Map<MovingDirection, Map<Integer, BufferedImage>> getEnemyAssetsMap();
+    Map<MovingDirection, Map<Integer, ImageModel>> getEnemyAssetsMap();
 
-    Map<MovingDirection, Map<Integer, BufferedImage>> getEnemyColisionAssetsMap();
+    Map<MovingDirection, Map<Integer, ImageModel>> getEnemyColisionAssetsMap();
 
-    Map<MovingDirection, Map<Integer, BufferedImage>> getEnamyUnderAttackAssetsMap();
+    Map<MovingDirection, Map<Integer, ImageModel>> getEnamyUnderAttackAssetsMap();
 }

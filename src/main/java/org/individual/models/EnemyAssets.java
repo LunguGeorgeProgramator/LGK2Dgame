@@ -1,5 +1,7 @@
 package org.individual.models;
 
+import org.imageAssets.models.ImageModel;
+
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
@@ -38,18 +40,18 @@ public enum EnemyAssets implements EnemyAsset
     final private int maxDistanceAllowedToMove;
     final private int speed;
     final private List<MovingDirection> enemyMovingDirectionList;
-    final private Map<MovingDirection, Map<Integer, BufferedImage>> enemyAssetsMap;
-    final private Map<MovingDirection, Map<Integer, BufferedImage>> enemyColisionAssetsMap;
-    final private Map<MovingDirection, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap;
+    final private Map<MovingDirection, Map<Integer, ImageModel>> enemyAssetsMap;
+    final private Map<MovingDirection, Map<Integer, ImageModel>> enemyColisionAssetsMap;
+    final private Map<MovingDirection, Map<Integer, ImageModel>> enemyUnderAttackAssetsMap;
 
     EnemyAssets(
         int enemyId,
         int maxDistanceAllowedToMove,
         int speed,
         List<MovingDirection> enemyMovingDirectionList,
-        Map<MovingDirection, Map<Integer, BufferedImage>> enemyAssetsMap,
-        Map<MovingDirection, Map<Integer, BufferedImage>> enemyColisionAssetsMap,
-        Map<MovingDirection, Map<Integer, BufferedImage>> enemyUnderAttackAssetsMap
+        Map<MovingDirection, Map<Integer, ImageModel>> enemyAssetsMap,
+        Map<MovingDirection, Map<Integer, ImageModel>> enemyColisionAssetsMap,
+        Map<MovingDirection, Map<Integer, ImageModel>> enemyUnderAttackAssetsMap
     )
     {
         this.enemyId = enemyId;
@@ -76,17 +78,17 @@ public enum EnemyAssets implements EnemyAsset
         return this.speed;
     }
 
-    public Map<MovingDirection, Map<Integer, BufferedImage>> getEnemyAssetsMap()
+    public Map<MovingDirection, Map<Integer, ImageModel>> getEnemyAssetsMap()
     {
         return this.enemyAssetsMap;
     }
 
-    public Map<MovingDirection, Map<Integer, BufferedImage>> getEnemyColisionAssetsMap()
+    public Map<MovingDirection, Map<Integer, ImageModel>> getEnemyColisionAssetsMap()
     {
         return this.enemyColisionAssetsMap;
     }
 
-    public  Map<MovingDirection, Map<Integer, BufferedImage>> getEnamyUnderAttackAssetsMap()
+    public  Map<MovingDirection, Map<Integer, ImageModel>> getEnamyUnderAttackAssetsMap()
     {
         return this.enemyUnderAttackAssetsMap;
     }
