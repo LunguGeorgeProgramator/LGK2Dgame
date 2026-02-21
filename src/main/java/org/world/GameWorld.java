@@ -1,12 +1,15 @@
 package org.world;
 
 import org.game.GamePanel;
+import org.imageAssets.models.WorldImagesAssets;
 import org.individual.Player;
 import org.world.models.WorldAssets;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.helpers.ToolsHelper.getTxtFileFromResources;
@@ -21,12 +24,14 @@ public class GameWorld
     public int[][] worldMap;
     int worldMapCol;
     int worldMapRow;
+    Map<WorldImagesAssets, BufferedImage> worldImagesAssetsBufferedImageMap;
 
 
     public GameWorld(GamePanel gamePanel, String worldMapPath)
     {
         this.gamePanel = gamePanel;
-        this.player = this.gamePanel.player;
+        this.worldImagesAssetsBufferedImageMap = gamePanel.imageLoader.getWorldAssetsImages();
+        this.player = gamePanel.player;
         List<String> txtMapLines = getTxtFileFromResources(worldMapPath);
         setWorldMapRange(txtMapLines);
         loadMapIntoMatrix(txtMapLines);
@@ -34,7 +39,9 @@ public class GameWorld
 
     protected void drawWorldAsset(Graphics2D g2D, int worldAssetIndex, int worldAssetPositionX, int worldAssetPositionY)
     {
-        g2D.drawImage(WorldAssets.getWorldImageAssetByIndex(worldAssetIndex), worldAssetPositionX, worldAssetPositionY, null);
+        WorldImagesAssets worldImagesAssets = WorldAssets.getWorldImageAssetByIndexImgLoad(worldAssetIndex);
+        BufferedImage imageAsset = this.worldImagesAssetsBufferedImageMap.get(worldImagesAssets);
+        g2D.drawImage(imageAsset, worldAssetPositionX, worldAssetPositionY, null);
     }
 
     private void setWorldMapRange(List<String> txtMapLines)

@@ -6,11 +6,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.imageAssets.ImageLoader;
+import org.imageAssets.models.WorldImagesAssets;
 import org.individual.SpiderBossEnemy;
 import org.individual.GrimBoosEnemy;
 import org.world.NonPlayerCharacters;
@@ -44,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable
 
     final int framePerSecond = 90;
     public final KeyBoardAndMouseHandler keyBoardAndMouseHandler;
+    public final ImageLoader imageLoader;
     public final Player player;
     public final SpiderBossEnemy spiderBossEnemy;
     public final GrimBoosEnemy grimBoosEnemy;
@@ -77,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable
         this.worldType = WorldType.MAIN_GAME;
         this.gameState = GameState.RESUME_GAME;
         this.gameSavedStats = new GameSavedStats();
+        this.imageLoader = new ImageLoader();
         this.playerInventory = new PlayerInventory(this);
         this.keyBoardAndMouseHandler = new KeyBoardAndMouseHandler(this);
         this.gameTextProvider = new GameTextProvider();

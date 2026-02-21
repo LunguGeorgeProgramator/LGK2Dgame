@@ -5,11 +5,11 @@ import org.individual.Individual;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
 import org.worlditems.WorldItem;
+import org.worlditems.models.LoadWorldItemType;
 import org.worlditems.models.WorldItemBuilder;
 import org.worlditems.models.WorldItemTypes;
 import org.worlditems.models.WorldItemsAssets;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +54,8 @@ public class WorldItems extends GameWorld
                     worldItemOptions != null && worldItemOptions.getItemType() != null ? worldItemOptions.getItemType() : worldItemsAssets.getItemType(),
                     worldItemOptions != null && worldItemOptions.getPositionX() != null ? worldItemOptions.getPositionX() : worldItemsAssets.getDefaultPositionX(),
                     worldItemOptions != null && worldItemOptions.getPositionY() != null ? worldItemOptions.getPositionY() : worldItemsAssets.getDefaultPositionY(),
-                    worldItemOptions != null && worldItemOptions.getItemAssetsMap() != null ? worldItemOptions.getItemAssetsMap() : worldItemsAssets.getItemAssetsMap()
+                    worldItemOptions != null && worldItemOptions.getItemAssetsMap() != null ? worldItemOptions.getItemAssetsMap() : worldItemsAssets.getItemAssetsMap(),
+                    LoadWorldItemType.MAIN_WORLD
                 )
             );
         }

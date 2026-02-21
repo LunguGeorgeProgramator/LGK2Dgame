@@ -1,21 +1,22 @@
 package org.worlditems.models;
 
-import java.awt.image.BufferedImage;
+import org.imageAssets.models.ImageModel;
+import org.imageAssets.models.WorldItemsImagesAssets;
 
 public class WorldItemAssetsModel
 {
-    private final BufferedImage imageAsset;
+    private final ImageModel imageAssetPath;
     private final String imageTextKey;
 
-    public WorldItemAssetsModel(BufferedImage imageAsset, String imageTextKey)
+    public WorldItemAssetsModel(ImageModel imageAssetPath, String imageTextKey)
     {
-        this.imageAsset = imageAsset;
+        this.imageAssetPath = imageAssetPath;
         this.imageTextKey = imageTextKey;
     }
 
-    public BufferedImage getImageAsset()
+    public ImageModel getImageAssetPath()
     {
-        return this.imageAsset;
+        return this.imageAssetPath;
     }
 
     public String getImageTextKey()

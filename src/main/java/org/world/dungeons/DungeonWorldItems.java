@@ -4,6 +4,7 @@ import org.game.GamePanel;
 import org.world.WorldItems;
 import org.worlditems.WorldItem;
 import org.worlditems.models.DungeonWorldItemsAssets;
+import org.worlditems.models.LoadWorldItemType;
 import org.worlditems.models.WorldItemBuilder;
 
 public class DungeonWorldItems extends WorldItems
@@ -32,7 +33,8 @@ public class DungeonWorldItems extends WorldItems
                     worldItemOptions != null && worldItemOptions.getItemType() != null ? worldItemOptions.getItemType() : worldItemsAssets.getItemType(),
                     worldItemOptions != null && worldItemOptions.getPositionX() != null ? worldItemOptions.getPositionX() : worldItemsAssets.getDefaultPositionX(),
                     worldItemOptions != null && worldItemOptions.getPositionY() != null ? worldItemOptions.getPositionY() : worldItemsAssets.getDefaultPositionY(),
-                    worldItemOptions != null && worldItemOptions.getItemAssetsMap() != null ? worldItemOptions.getItemAssetsMap() : worldItemsAssets.getItemAssetsMap()
+                    worldItemOptions != null && worldItemOptions.getItemAssetsMap() != null ? worldItemOptions.getItemAssetsMap() : worldItemsAssets.getItemAssetsMap(),
+                    LoadWorldItemType.DUNGEON_WORLD
                 )
             );
         }

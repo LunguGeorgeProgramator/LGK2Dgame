@@ -3,19 +3,16 @@ package org.worlditems;
 import org.game.CollisionChecker;
 import org.game.GamePanel;
 import org.game.models.GameState;
+import org.imageAssets.models.ImageModel;
+import org.imageAssets.models.WorldItemsImagesAssets;
 import org.individual.Individual;
 import org.individual.Player;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
 import org.world.models.WorldType;
-import org.worlditems.models.DungeonWorldItemsAssets;
-import org.worlditems.models.WorldItemAssetsModel;
-import org.worlditems.models.WorldItemTypes;
-import org.worlditems.models.WorldItemsAssets;
+import org.worlditems.models.*;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
@@ -45,6 +42,7 @@ public class WorldItem extends Individual
     private int worldItemAssetPositionX;
     private int worldItemAssetPositionY;
     private boolean hideWorldItem;
+    private final Map<ImageModel, BufferedImage> worldItemsImagesAssetsBufferedImageMap;
 
     public WorldItem(
             GamePanel gamePanel,
@@ -58,10 +56,15 @@ public class WorldItem extends Individual
             String itemAssetType,
             int worldItemPositionX,
             int worldItemPositionY,
-            Map<Integer, WorldItemAssetsModel> itemsAssetsMap
+            Map<Integer, WorldItemAssetsModel> itemsAssetsMap,
+            LoadWorldItemType loadWorldItemType
     )
     {
         super(worldItemPositionX, worldItemPositionY, gamePanel.player.speed);
+        boolean isDungeonType = loadWorldItemType.equals(LoadWorldItemType.DUNGEON_WORLD);
+        this.worldItemsImagesAssetsBufferedImageMap =
+                isDungeonType ? gamePanel.imageLoader.getDungeonWorldItemsImagesAssetsBufferedImageHashMap()
+                : gamePanel.imageLoader.getWorldItemsAssetsImages();
         this.itemAssetId = itemAssetId;
         this.itemWorldMatrixRowIndex = itemWorldMatrixRowIndex;
         this.itemWorldMatrixColIndex = itemWorldMatrixColIndex;
@@ -203,7 +206,12 @@ public class WorldItem extends Individual
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * 2) && !this.hideWorldItem)
         {
             WorldItemAssetsModel worldItemAssetsModel = this.itemsAssetsMap.get(this.dynamicAssetNumber);
-            BufferedImage bufferedImage = worldItemAssetsModel != null ? worldItemAssetsModel.getImageAsset() : null;
+            BufferedImage bufferedImage = null;
+            if (worldItemAssetsModel != null)
+            {
+                ImageModel assetImageName = worldItemAssetsModel.getImageAssetPath();
+                bufferedImage = worldItemsImagesAssetsBufferedImageMap.get(assetImageName);
+            }
             if (bufferedImage != null)
             {
                 g2D.drawImage(bufferedImage, this.worldItemAssetPositionX, this.worldItemAssetPositionY, null);

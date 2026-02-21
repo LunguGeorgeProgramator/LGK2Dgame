@@ -1,53 +1,51 @@
 package org.worlditems.models;
 
 
+import org.imageAssets.models.DungeonWorldItemsImagesAssets;
 import org.world.models.GameWorldAssets;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
-
-import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
 public enum DungeonWorldItemsAssets implements GameWorldAssets
 {
     GOLD_KEY(1, WorldItemTypes.KEY.name(), false, 0, 0, 0,
         Map.of(
-            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-right.png")), null),
-            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-one.png")), null),
-            3, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-back.png")), null),
-            4, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-two.png")), null),
-            5, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-profile-left.png")), null),
-            6, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-three.png")), null),
-            7, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-front.png")), null),
-            8, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/rusted-key-spin-four.png")), null)
+            1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUSTED_KEY_POSITION_RIGHT, null),
+            2, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUSTED_KEY_POSITION_SPIN_ONE, null),
+            3, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUSTED_KEY_POSITION_SPIN_BACK, null),
+            4, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUSTED_KEY_POSITION_SPIN_TWO, null),
+            5, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUSTED_KEY_POSITION_SPIN_LEFT, null),
+            6, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUSTED_KEY_POSITION_SPIN_THREE, null),
+            7, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUSTED_KEY_POSITION_SPIN_FRONT, null),
+            8, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUSTED_KEY_POSITION_SPIN_FOUR, null)
         )),
     RUBY(2, WorldItemTypes.HEALTH_RESTORATION.name(), false, 0, 0, 0,
         Map.of(
-            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-front.png")), null),
-            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-left.png")), null),
-            3, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-side.png")), null),
-            4, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/ruby-spin-right.png")), null)
+            1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUBY_FRONT, null),
+            2, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUBY_SPIN_LEFT, null),
+            3, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUBY_SIDE, null),
+            4, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.RUBY_SPIN_RIGHT, null)
         )),
     CHEST(3, WorldItemTypes.CHEST.name(), true, 0, 0, DungeonWorldItemsAssets.GOLD_KEY.getItemId(),
         Map.of(
-            1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/open-chest.png")), "open-chest"),
-            2, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/closed-chest.png")), "closed-chest")
+            1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.CHEST_OPEN, "open-chest"),
+            2, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.CHEST_CLOSED, "closed-chest")
         )),
     DUNGEON_EXIT_ENTRY_WAY(4, WorldItemTypes.DUNGEON_EXIT_ENTRY_WAY.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/cave-dungeon-exit-way.png")), null))),
+        Map.of(1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.DUNGEON_EXIT_ENTRY_WAY, null))),
     SWORD(5, WorldItemTypes.WEAPON.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/player-sword.png")), null))),
+        Map.of(1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.SWORD, null))),
     WOOD_BOARD(6, WorldItemTypes.BUILDING.name(), true, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/worlditems/wood-board.png")), "impenetrable-forrest"))),
+        Map.of(1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.WOOD_BOARD, "impenetrable-forrest"))),
     TOP_WALL_CORNER_RIGHT_TOP(8, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-right-top.png")), null))),
+        Map.of(1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.TOP_WALL_CORNER_RIGHT_TOP, null))),
     TOP_WALL_CORNER_LEFT_TOP(9, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
-            Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall-corner-left-top.png")), null))),
+            Map.of(1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.TOP_WALL_CORNER_LEFT_TOP, null))),
     TOP_WALL(10, WorldItemTypes.BUILDING.name(), false, 0, 0, 0,
-        Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/tiles/top-wall.png")), null))),
+        Map.of(1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.TOP_WALL, null))),
     GOLD_SWORD(11, WorldItemTypes.WEAPON.name(), false, 0, 0, 0,
-            Map.of(1, new WorldItemAssetsModel(Objects.requireNonNull(getScaledImageFromAssets("/dungeon/gold-sword-in-rock.png")), null)));
+            Map.of(1, new WorldItemAssetsModel(DungeonWorldItemsImagesAssets.GOLD_SWORD, null)));
 
     private final int itemId;
     private final String itemType;

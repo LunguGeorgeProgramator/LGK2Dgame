@@ -8,7 +8,6 @@ import org.individual.Individual;
 import org.individual.models.EnemyAsset;
 import org.individual.models.EnemyAssets;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.nio.file.Paths;
