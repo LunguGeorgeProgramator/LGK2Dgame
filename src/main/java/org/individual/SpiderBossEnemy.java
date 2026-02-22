@@ -2,17 +2,17 @@ package org.individual;
 
 import org.game.CollisionChecker;
 import org.game.GamePanel;
+import org.imageAssets.ImageLoader;
+import org.imageAssets.models.EnemyBossesImagesAssets;
 import org.individual.models.MovingDirection;
 
-import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.Objects;
 import java.util.Map;
 
-import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 import static org.game.GamePanel.tileSize;
 import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
 
@@ -22,6 +22,7 @@ public class SpiderBossEnemy extends Individual
     BufferedImage boosAssetImage;
     BufferedImage boosAttackAssetImage;
     private final GamePanel gamePanel;
+    private final ImageLoader imageLoader;
     private final Player player;
     private final CollisionChecker collisionChecker;
     private final int maxMovement;
@@ -47,10 +48,11 @@ public class SpiderBossEnemy extends Individual
         this.maxMovementLeft = this.positionX;
         this.maxMovementRight = this.positionX + this.maxMovement;
         this.gamePanel = gamePanel;
+        this.imageLoader = gamePanel.imageLoader;
         this.player = this.gamePanel.player;
         this.collisionChecker = this.gamePanel.collisionChecker;
         this.movementDirection = MovingDirection.RIGHT;
-        this.boosTileSize = 4;
+        this.boosTileSize = boosTileSizeImage;
         this._buildBossEnemyAssets();
         this._buildBossEnemyCollisionArea();
         this._buildBossEnemyAttackArea();
@@ -60,17 +62,18 @@ public class SpiderBossEnemy extends Individual
 
     private void _buildBossEnemyAssets()
     {
-        this.boosAssetImage = Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize));
-        this.boosAttackAssetImage = Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-attack.png", tileSize, tileSize * 2));
+        this.boosAssetImage = this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.BOOS_ENEMY);
+//        this.boosAttackAssetImage = this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.BOOS_ENEMY_ATTACK);
+        this.boosAttackAssetImage = this.imageLoader.getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-attack.png", tileSize, tileSize * 2);
 
         this.boosEnemyCollisionAssets = Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize)),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-bites.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize))
+                1, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.BOOS_ENEMY),
+                2, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.BOOS_ENEMY_BITES)
         );
 
         this.boosEnemyMovingAssets = Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-moving-two.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize)),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/spider/boos-enemy-moving.png", tileSize * this.boosTileSize, tileSize * this.boosTileSize))
+                1, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.BOOS_ENEMY_MOVING_TWO),
+                2, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.BOOS_ENEMY_MOVING)
         );
     }
 
@@ -79,8 +82,8 @@ public class SpiderBossEnemy extends Individual
         this.collisionArea = new Rectangle();
         this.collisionArea.x = 0;
         this.collisionArea.y = 0;
-        this.collisionArea.height = tileSize * this.boosTileSize;
-        this.collisionArea.width = tileSize * this.boosTileSize;
+        this.collisionArea.height = this.boosTileSize;
+        this.collisionArea.width = this.boosTileSize;
     }
 
     private void _buildBossEnemyAttackArea()
@@ -98,7 +101,7 @@ public class SpiderBossEnemy extends Individual
         this.isBoosEnemyDead = this.isIndividualDead(this.gamePanel.gameSavedStats, this.spiderBossWorldId, spiderBossMapName);
         this.changeAssetNumberByFrameCounter();
         this.changeAssetNumberByFrameCounter(4, 60);
-        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * this.boosTileSize * this.boosTileSize) && !this.isBoosEnemyDead)
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, this.boosTileSize * 4) && !this.isBoosEnemyDead)
         {
             this.isBoosEnemyDead = this.enemyHealth <= 0;
             if (this.isBoosEnemyDead)
@@ -194,13 +197,13 @@ public class SpiderBossEnemy extends Individual
         this.collisionArea.x = boosEnemyAssetPositionX;
         this.collisionArea.y = boosEnemyAssetPositionY;
         this.attackArea.x = (boosEnemyAssetPositionX - tileSize) + (tileSize * this.dynamicAssetNumber);
-        this.attackArea.y = boosEnemyAssetPositionY + (tileSize * boosTileSize);
+        this.attackArea.y = boosEnemyAssetPositionY + boosTileSize;
     }
 
     @Override
     public void draw(Graphics2D g2D)
     {
-        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize * this.boosTileSize))
+        if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, this.boosTileSize))
         {
             if (this.boosAssetImage != null && !this.isBoosEnemyDead)
             {

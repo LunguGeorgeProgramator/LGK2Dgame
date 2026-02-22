@@ -2,6 +2,8 @@ package org.individual;
 
 import org.game.CollisionChecker;
 import org.game.GamePanel;
+import org.imageAssets.ImageLoader;
+import org.imageAssets.models.EnemyBossesImagesAssets;
 import org.individual.models.MovingDirection;
 
 import java.awt.Graphics2D;
@@ -9,11 +11,9 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.game.GamePanel.tileSize;
 import static org.helpers.ToolsHelper.checkIfAssetIsInsideTheBoundary;
-import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
 public class GrimBoosEnemy  extends Individual
 {
@@ -24,6 +24,7 @@ public class GrimBoosEnemy  extends Individual
     private Map<MovingDirection, Map<Integer, BufferedImage>> attackAssetsMap;
     private Map<MovingDirection, BufferedImage> attackPossitionAssetsMap;
     private Map<MovingDirection, BufferedImage> stanbyPossitionAssetsMap;
+    private final ImageLoader imageLoader;
     private int boosEnemyAssetPositionX;
     private int boosEnemyAssetPositionY;
     private final int boosWight;
@@ -43,8 +44,9 @@ public class GrimBoosEnemy  extends Individual
         super(tileSize * 26, tileSize * 9, 4);
         this.player = gamePanel.player;
         this.gamePanel = gamePanel;
+        this.imageLoader = gamePanel.imageLoader;
         this.collisionChecker = gamePanel.collisionChecker;
-        this.boosTileSize = tileSize * 4;
+        this.boosTileSize = boosTileSizeImage;
         this.boosWight = this.boosTileSize;
         this.boosHeight = this.boosTileSize;
         this._buildBossEnemyCollisionArea();
@@ -88,32 +90,32 @@ public class GrimBoosEnemy  extends Individual
 
     private void _buildBossAssets()
     {
-        BufferedImage assetImage = Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-boos-enemy.png", this.boosWight, this.boosHeight));
-        BufferedImage leftAssetImage = Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-boos-enemy-left.png", this.boosWight, this.boosHeight));
+        BufferedImage assetImage = this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_BOOS_ENEMY);
+        BufferedImage leftAssetImage = this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_BOOS_ENEMY_LEFT);
         this.attackAssetsMap = Map.of(
             MovingDirection.UP, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-weapon-attack-up-up.png", this.boosWight, this.boosHeight)),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-weapon-attack-center-up.png", this.boosWight, this.boosHeight))
+            1, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_WEAPON_ATTACK_UP_UP),
+            2, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_WEAPON_ATTACK_CENTER_UP)
             ),
             MovingDirection.RIGHT, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-weapon-attack-up-right.png", this.boosWight, this.boosHeight)),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-weapon-attack-center-right.png", this.boosWight, this.boosHeight))
+            1, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_WEAPON_ATTACK_UP_RIGHT),
+            2, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_WEAPON_ATTACK_CENTER_RIGHT)
             ),
             MovingDirection.LEFT, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-weapon-attack-up-left.png", this.boosWight, this.boosHeight)),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-weapon-attack-center-left.png", this.boosWight, this.boosHeight))
+            1, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_WEAPON_ATTACK_UP_LEFT),
+            2, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_WEAPON_ATTACK_CENTER_LEFT)
             ),
             MovingDirection.DOWN, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-weapon-attack-up-down.png", this.boosWight, this.boosHeight)),
-            2, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-weapon-attack-center-down.png", this.boosWight, this.boosHeight))
+            1, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_WEAPON_ATTACK_UP_DOWN),
+            2, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_WEAPON_ATTACK_CENTER_DOWN)
             ),
             MovingDirection.STATIONARY, Map.of(1, assetImage, 2, assetImage)
         );
         this.attackPossitionAssetsMap = Map.of(
-            MovingDirection.UP, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-boos-enemy-attack-up.png", this.boosWight, this.boosHeight)),
-            MovingDirection.DOWN, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-boos-enemy-attack-down.png", this.boosWight, this.boosHeight)),
-            MovingDirection.LEFT, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-boos-enemy-attack-left.png", this.boosWight, this.boosHeight)),
-            MovingDirection.RIGHT, Objects.requireNonNull(getScaledImageFromAssets("/boosEnemy/grim/grim-boos-enemy-attack-right.png", this.boosWight, this.boosHeight)),
+            MovingDirection.UP, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_BOOS_ENEMY_ATTACK_UP),
+            MovingDirection.DOWN, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_BOOS_ENEMY_ATTACK_DOWN),
+            MovingDirection.LEFT, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_BOOS_ENEMY_ATTACK_LEFT),
+            MovingDirection.RIGHT, this.imageLoader.getEnemyBossesImageAssets(EnemyBossesImagesAssets.GRIM_BOOS_ENEMY_ATTACK_RIGHT),
             MovingDirection.STATIONARY, assetImage
         );
         this.stanbyPossitionAssetsMap = Map.of(

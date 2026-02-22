@@ -1,5 +1,7 @@
 package org.individual.models;
 
+import org.imageAssets.models.ImageModel;
+
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +19,7 @@ public enum NonPlayerCharacterAssets
     final private int maxDistanceAllowedToMove;
     final private int speed;
     final private List<MovingDirection> npcMovingDirectionList;
-    final private Map<MovingDirection, Map<Integer, BufferedImage>> npcAssetsMap;
+    final private Map<MovingDirection, Map<Integer, ImageModel>> npcAssetsMap;
 
     NonPlayerCharacterAssets(
         int npcId,
@@ -25,7 +27,7 @@ public enum NonPlayerCharacterAssets
         int maxDistanceAllowedToMove,
         int speed,
         List<MovingDirection> npcMovingDirectionList,
-        Map<MovingDirection, Map<Integer, BufferedImage>> npcAssetsMap
+        Map<MovingDirection, Map<Integer, ImageModel>> npcAssetsMap
     )
     {
         this.npcId = npcId;
@@ -56,7 +58,7 @@ public enum NonPlayerCharacterAssets
         return this.speed;
     }
 
-    public Map<MovingDirection, Map<Integer, BufferedImage>> getNpcAssetsMap()
+    public Map<MovingDirection, Map<Integer, ImageModel>> getNpcAssetsMap()
     {
         return this.npcAssetsMap;
     }

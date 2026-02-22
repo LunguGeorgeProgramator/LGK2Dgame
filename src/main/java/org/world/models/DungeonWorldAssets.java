@@ -1,44 +1,43 @@
 package org.world.models;
 
-import java.awt.image.BufferedImage;
-import java.util.Arrays;
-import java.util.Objects;
+import org.imageAssets.models.DungeonWorldImagesAssets;
+import org.imageAssets.models.ImageModel;
 
-import static org.helpers.ToolsHelper.getScaledImageFromAssets;
+import java.util.Arrays;
 
 public enum DungeonWorldAssets implements GameWorldAssets
 {
-    WATER(1, getScaledImageFromAssets("/tiles/water-exp.png"), false),
-    TEMPLE_FLOOR_CRACKED(20, getScaledImageFromAssets("/dungeon/temple-floor-cracked.png"), true),
-    INTERIOR_FLOOR(21, getScaledImageFromAssets("/tiles/floor.png"), false),
-    TEMPLE_FLOOR(22, getScaledImageFromAssets("/tiles/runinedtemple/temple-floor.png"), false),
-    WORLD_WALL_END(40, getScaledImageFromAssets("/tiles/end-world-wall.png"), true),
-    WORLD_WALL_START(41, getScaledImageFromAssets("/tiles/start-world-wall.png"), true),
-    WORLD_WALL_TOP_CORNER_LEFT_BOTTOM(42, getScaledImageFromAssets("/tiles/top-wall-corner-left-bottom.png"), true),
-    WORLD_WALL_TOP_CORNER_LEFT_TOP(43, getScaledImageFromAssets("/tiles/top-wall-corner-left-top.png"), true),
-    TOP_WALL_CORNER_RIGHT_TOP(44, getScaledImageFromAssets("/tiles/top-wall-corner-right-top.png"), true),
-    TOP_WALL_CORNER_RIGHT_BOTTOM(45, getScaledImageFromAssets("/tiles/top-wall-corner-right-bottom.png"), true),
-    WALL_FRONT_VIEW(46, getScaledImageFromAssets("/tiles/front-wall.png"), true),
-    TOP_SIDE_WALL(47, getScaledImageFromAssets("/tiles/top-wall-side.png"), true),
-    TOP_WALL(48, getScaledImageFromAssets("/tiles/top-wall.png"), true),
-    BROKEN_END_WALL(49, getScaledImageFromAssets("/dungeon/broken-end-world-wall.png"), true),
-    BROKEN_END_WALL_RIGHT_SIZE(50, getScaledImageFromAssets("/dungeon/broken-end-world-wall-right.png"), true),
-    TEMPLE_FLOOR_CRACKED_RIGHT_SIZE(51, getScaledImageFromAssets("/dungeon/temple-floor-cracked-right.png"), true);
+    WATER(1, DungeonWorldImagesAssets.WATER, false),
+    TEMPLE_FLOOR_CRACKED(20, DungeonWorldImagesAssets.TEMPLE_FLOOR_CRACKED, true),
+    INTERIOR_FLOOR(21, DungeonWorldImagesAssets.INTERIOR_FLOOR, false),
+    TEMPLE_FLOOR(22, DungeonWorldImagesAssets.TEMPLE_FLOOR, false),
+    WORLD_WALL_END(40, DungeonWorldImagesAssets.WORLD_WALL_END, true),
+    WORLD_WALL_START(41, DungeonWorldImagesAssets.WORLD_WALL_START, true),
+    WORLD_WALL_TOP_CORNER_LEFT_BOTTOM(42, DungeonWorldImagesAssets.WORLD_WALL_TOP_CORNER_LEFT_BOTTOM, true),
+    WORLD_WALL_TOP_CORNER_LEFT_TOP(43, DungeonWorldImagesAssets.WORLD_WALL_TOP_CORNER_LEFT_TOP, true),
+    TOP_WALL_CORNER_RIGHT_TOP(44, DungeonWorldImagesAssets.TOP_WALL_CORNER_RIGHT_TOP, true),
+    TOP_WALL_CORNER_RIGHT_BOTTOM(45, DungeonWorldImagesAssets.TOP_WALL_CORNER_RIGHT_BOTTOM, true),
+    WALL_FRONT_VIEW(46, DungeonWorldImagesAssets.WALL_FRONT_VIEW, true),
+    TOP_SIDE_WALL(47, DungeonWorldImagesAssets.TOP_SIDE_WALL, true),
+    TOP_WALL(48, DungeonWorldImagesAssets.TOP_WALL, true),
+    BROKEN_END_WALL(49, DungeonWorldImagesAssets.BROKEN_END_WALL, true),
+    BROKEN_END_WALL_RIGHT_SIZE(50, DungeonWorldImagesAssets.BROKEN_END_WALL_RIGHT_SIZE, true),
+    TEMPLE_FLOOR_CRACKED_RIGHT_SIZE(51, DungeonWorldImagesAssets.TEMPLE_FLOOR_CRACKED_RIGHT_SIZE, true);
 
     private final int index;
-    private final BufferedImage worldAssetImage;
+    private final ImageModel worldAssetImage;
     private final boolean solidStopOnCollisionWithPlayer;
 
-    DungeonWorldAssets(int index, BufferedImage worldAssetImage, boolean solidStopOnCollisionWithPlayer)
+    DungeonWorldAssets(int index, ImageModel worldAssetImage, boolean solidStopOnCollisionWithPlayer)
     {
         this.index = index;
         this.worldAssetImage = worldAssetImage;
         this.solidStopOnCollisionWithPlayer = solidStopOnCollisionWithPlayer;
     }
 
-    public static BufferedImage getWorldImageAssetByIndex(int index)
+    public static ImageModel getWorldImageAssetByIndex(int index)
     {
-        return Objects.requireNonNull(getWorldAssetByIndex(index)).getWorldAssetImage();
+        return getWorldAssetByIndex(index).getWorldAssetImage();
     }
 
     public static DungeonWorldAssets getWorldAssetByIndex(int index)
@@ -55,7 +54,7 @@ public enum DungeonWorldAssets implements GameWorldAssets
         return worldAssets;
     }
 
-    private BufferedImage getWorldAssetImage()
+    private ImageModel getWorldAssetImage()
     {
         return this.worldAssetImage;
     }

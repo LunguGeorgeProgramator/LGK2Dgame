@@ -33,6 +33,7 @@ public abstract class Individual
     protected Map<Integer, BufferedImage> downMovementImagesAssetsMap;
     protected Map<Integer, BufferedImage> leftMovementImagesAssetsMap;
     protected Map<Integer, BufferedImage> rightMovementImagesAssetsMap;
+    public static int boosTileSizeImage = tileSize * 4;
     public Rectangle collisionArea;
     public boolean activateCollision = false;
     public double enemyHealth = 100;

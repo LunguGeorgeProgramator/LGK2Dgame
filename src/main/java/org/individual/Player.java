@@ -1,6 +1,8 @@
 package org.individual;
 import org.game.GamePanel;
 import org.game.KeyBoardAndMouseHandler;
+import org.imageAssets.ImageLoader;
+import org.imageAssets.models.PlayerImagesAssets;
 import org.individual.models.MovingDirection;
 import org.inventory.PlayerInventory;
 import org.inventory.models.PlayerInventoryModel;
@@ -12,9 +14,7 @@ import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Map;
-import java.util.Objects;
 
-import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 import static org.game.GamePanel.tileSize;
 
 public class Player extends Individual
@@ -28,6 +28,7 @@ public class Player extends Individual
     public static final double PLAYER_DAMAGE_GOLD_STEEL_SWORD = 50.1;
     public double playerDamageToEnemy;
     public PlayerInventory playerInventory;
+    private final ImageLoader imageLoader;
     public final int playerScreenX;
     public final int playerScreenY;
     public double damageTaken = 0.0;
@@ -52,6 +53,7 @@ public class Player extends Individual
         super(tileSize * 2, tileSize * 2, 4); // set player position x, y and speed
         this.defaultMovementSpeed = 4;
         this.gamePanel = gamePanel;
+        this.imageLoader = gamePanel.imageLoader;
         this.keyBoardAndMouseHandler = this.gamePanel.keyBoardAndMouseHandler;
         this.playerScreenX = (GamePanel.screenWith /2) - (tileSize/2);
         this.playerScreenY = (GamePanel.screenHeight /2) - (tileSize/2);
@@ -102,108 +104,103 @@ public class Player extends Individual
     public void getAssetImages()
     {
         this.upMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/walking/player-walk-up.png"),
-            2, getAssetImage("/player/walking/player-walk-up-two.png")
+            1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_UP),
+            2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_UP_TWO)
         );
 
         this.downMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/walking/player-walk-down.png"),
-            2, getAssetImage("/player/walking/player-walk-down-two.png")
+            1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_DOWN),
+            2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_DOWN_TWO)
         );
 
         this.leftMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/walking/player-walk-left.png"),
-            2, getAssetImage("/player/walking/player-walk-left-two.png")
+            1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_LEFT),
+            2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_LEFT_TWO)
         );
 
         this.rightMovementImagesAssetsMap = Map.of(
-            1, getAssetImage("/player/walking/player-walk-right.png"),
-            2, getAssetImage("/player/walking/player-walk-right-two.png")
+            1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_RIGHT),
+            2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_RIGHT_TWO)
         );
 
         this.standStillImagesAssetsMap = Map.of(
-            MovingDirection.UP, getAssetImage("/player/player-stand-still-up.png"),
-            MovingDirection.DOWN, getAssetImage("/player/player-stand-still-down.png"),
-            MovingDirection.LEFT, getAssetImage("/player/player-stand-still-left.png"),
-            MovingDirection.RIGHT, getAssetImage("/player/player-stand-still-right.png")
+            MovingDirection.UP, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_STAND_STILL_UP),
+            MovingDirection.DOWN, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_STAND_STILL_DOWN),
+            MovingDirection.LEFT, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_STAND_STILL_LEFT),
+            MovingDirection.RIGHT, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_STAND_STILL_RIGHT)
         );
 
         this.swordSwingAttackImagesAssetsMap = Map.of(
             MovingDirection.RIGHT, Map.of(
-            1, getAssetImage("/player/attack/sword-swing-up.png"),
-            2, getAssetImage("/player/attack/sword-swing-center.png"),
-            3, getAssetImage("/player/attack/sword-swing-down.png")
+            1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_UP),
+            2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_CENTER),
+            3, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_DOWN)
             ),
             MovingDirection.LEFT, Map.of(
-            1, getAssetImage("/player/attack/sword-swing-up-left.png"),
-            2, getAssetImage("/player/attack/sword-swing-center-left.png"),
-            3, getAssetImage("/player/attack/sword-swing-down-left.png")
+            1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_UP_LEFT),
+            2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_CENTER_LEFT),
+            3, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_DOWN_LEFT)
             ),
             MovingDirection.UP, Map.of(
-            1, getAssetImage("/player/attack/sword-swing-up-up.png"),
-            2, getAssetImage("/player/attack/sword-swing-center-up.png"),
-            3, getAssetImage("/player/attack/sword-swing-down-up.png")
+            1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_UP_UP),
+            2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_CENTER_UP),
+            3, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_DOWN_UP)
             ),
             MovingDirection.DOWN, Map.of(
-            1, getAssetImage("/player/attack/sword-swing-up-down.png"),
-            2, getAssetImage("/player/attack/sword-swing-center-down.png"),
-            3, getAssetImage("/player/attack/sword-swing-down-down.png")
+            1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_UP_DOWN),
+            2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_CENTER_DOWN),
+            3, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.SWORD_SWING_DOWN_DOWN)
             )
         );
 
         this.goldSwordSwingAttackImagesAssetsMap = Map.of(
             MovingDirection.RIGHT, Map.of(
-                1, getAssetImage("/player/attack/gold-sword-swing-up.png"),
-                2, getAssetImage("/player/attack/gold-sword-swing-center.png"),
-                3, getAssetImage("/player/attack/gold-sword-swing-down.png")
+                1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_UP),
+                2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_CENTER),
+                3, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_DOWN)
             ),
             MovingDirection.LEFT, Map.of(
-                1, getAssetImage("/player/attack/gold-sword-swing-up-left.png"),
-                2, getAssetImage("/player/attack/gold-sword-swing-center-left.png"),
-                3, getAssetImage("/player/attack/gold-sword-swing-down-left.png")
+                1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_UP_LEFT),
+                2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_CENTER_LEFT),
+                3, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_DOWN_LEFT)
             ),
             MovingDirection.UP, Map.of(
-                1, getAssetImage("/player/attack/gold-sword-swing-up-up.png"),
-                2, getAssetImage("/player/attack/gold-sword-swing-center-up.png"),
-                3, getAssetImage("/player/attack/gold-sword-swing-down-up.png")
+                1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_UP_UP),
+                2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_CENTER_UP),
+                3, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_DOWN_UP)
             ),
             MovingDirection.DOWN, Map.of(
-                1, getAssetImage("/player/attack/gold-sword-swing-up-down.png"),
-                2, getAssetImage("/player/attack/gold-sword-swing-center-down.png"),
-                3, getAssetImage("/player/attack/gold-sword-swing-down-down.png")
+                1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_UP_DOWN),
+                2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_CENTER_DOWN),
+                3, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.GOLD_SWORD_SWING_DOWN_DOWN)
             )
         );
 
         this.swordSwingWhenMovingImagesAssetsMap = Map.of(
             MovingDirection.RIGHT, Map.of(
-                1, getAssetImage("/player/swingingSword/player-sword-start-swing-arm.png"),
-                2, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-two.png")
+                1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_SWORD_START_SWING_ARM),
+                2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_SWORD_START_SWING_ARM_TWO)
             ),
             MovingDirection.LEFT, Map.of(
-                1, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-left.png"),
-                2, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-two-left.png")
+                1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_SWORD_START_SWING_ARM_LEFT),
+                2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_SWORD_START_SWING_ARM_TWO_LEFT)
             ),
             MovingDirection.UP, Map.of(
-                1, getAssetImage("/player/walking/player-walk-up.png"),
-                2, getAssetImage("/player/walking/player-walk-up-two.png")
+                1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_UP),
+                2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_UP_TWO)
             ),
             MovingDirection.DOWN, Map.of(
-                1, getAssetImage("/player/walking/player-walk-down.png"),
-                2, getAssetImage("/player/walking/player-walk-down-two.png")
+                1, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_DOWN),
+                2, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_WALK_DOWN_TWO)
             )
         );
 
         this.swordSwingStandStillImagesAssetsMap = Map.of(
-            MovingDirection.UP, getAssetImage("/player/player-stand-still-up.png"),
-            MovingDirection.DOWN, getAssetImage("/player/player-stand-still-down.png"),
-            MovingDirection.LEFT, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-stand-still-left.png"),
-            MovingDirection.RIGHT, getAssetImage("/player/swingingSword/player-sword-start-swing-arm-stand-still.png")
+            MovingDirection.UP, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_STAND_STILL_UP),
+            MovingDirection.DOWN, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_STAND_STILL_DOWN),
+            MovingDirection.LEFT, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_SWORD_START_SWING_ARM_STAND_STILL_LEFT),
+            MovingDirection.RIGHT, this.imageLoader.getPlayerImageAssetByKey(PlayerImagesAssets.PLAYER_SWORD_START_SWING_ARM_STAND_STILL)
         );
-    }
-
-    private BufferedImage getAssetImage(String assetPath)
-    {
-        return Objects.requireNonNull(getScaledImageFromAssets(assetPath));
     }
 
     private void _checkPlayerInventoryForWeapons()

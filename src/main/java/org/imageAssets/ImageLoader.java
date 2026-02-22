@@ -1,11 +1,7 @@
 package org.imageAssets;
 
 import org.helpers.ToolsHelper;
-import org.imageAssets.models.ImageModel;
-import org.imageAssets.models.WorldImagesAssets;
-import org.imageAssets.models.WorldItemsImagesAssets;
-import org.imageAssets.models.DungeonWorldItemsImagesAssets;
-import org.imageAssets.models.EnemyImagesAssets;
+import org.imageAssets.models.*;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -17,6 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.game.GamePanel.tileSize;
+import static org.individual.Individual.boosTileSizeImage;
 
 public class ImageLoader
 {
@@ -25,6 +22,10 @@ public class ImageLoader
     private final Map<ImageModel, BufferedImage> worldItemsAssetsImages = new HashMap<>();
     private final Map<ImageModel, BufferedImage> dungeonWorldItemsImages = new HashMap<>();
     private final Map<ImageModel, BufferedImage> enemyAssetsImages = new HashMap<>();
+    private final Map<ImageModel, BufferedImage> playerAssetsImages = new HashMap<>();
+    private final Map<ImageModel, BufferedImage> enemyBossAssetsImages = new HashMap<>();
+    private final Map<ImageModel, BufferedImage> nonPlayerAssetsImages = new HashMap<>();
+    private final Map<ImageModel, BufferedImage> dungeonWorldImagesAssets = new HashMap<>();
 
     public ImageLoader()
     {
@@ -43,6 +44,22 @@ public class ImageLoader
         for(EnemyImagesAssets enemyImagesAssets : EnemyImagesAssets.values())
         {
             this.enemyAssetsImages.put(enemyImagesAssets, getScaledImageFromAssets(enemyImagesAssets.getPath()));
+        }
+        for(PlayerImagesAssets playerImagesAssets : PlayerImagesAssets.values())
+        {
+            this.playerAssetsImages.put(playerImagesAssets, getScaledImageFromAssets(playerImagesAssets.getPath()));
+        }
+        for(EnemyBossesImagesAssets enemyBossesImageAssets : EnemyBossesImagesAssets.values())
+        {
+            this.enemyBossAssetsImages.put(enemyBossesImageAssets, getScaledImageFromAssets(enemyBossesImageAssets.getPath(), boosTileSizeImage, boosTileSizeImage));
+        }
+        for(NonPlayerImagesAssets nonPlayerImagesAssets : NonPlayerImagesAssets.values())
+        {
+            this.nonPlayerAssetsImages.put(nonPlayerImagesAssets, getScaledImageFromAssets(nonPlayerImagesAssets.getPath()));
+        }
+        for(DungeonWorldImagesAssets dungeonWorldImagesAssets : DungeonWorldImagesAssets.values())
+        {
+            this.dungeonWorldImagesAssets.put(dungeonWorldImagesAssets, getScaledImageFromAssets(dungeonWorldImagesAssets.getPath()));
         }
     }
 
@@ -64,6 +81,42 @@ public class ImageLoader
     public Map<ImageModel, BufferedImage> getEnemyAssetsImages()
     {
         return this.enemyAssetsImages;
+    }
+
+    public Map<ImageModel, BufferedImage> getNonPlayerAssetsImages()
+    {
+        return this.nonPlayerAssetsImages;
+    }
+
+    public Map<ImageModel, BufferedImage> getDungeonWorldImagesAssets()
+    {
+        return this.dungeonWorldImagesAssets;
+    }
+
+    public BufferedImage getPlayerImageAssetByKey(ImageModel playerImageKeyName)
+    {
+        try
+        {
+            return this.playerAssetsImages.get(playerImageKeyName);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public BufferedImage getEnemyBossesImageAssets(ImageModel enemyBossImageKeyName)
+    {
+        try
+        {
+            return this.enemyBossAssetsImages.get(enemyBossImageKeyName);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     public BufferedImage getScaledImageFromAssets(String imagePath)

@@ -3,12 +3,8 @@ package org.individual.models;
 import org.imageAssets.models.EnemyImagesAssets;
 import org.imageAssets.models.ImageModel;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
 public class EnemyAssetsConstance
 {

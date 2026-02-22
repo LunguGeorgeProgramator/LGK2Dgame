@@ -1,11 +1,10 @@
 package org.individual.models;
 
-import java.awt.image.BufferedImage;
+import org.imageAssets.models.ImageModel;
+import org.imageAssets.models.NonPlayerImagesAssets;
+
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import static org.helpers.ToolsHelper.getScaledImageFromAssets;
 
 public class NonPlayerCharacterConstants
 {
@@ -17,9 +16,9 @@ public class NonPlayerCharacterConstants
     public static List<MovingDirection> square = List.of(MovingDirection.DOWN, MovingDirection.RIGHT, MovingDirection.UP, MovingDirection.LEFT);
     public static List<MovingDirection> invertedSquare = List.of(MovingDirection.UP, MovingDirection.LEFT, MovingDirection.DOWN, MovingDirection.RIGHT);
 
-    public static Map<MovingDirection, Map<Integer, BufferedImage>> vandorSallerAssetsMap = Map.of(
+    public static Map<MovingDirection, Map<Integer, ImageModel>> vandorSallerAssetsMap = Map.of(
         MovingDirection.STATIONARY, Map.of(
-            1, Objects.requireNonNull(getScaledImageFromAssets("/npc/vendor-seller-npc.png"))
+            1, NonPlayerImagesAssets.VENDOR_SELLER_NPC
         )
     );
 }

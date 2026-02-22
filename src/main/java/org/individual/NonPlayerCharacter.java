@@ -4,6 +4,8 @@ import org.game.CollisionChecker;
 import org.game.GamePanel;
 import org.game.models.GameState;
 import org.helpers.KeyPressHelper;
+import org.imageAssets.ImageLoader;
+import org.imageAssets.models.ImageModel;
 import org.individual.models.MovingDirection;
 import org.individual.models.NonPlayerCharacterType;
 import org.inventory.PlayerInventory;
@@ -33,13 +35,14 @@ public class NonPlayerCharacter extends Individual
     private final static String INVENTORY_SWORD = "vendor-inventory-sword";
     private final static String CLOSE_WINDOW_BUTTON_TEXT = "close-window-button-text";
     final private GamePanel gamePanel;
+    final private ImageLoader imageLoader;
     final private Player player;
     final private PlayerInventory playerInventory;
     final private int npcId;
     final private NonPlayerCharacterType npcType;
     final private int maxDistanceAllowedToMove;
     final private List<MovingDirection> npcMovingDirectionList;
-    final private Map<MovingDirection, Map<Integer, BufferedImage>> npcAssetsMap;
+    final private Map<MovingDirection, Map<Integer, ImageModel>> npcAssetsMap;
     private BufferedImage npcAsset;
     private int worldNpcAssetPositionX;
     private int worldNpcAssetPositionY;
@@ -69,11 +72,12 @@ public class NonPlayerCharacter extends Individual
         NonPlayerCharacterType npcType,
         int maxDistanceAllowedToMove,
         List<MovingDirection> npcMovingDirectionList,
-        Map<MovingDirection, Map<Integer, BufferedImage>> npcAssetsMap
+        Map<MovingDirection, Map<Integer, ImageModel>> npcAssetsMap
     )
     {
         super(positionX, positionY, speed);
         this.gamePanel = gamePanel;
+        this.imageLoader = gamePanel.imageLoader;
         this.player = gamePanel.player;
         this.playerInventory = gamePanel.playerInventory;
         this.collisionChecker = gamePanel.collisionChecker;
@@ -131,7 +135,8 @@ public class NonPlayerCharacter extends Individual
         // draw enemy only if is inside the screen view
         if(checkIfAssetIsInsideTheBoundary(this.positionX, this.positionY, this.player, tileSize))
         {
-            this.npcAsset = this.npcAssetsMap.get(MovingDirection.STATIONARY).get(1);
+            ImageModel npcAssetKeyName = this.npcAssetsMap.get(MovingDirection.STATIONARY).get(1);
+            this.npcAsset = this.imageLoader.getNonPlayerAssetsImages().get(npcAssetKeyName);
             if (this.npcAsset != null && this.enemyHealth > 0)
             {
                 g2D.drawImage(this.npcAsset, this.worldNpcAssetPositionX, this.worldNpcAssetPositionY, null);
