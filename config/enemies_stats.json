@@ -17,11 +17,11 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "83646",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "93647",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "23713",
@@ -73,13 +73,9 @@
 }, {
   "mapName" : "WorldMapEnemies",
   "enemyWorldId" : "1010516",
-  "isAlive" : false
+  "isAlive" : true
 }, {
   "mapName" : "WorldMap",
   "enemyWorldId" : "14320624",
-  "isAlive" : true
-}, {
-  "mapName" : "WaterDungeonWorldMapEnemies",
-  "enemyWorldId" : "1145",
   "isAlive" : true
 } ]
